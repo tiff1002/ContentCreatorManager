@@ -5,6 +5,7 @@ Created on Feb 9, 2022
 '''
 
 import ffmpeg
+import math
 import random
 import time
 import logging.config
@@ -151,9 +152,87 @@ class Settings(object):
             id_list.append(ID)
         return id_list
     
+    def testmeth(self):
+        result = None
+        try:
+            result = self.YouTube_service.channels().list(
+                part="snippet",
+                mine=True
+            ).execute()
+        except Exception as e:
+            self.logger.error(f"Error:\n{e}")
+            return None
+        self.logger.info("worked?")
+        channel_id = result['items'][0]['id']
+        try:
+            result = self.YouTube_service.search().list(
+                part="snippet",
+                channelId=channel_id,
+                order='date',
+                type='video'
+            ).execute()
+        except Exception as e:
+            self.logger.error(f"Error:\n{e}")
+            return None
+        pages = []
+        pages.append(result['items'])
+        next_page_token = result['nextPageToken']
+        num_pages = math.ceil(result['pageInfo']['totalResults'] /  result['pageInfo']['resultsPerPage'])
+        for x in range(num_pages - 1):
+            new_result = None
+            try:
+                new_result = self.YouTube_service.search().list(
+                    part="snippet",
+                    channelId=channel_id,
+                    order='date',
+                    type='video',
+                    pageToken=next_page_token
+                ).execute()
+            except Exception as e:
+                self.logger.error(f"Error:\n{e}")
+                return None
+            if 'nextPageToken' in new_result:
+                next_page_token = new_result['nextPageToken']
+            pages.append(new_result['items'])
+        
+        for i in pages:
+            print(f"{i['title']}")
+            
+        return result
+    
     #private method to find all vid ids on the LBRY channel with the ID set in the settings object and return them
     def __getLBRYChannelVidClaimIDs(self):
-        return
+        intialRequest = requests.post("http://localhost:5279", json={"method": "claim_search", "params": {"claim_ids": [], "channel_ids": [self.LBRYChannelClaimID], "not_channel_ids": [], "has_channel_signature": False, "valid_channel_signature": False, "invalid_channel_signature": False, "is_controlling": False, "stream_types": [], "media_types": [], "any_tags": [], "all_tags": [], "not_tags": [], "any_languages": [], "all_languages": [], "not_languages": [], "any_locations": [], "all_locations": [], "not_locations": [], "order_by": [], "no_totals": False, "include_purchase_receipt": False, "include_is_my_output": False, "remove_duplicates": False, "has_source": False, "has_no_source": False}}).json()
+        
+        numPages = intialRequest['result']['total_pages']
+        numItems = intialRequest['result']['total_items']
+        
+        self.logger.info(f"Found {numItems} videos on channel {self.LBRYChannelClaimID} with {numPages} pages of data")
+        
+        pages = []
+        claim_ids = []
+        claims = []
+        self.logger.info("adding initial request as 1st page of data")
+        pages.append(intialRequest['result']['items'])
+
+        for x in range(numPages-1):
+            self.logger.info(f"getting page {x+2} of data and adding it")
+            currentRequest = requests.post("http://localhost:5279", json={"method": "claim_search", "params": {"page":x+2,"claim_ids": [], "channel_ids": [self.LBRYChannelClaimID], "not_channel_ids": [], "has_channel_signature": False, "valid_channel_signature": False, "invalid_channel_signature": False, "is_controlling": False, "stream_types": [], "media_types": [], "any_tags": [], "all_tags": [], "not_tags": [], "any_languages": [], "all_languages": [], "not_languages": [], "any_locations": [], "all_locations": [], "not_locations": [], "order_by": [], "no_totals": False, "include_purchase_receipt": False, "include_is_my_output": False, "remove_duplicates": False, "has_source": False, "has_no_source": False}}).json()
+            pages.append(currentRequest['result']['items'])
+            
+        page = 0
+        x = 0
+        for p in pages:
+            page += 1
+            for i in p:
+                x += 1
+                self.logger.info(f"Adding claim_id {i['claim_id']} with name {i['name']} from page {page} this is the {x} claim_id added")
+                claims.append(i)
+        
+        sorted_claims = sorted(claims, key = lambda i: i['name'])
+        for x in sorted_claims:
+            claim_ids.append(x['claim_id'])
+        return claim_ids
     
     #method to refresh youtube creds
     def refresh_YouTube_service(self):
@@ -233,7 +312,10 @@ class Settings(object):
         
     #method set the LBRY channel and grab its claim IDs
     def setLBRYChannel(self, Channel_ID):
-        return
+        self.logger.info(f"Setting settings object LBRYChannelClaimID to {Channel_ID}")
+        self.LBRYChannelClaimID = Channel_ID
+        self.logger.info("Loading and setting the LBRY claim IDs to a list from the channel")
+        self.LBRYClaimIDs = self.__getLBRYChannelVidClaimIDs()
 
 class YouTube(object):
     #base of the url used to grab YT thumbs
