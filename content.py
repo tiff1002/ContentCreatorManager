@@ -152,7 +152,7 @@ class Settings(object):
             id_list.append(ID)
         return id_list
     
-    def testmeth(self):
+    def __getYouTubeChannelID(self):
         result = None
         try:
             result = self.YouTube_service.channels().list(
@@ -163,11 +163,16 @@ class Settings(object):
             self.logger.error(f"Error:\n{e}")
             return None
         self.logger.info("worked?")
-        channel_id = result['items'][0]['id']
+        return result['items'][0]['id']
+    
+    #function to utilize api and not pytube get channel id as well as all video IDs in order by date (quota heavy need to improve)
+    def setYouTubeChannel(self):
+        self.YouTubeChannelID = self.__getYouTubeChannelID()
+        result = None
         try:
             result = self.YouTube_service.search().list(
                 part="snippet",
-                channelId=channel_id,
+                channelId=self.YouTubeChannelID,
                 order='date',
                 type='video'
             ).execute()
@@ -183,7 +188,7 @@ class Settings(object):
             try:
                 new_result = self.YouTube_service.search().list(
                     part="snippet",
-                    channelId=channel_id,
+                    channelId=self.YouTubeChannelID,
                     order='date',
                     type='video',
                     pageToken=next_page_token
@@ -194,11 +199,13 @@ class Settings(object):
             if 'nextPageToken' in new_result:
                 next_page_token = new_result['nextPageToken']
             pages.append(new_result['items'])
-        
+        items = []
         for i in pages:
-            print(f"{i['title']}")
+            for x in i:
+                items.append(x)
+                self.YouTubeIDs.append(x['id']['videoId'])
             
-        return result
+        return items
     
     #private method to find all vid ids on the LBRY channel with the ID set in the settings object and return them
     def __getLBRYChannelVidClaimIDs(self):
