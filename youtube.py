@@ -300,5 +300,6 @@ class Video(object):
         self.favorite_count = favorite_count
         self.downloaded = self.__is_downloaded()
         
+    
     def download(self):
         self.logger.info(f"Downloading {self.__file_name()}")
