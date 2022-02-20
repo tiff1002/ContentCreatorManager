@@ -12,6 +12,6 @@ import os
 settings = config.Settings(f"{os.getcwd()}\\test")
 
 
-test = youtube.Channel(settings).videos()
+test = youtube.Channel(settings)
 
-print(len(test))
+test.download_videos()
