@@ -129,6 +129,7 @@ class Channel(object):
         num_pages = math.ceil(len(Ids)/50)
         max_num_per_page = math.ceil(len(Ids)/num_pages)
         Id_csvs = []
+        Ids.reverse()
         
         for x in range(num_pages):
             Id_csvs.append([])
@@ -197,7 +198,23 @@ class Channel(object):
         vids = self.__get_videos()
         
         for vid in vids:
-            video = Video(video_id=vid['items'][0]['id'], favorite_count=vid['items'][0]['statistics']['favoriteCount'], comment_count=vid['items'][0]['statistics']['commentCount'], dislike_count=vid['items'][0]['statistics']['dislikeCount'], like_count=vid['items'][0]['statistics']['likeCount'], view_count=vid['items'][0]['statistics']['viewCount'], self_declared_made_for_kids=vid['items'][0]['status']['selfDeclaredMadeForKids'], made_for_kids=vid['items'][0]['status']['madeForKids'], public_stats_viewable=vid['items'][0]['status']['publicStatsViewable'], embeddable=vid['items'][0]['status']['embeddable'], license=vid['items'][0]['status']['license'], privacy_status=vid['items'][0]['status']['privacyStatus'], upload_status=vid['items'][0]['status']['uploadStatus'], has_custom_thumbnail=vid['items'][0]['contentDetails']['hasCustomThumbnail'], content_rating=vid['items'][0]['contentDetails']['contentRating'], licensed_content=vid['items'][0]['contentDetails']['licensedContent'], default_audio_language=vid['items'][0]['snippet']['defaultAudioLanguage'], published_at=vid['items'][0]['snippet']['publishedAt'], channel_id=vid['items'][0]['snippet']['channelId'], title=vid['items'][0]['snippet']['title'], description=vid['items'][0]['snippet']['description'], thumbnails=vid['items'][0]['snippet']['thumbnails'], channel_title=vid['items'][0]['snippet']['channelTitle'], tags=vid['items'][0]['snippet']['tags'], category_id=vid['items'][0]['snippet']['categoryId'], live_broadcast_content=vid['items'][0]['snippet']['liveBroadcastContent'])
+            if 'tags' not in vid['snippet']:
+                tags = []
+            else:
+                tags = vid['snippet']['tags']
+            if 'description' not in vid['snippet']:
+                description = ""
+            else:
+                description = vid['snippet']['description']
+            if 'selfDeclaredMadeForKids' not in vid['status']:
+                self_declared_made_for_kids = False
+            else:
+                self_declared_made_for_kids = vid['status']['selfDeclaredMadeForKids']
+            if 'defaultAudioLanguage' not in vid['snippet']:
+                default_audio_language = 'en-US'
+            else:
+                default_audio_language = vid['snippet']['defaultAudioLanguage']
+            video = Video(settings=self.settings, video_id=vid['id'], favorite_count=vid['statistics']['favoriteCount'], comment_count=vid['statistics']['commentCount'], dislike_count=vid['statistics']['dislikeCount'], like_count=vid['statistics']['likeCount'], view_count=vid['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=vid['status']['madeForKids'], public_stats_viewable=vid['status']['publicStatsViewable'], embeddable=vid['status']['embeddable'], license=vid['status']['license'], privacy_status=vid['status']['privacyStatus'], upload_status=vid['status']['uploadStatus'], has_custom_thumbnail=vid['contentDetails']['hasCustomThumbnail'], content_rating=vid['contentDetails']['contentRating'], licensed_content=vid['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=vid['snippet']['publishedAt'], channel_id=vid['snippet']['channelId'], title=vid['snippet']['title'], description=description, thumbnails=vid['snippet']['thumbnails'], channel_title=vid['snippet']['channelTitle'], tags=tags, category_id=vid['snippet']['categoryId'], live_broadcast_content=vid['snippet']['liveBroadcastContent'])
             self.videos.append(video)
 
     def __init__(self, settings : config.Settings):
@@ -221,9 +238,13 @@ class Channel(object):
         self.logger.info("Setting Id for the Channel")
         self.id = self.__get_channel()
         
-        self.video = []
+        self.videos = []
         self.__set_videos()
     
+    def download_videos(self):
+        for video in self.videos:
+            if not video.downloaded:
+                video.download()
         
     def refresh_service(self):
         os.chdir(self.original_dir)
@@ -235,12 +256,22 @@ class Video(object):
     '''
     classdocs
     '''
+    def __is_downloaded(self):        
+        return pathlib.Path(f"{os.getcwd()}\\{self.__file_name()}").is_file()
+    
+    def __file_name(self):
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        getVals = list([val for val in f"youtube_{self.title}.mp4" if val in valid_chars])
+        return "".join(getVals)
+        
 
-
-    def __init__(self, video_id=None, favorite_count='0', comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, made_for_kids=False, public_stats_viewable=True, embeddable=True, license='youtube', privacy_status="public", upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None):
+    def __init__(self, settings : config.Settings, video_id=None, favorite_count='0', comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, made_for_kids=False, public_stats_viewable=True, embeddable=True, license='youtube', privacy_status="public", upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None):
         '''
         Constructor
         '''
+        self.logger = settings.YouTube_logger
+        self.logger.info('initializing Video Object')
+        self.settings = settings
         self.id = video_id
         self.published_at = published_at
         self.channel_id = channel_id
@@ -267,3 +298,7 @@ class Video(object):
         self.dislike_count = dislike_count
         self.comment_count = comment_count
         self.favorite_count = favorite_count
+        self.downloaded = self.__is_downloaded()
+        
+    def download(self):
+        self.logger.info(f"Downloading {self.__file_name()}")
