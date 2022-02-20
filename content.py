@@ -180,13 +180,13 @@ class Settings(object):
             self.logger.error(f"Error:\n{e}")
             return None
         pages = []
+        items = []
         pages.append(result['items'])
         next_page_token = result['nextPageToken']
-        num_pages = math.ceil(result['pageInfo']['totalResults'] /  result['pageInfo']['resultsPerPage'])
-        for x in range(num_pages - 1):
-            new_result = None
+        
+        while 'nextPageToken' in result:
             try:
-                new_result = self.YouTube_service.search().list(
+                result = self.YouTube_service.search().list(
                     part="snippet",
                     channelId=self.YouTubeChannelID,
                     order='date',
@@ -196,10 +196,10 @@ class Settings(object):
             except Exception as e:
                 self.logger.error(f"Error:\n{e}")
                 return None
-            if 'nextPageToken' in new_result:
-                next_page_token = new_result['nextPageToken']
-            pages.append(new_result['items'])
-        items = []
+            if 'nextPageToken' in result:
+                next_page_token = result['nextPageToken']
+            pages.append(result['items'])
+        
         for i in pages:
             for x in i:
                 items.append(x)
