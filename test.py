@@ -10,7 +10,7 @@ import os
 
 
 
-settings = config.Settings(f"{os.getcwd()}\\test")
+settings = config.Settings(os.path.join(os.getcwd(),"test"))
 
 
 test = youtube.Channel(settings)
