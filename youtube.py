@@ -276,6 +276,13 @@ class Video(object):
         file_name = "".join(getVals)
         return os.path.join(os.getcwd(), file_name)
     
+    def __orig_thumb_path(self):
+        title = f"thumb_{self.title}.original.jpg"
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        getVals = list([val for val in title if val in valid_chars])
+        file_name = "".join(getVals)
+        return os.path.join(os.getcwd(), file_name)
+    
     def __is_downloaded(self):
         f = os.path.join(os.getcwd(),self.__file_name())
         return pathlib.Path(f).is_file()
@@ -418,6 +425,27 @@ class Video(object):
         else:
             self.pytube_obj = self.__get_pytube()
         self.channel = channel
+        
+    def check_thumb(self):
+        if 'maxres' in self.thumbnails:
+            url = self.thumbnails['maxres']['url']
+        else:
+            url = self.thumbnails['high']['url']
+            
+        temp_thumb = os.path.join(self.settings.folder_location, "temp_thumb")
+        
+        self.logger.info("Downloading thumbnail as temp file to use for comparison")
+        
+        f = open(temp_thumb,'wb')
+        f.write(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})).read())
+        f.close()
+        
+        result = content.compare_images(temp_thumb, self.__thumb_path(), self.settings)
+        
+        self.logger.info("removing temp file downloaded for comparison")
+        os.remove(temp_thumb)
+        
+        return result
     
     def download_thumb(self):
         if 'maxres' in self.thumbnails:
@@ -428,6 +456,27 @@ class Video(object):
         f_r = f.write(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})).read())
         f.close()
         return f_r
+    
+    def upload_thumbnail(self):
+        file = self.__thumb_path()
+        new_file = self.__orig_thumb_path()
+        self.logger.info(f"Attempting to set thumbnail to {file}")
+        result = None
+        try:
+            result = self.channel.service.thumbnails().set(
+                videoId=self.id,
+                media_body=file
+            ).execute()
+        except Exception as e:
+            self.logger.error(f"Error uploading thumbnail:\n{e}\nThumbnail not uploaded.")
+            return None
+        self.logger.info("New thumbnail is set")
+        self.update_from_web()
+        self.logger.info("renaming original thumbnail file to download the processed version")
+        os.rename(file, new_file)
+        self.logger.info("Downloading thumb for future compares")
+        self.download_thumb()
+        return result
     
     def update_to_web(self):
         current_web_status = self.__get_web_data()
@@ -469,6 +518,8 @@ class Video(object):
         return request.execute()
         
     def update_from_web(self):
+        self.logger.info(f"Updating Video Object with id {self.id} from the web")
+        
         video = self.__get_web_data()
         if 'tags' not in video['snippet']:
             tags = []
@@ -513,6 +564,8 @@ class Video(object):
         self.comment_count = video['statistics']['commentCount']
         self.favorite_count = video['statistics']['favoriteCount']
         self.downloaded = self.__is_downloaded()
+        
+        self.logger.info("Update from web complete")
         
     
     def download(self, overwrite=False):
