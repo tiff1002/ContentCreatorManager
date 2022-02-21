@@ -10,6 +10,7 @@ import random
 import time
 import httplib2
 import http.client
+import urllib.request
 import pathlib
 import os
 import math
@@ -224,7 +225,7 @@ class Channel(object):
         for vid in vids:
             self.videos.append(make_video(vid,self))
 
-    def __init__(self, settings : config.Settings):
+    def __init__(self, settings : config.Settings, init_vids=True):
         '''
         Constructor
         '''
@@ -246,7 +247,8 @@ class Channel(object):
         self.id = self.__get_channel()
         
         self.videos = []
-        self.__set_videos()
+        if init_vids:
+            self.__set_videos()
     
     def download_videos(self):
         for video in self.videos:
@@ -266,6 +268,13 @@ class Video(object):
     BASE_URL = "https://www.youtube.com/watch?v="
     
     MAX_RETRIES = 25
+    
+    def __thumb_path(self):
+        title = f"thumb_{self.title}.jpg"
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        getVals = list([val for val in title if val in valid_chars])
+        file_name = "".join(getVals)
+        return os.path.join(os.getcwd(), file_name)
     
     def __is_downloaded(self):
         f = os.path.join(os.getcwd(),self.__file_name())
@@ -409,6 +418,16 @@ class Video(object):
         else:
             self.pytube_obj = self.__get_pytube()
         self.channel = channel
+    
+    def download_thumb(self):
+        if 'maxres' in self.thumbnails:
+            url = self.thumbnails['maxres']['url']
+        else:
+            url = self.thumbnails['high']['url']
+        f = open(self.__thumb_path(),'wb')
+        f_r = f.write(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})).read())
+        f.close()
+        return f_r
     
     def update_to_web(self):
         current_web_status = self.__get_web_data()
