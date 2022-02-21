@@ -40,21 +40,7 @@ def getInputFilename(stream):
     return stream.node.__dict__['kwargs']['filename']
 
 
-# Returns a content object with its youtube obj being made from its ID and the LBRY object made from a lookup to LBRY if it doesnt find anything it uses the Youtube details and sets upoaded flag for LBRY to false
-def makeContentWithYouTubeID(ID, settings, LBRY_Channel_ID):
-    ytVid = getYouTubeFromID(ID, settings)
-    title = ytVid.title
-    description = ytVid.description
-    tags = ytVid.tags
-    getVals = list([val for val in title if val.isalpha() or val.isnumeric() or val == '-'])
-    name = "".join(getVals)
-    settings.Base_Method_logger.info(f"Using data from YouTube Obj to create LBRY oject with channel_claim_id set to {LBRY_Channel_ID}")
-    lbry = LBRY(settings, f"{ytVid.title}.mp4", channel_claim_id=LBRY_Channel_ID, name=name, title=title, description=description, tags=tags)
-    settings.Base_Method_logger.info("Checking LBRY to see if the content is already on the channel and if so will update object with that data")
-    lbry.updateFromLBRY()
-    
-    settings.Base_Method_logger.info("Returning Content Object with the YouTube and LBRY obj created")
-    return Content(settings=settings, youtube_obj=ytVid, lbry_obj=lbry)
+
 
 # class to store and handle various settings
 class Settings(object):
@@ -286,25 +272,7 @@ class YouTube(object):
     def __setThumbnailFileName(self):
         self.thumbnail_file = f"thumb_{self.filename.replace('.mp4','.jpg')}"
     
-    # method to download thumbnail from youtube this will remove existing thumbnail file assosiated with this obj
-    def downloadThumbnail(self):
-        url = self.__thumb_URL()
-        if not self.thumbnail_file is None:
-            if Path(self.__thumb_path()).is_file():
-                self.logger.info("Removing existing Thumbnail file")
-                os.remove(self.__thumb_path())
-        else:
-            self.__setThumbnailFileName()
-            self.logger.info(f"thumbnail_file not set setting to {self.thumbnail_file}")
-            if Path(self.__thumb_path()).is_file():
-                self.logger.info("Removing existing Thumbnail file")
-                os.remove(self.__thumb_path())
-           
-        self.logger.info(f"Downloading thumb from {url}")    
-        f = open(self.__thumb_path(),'wb')
-        f_r = f.write(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})).read())
-        f.close()
-        return f_r
+    
 
     #method to update the thumbnail on youtube if the file linked to the obj does not match the uploaded one
     def updateThumbnail(self):
