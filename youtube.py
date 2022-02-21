@@ -317,7 +317,7 @@ class Video(object):
             media_body=MediaFileUpload(self.__file_name(), chunksize=-1, resumable=True)
         )
         self.logger.info("returning resumable_upload private method to create a resumable upload")
-        return self.__resumable_YouTube_upload(insert_request)
+        return self.__resumable_upload(insert_request)
     
     def __resumable_upload(self, request):
         response = None
@@ -369,7 +369,7 @@ class Video(object):
                  made_for_kids=False, public_stats_viewable=True, embeddable=True, lic='youtube', privacy_status="public", 
                  upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, 
                  default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, 
-                 thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None):
+                 thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None, new_video=False):
         '''
         Constructor
         '''
@@ -404,7 +404,10 @@ class Video(object):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         self.downloaded = self.__is_downloaded()
-        self.pytube_obj = self.__get_pytube()
+        if new_video:
+            self.pytube_obj = None
+        else:
+            self.pytube_obj = self.__get_pytube()
         self.channel = channel
     
     def update_to_web(self):
@@ -604,3 +607,6 @@ class Video(object):
             self.__initialize_upload()
         except HttpError as e:
             raise e
+        
+        self.pytube_obj = self.__get_pytube()
+        self.update_from_web()
