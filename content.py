@@ -311,12 +311,7 @@ class Settings(object):
             self.logger.error(f"something went wrong:\n{e}\nReturning None")
             return None
     #method to set the youtube channel and list of IDs
-    def setYouTubeChannel(self, ID):
-        self.logger.info(f"Setting settings object YoutubeChannelID to {ID}")
-        self.YouTubeChannelID = ID
-        self.logger.info("Loading and setting the YouTubeIDs to a list of video IDs from the channel")
-        self.YouTubeIDs = self.__getYTChannelVidIDs()
-        
+    
     #method set the LBRY channel and grab its claim IDs
     def setLBRYChannel(self, Channel_ID):
         self.logger.info(f"Setting settings object LBRYChannelClaimID to {Channel_ID}")
