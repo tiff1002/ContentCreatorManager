@@ -25,6 +25,21 @@ from googleapiclient.errors import HttpError
 from pathlib import Path
 import urllib.request
 
+def compare_images(img1, img2, settings):
+    file_1 = cv2.imread(img1)
+    file_2 = cv2.imread(img2)
+    difference = cv2.subtract(file_1, file_2)
+    f_r = not np.any(difference)
+    
+    if f_r:
+        settings.Base_Method_logger.info(f"{img1} matches {img2}")
+        settings.Base_Method_logger.info("Returning True")
+        return True
+    else:
+        settings.Base_Method_logger.info(f"{img1} does not match {img2}")
+        settings.Base_Method_logger.info("returning False")
+        return False
+
 #Function to return a string that is a valid filename based on string given
 def getValidFilename(filename):
     valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
