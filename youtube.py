@@ -22,7 +22,7 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from google.auth.transport.requests import Request as GoogleAuthRequest
 
-def make_video(video):
+def make_video(video,channel):
     if 'tags' not in video['snippet']:
         tags = []
     else:
@@ -39,7 +39,7 @@ def make_video(video):
         default_audio_language = 'en-US'
     else:
         default_audio_language = video['snippet']['defaultAudioLanguage']
-    return Video(settings=self.settings, video_id=video['id'], favorite_count=video['statistics']['favoriteCount'], comment_count=video['statistics']['commentCount'], dislike_count=video['statistics']['dislikeCount'], like_count=video['statistics']['likeCount'], view_count=video['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=video['status']['madeForKids'], public_stats_viewable=video['status']['publicStatsViewable'], embeddable=video['status']['embeddable'], license=video['status']['license'], privacy_status=video['status']['privacyStatus'], upload_status=video['status']['uploadStatus'], has_custom_thumbnail=video['contentDetails']['hasCustomThumbnail'], content_rating=video['contentDetails']['contentRating'], licensed_content=video['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=video['snippet']['publishedAt'], channel_id=video['snippet']['channelId'], title=video['snippet']['title'], description=description, thumbnails=video['snippet']['thumbnails'], channel_title=video['snippet']['channelTitle'], tags=tags, category_id=video['snippet']['categoryId'], live_broadcast_content=video['snippet']['liveBroadcastContent'])
+    return Video(channel=channel, video_id=video['id'], favorite_count=video['statistics']['favoriteCount'], comment_count=video['statistics']['commentCount'], dislike_count=video['statistics']['dislikeCount'], like_count=video['statistics']['likeCount'], view_count=video['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=video['status']['madeForKids'], public_stats_viewable=video['status']['publicStatsViewable'], embeddable=video['status']['embeddable'], lic=video['status']['license'], privacy_status=video['status']['privacyStatus'], upload_status=video['status']['uploadStatus'], has_custom_thumbnail=video['contentDetails']['hasCustomThumbnail'], content_rating=video['contentDetails']['contentRating'], licensed_content=video['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=video['snippet']['publishedAt'], channel_id=video['snippet']['channelId'], title=video['snippet']['title'], description=description, thumbnails=video['snippet']['thumbnails'], channel_title=video['snippet']['channelTitle'], tags=tags, category_id=video['snippet']['categoryId'], live_broadcast_content=video['snippet']['liveBroadcastContent'])
 
 class Channel(object):
     '''
@@ -222,7 +222,7 @@ class Channel(object):
     def __set_videos(self):
         vids = self.__get_videos()
         for vid in vids:
-            self.videos.append(make_video(vid))
+            self.videos.append(make_video(vid,self))
 
     def __init__(self, settings : config.Settings):
         '''
@@ -364,7 +364,7 @@ class Video(object):
         
         return result['items'][0]
         
-    def __init__(self, settings : config.Settings, channel, video_id=None, favorite_count='0', 
+    def __init__(self, channel, video_id=None, favorite_count='0', 
                  comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, 
                  made_for_kids=False, public_stats_viewable=True, embeddable=True, lic='youtube', privacy_status="public", 
                  upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, 
@@ -373,9 +373,9 @@ class Video(object):
         '''
         Constructor
         '''
-        self.logger = settings.YouTube_logger
+        self.logger = channel.settings.YouTube_logger
         self.logger.info('initializing Video Object')
-        self.settings = settings
+        self.settings = channel.settings
         self.id = video_id
         self.published_at = published_at
         self.channel_id = channel_id
