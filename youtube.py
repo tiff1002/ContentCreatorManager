@@ -6,6 +6,8 @@ Created on Feb 20, 2022
 import config
 import content
 import ffmpeg
+import random
+import time
 import httplib2
 import http.client
 import pathlib
@@ -16,8 +18,28 @@ import pytube
 import google_auth_oauthlib
 import googleapiclient.discovery
 import google.oauth2.credentials
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 from google.auth.transport.requests import Request as GoogleAuthRequest
 
+def make_video(video,channel):
+    if 'tags' not in video['snippet']:
+        tags = []
+    else:
+        tags = video['snippet']['tags']
+    if 'description' not in video['snippet']:
+        description = ""
+    else:
+        description = video['snippet']['description']
+    if 'selfDeclaredMadeForKids' not in video['status']:
+        self_declared_made_for_kids = False
+    else:
+        self_declared_made_for_kids = video['status']['selfDeclaredMadeForKids']
+    if 'defaultAudioLanguage' not in video['snippet']:
+        default_audio_language = 'en-US'
+    else:
+        default_audio_language = video['snippet']['defaultAudioLanguage']
+    return Video(channel=channel, video_id=video['id'], favorite_count=video['statistics']['favoriteCount'], comment_count=video['statistics']['commentCount'], dislike_count=video['statistics']['dislikeCount'], like_count=video['statistics']['likeCount'], view_count=video['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=video['status']['madeForKids'], public_stats_viewable=video['status']['publicStatsViewable'], embeddable=video['status']['embeddable'], lic=video['status']['license'], privacy_status=video['status']['privacyStatus'], upload_status=video['status']['uploadStatus'], has_custom_thumbnail=video['contentDetails']['hasCustomThumbnail'], content_rating=video['contentDetails']['contentRating'], licensed_content=video['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=video['snippet']['publishedAt'], channel_id=video['snippet']['channelId'], title=video['snippet']['title'], description=description, thumbnails=video['snippet']['thumbnails'], channel_title=video['snippet']['channelTitle'], tags=tags, category_id=video['snippet']['categoryId'], live_broadcast_content=video['snippet']['liveBroadcastContent'])
 
 class Channel(object):
     '''
@@ -47,9 +69,9 @@ class Channel(object):
         return f'token_{Channel.API_SERVICE_NAME}_{Channel.API_VERSION}.pickle'
     
     def __load__creds(self):
-        pickle_file = self.__creds_pickle_file_name()
- 
-        if not pathlib.Path(f"{os.getcwd()}\\{pickle_file}").is_file():
+        pickle_file = os.path.join(os.getcwd(),self.__creds_pickle_file_name())
+        
+        if not pathlib.Path(pickle_file).is_file():
             self.logger.info("Pickle File for Google Creds does not exist...Returning None")
             return None
 
@@ -199,26 +221,8 @@ class Channel(object):
         
     def __set_videos(self):
         vids = self.__get_videos()
-        
         for vid in vids:
-            if 'tags' not in vid['snippet']:
-                tags = []
-            else:
-                tags = vid['snippet']['tags']
-            if 'description' not in vid['snippet']:
-                description = ""
-            else:
-                description = vid['snippet']['description']
-            if 'selfDeclaredMadeForKids' not in vid['status']:
-                self_declared_made_for_kids = False
-            else:
-                self_declared_made_for_kids = vid['status']['selfDeclaredMadeForKids']
-            if 'defaultAudioLanguage' not in vid['snippet']:
-                default_audio_language = 'en-US'
-            else:
-                default_audio_language = vid['snippet']['defaultAudioLanguage']
-            video = Video(settings=self.settings, video_id=vid['id'], favorite_count=vid['statistics']['favoriteCount'], comment_count=vid['statistics']['commentCount'], dislike_count=vid['statistics']['dislikeCount'], like_count=vid['statistics']['likeCount'], view_count=vid['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=vid['status']['madeForKids'], public_stats_viewable=vid['status']['publicStatsViewable'], embeddable=vid['status']['embeddable'], license=vid['status']['license'], privacy_status=vid['status']['privacyStatus'], upload_status=vid['status']['uploadStatus'], has_custom_thumbnail=vid['contentDetails']['hasCustomThumbnail'], content_rating=vid['contentDetails']['contentRating'], licensed_content=vid['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=vid['snippet']['publishedAt'], channel_id=vid['snippet']['channelId'], title=vid['snippet']['title'], description=description, thumbnails=vid['snippet']['thumbnails'], channel_title=vid['snippet']['channelTitle'], tags=tags, category_id=vid['snippet']['categoryId'], live_broadcast_content=vid['snippet']['liveBroadcastContent'])
-            self.videos.append(video)
+            self.videos.append(make_video(vid,self))
 
     def __init__(self, settings : config.Settings):
         '''
@@ -263,8 +267,9 @@ class Video(object):
     
     MAX_RETRIES = 25
     
-    def __is_downloaded(self):        
-        return pathlib.Path(f"{os.getcwd()}\\{self.__file_name()}").is_file()
+    def __is_downloaded(self):
+        f = os.path.join(os.getcwd(),self.__file_name())
+        return pathlib.Path(f).is_file()
     
     def __file_name(self):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -272,15 +277,105 @@ class Video(object):
         return "".join(getVals)
         
     def __get_pytube(self, use_oauth=True):
-        return pytube.YouTube(f"{Video.BASE_URL}{self.id}", use_oauth=use_oauth)
+        url = f"{Video.BASE_URL}{self.id}"
+        return pytube.YouTube(url, use_oauth=use_oauth)
+    
+    def __initialize_upload(self):
+        self.logger.info(f"Preparing to upload video to youtube with title: {self.title} ad other stored details")
+        body=dict(
+            snippet=dict(
+                title=self.title,
+                description=self.description,
+                tags=self.tags,
+                categoryId=self.category_id,
+                defaultLanguage=self.default_language
+            ),
+            status=dict(
+                embeddable=self.embeddable,
+                license=self.license,
+                privacyStatus=self.privacy_status,
+                publicStatsViewable=self.public_stats_viewable,
+                selfDeclaredMadeForKids=self.self_declared_made_for_kids
+            )
+        )
+        self.logger.info("Starting the upload")
+        # Call the API's videos.insert method to create and upload the video.
+        insert_request = self.channel.service.videos().insert(
+            part=','.join(body.keys()),
+            body=body,
+            # The chunksize parameter specifies the size of each chunk of data, in
+            # bytes, that will be uploaded at a time. Set a higher value for
+            # reliable connections as fewer chunks lead to faster uploads. Set a lower
+            # value for better recovery on less reliable connections.
+            #
+            # Setting 'chunksize' equal to -1 in the code below means that the entire
+            # file will be uploaded in a single HTTP request. (If the upload fails,
+            # it will still be retried where it left off.) This is usually a best
+            # practice, but if you're using Python older than 2.6 or if you're
+            # running on App Engine, you should set the chunksize to something like
+            # 1024 * 1024 (1 megabyte).
+            media_body=MediaFileUpload(self.__file_name(), chunksize=-1, resumable=True)
+        )
+        self.logger.info("returning resumable_upload private method to create a resumable upload")
+        return self.__resumable_upload(insert_request)
+    
+    def __resumable_upload(self, request):
+        response = None
+        error = None
+        retry = 0
+        vidID = None
+        while response is None:
+            try:
+                self.logger.info('Uploading file...') 
+                status, response = request.next_chunk()
+                if(response is not None):
+                    if('id' in response):
+                        self.logger.info(f"Video id \"{response['id']}\" was successfully uploaded.")
+                        vidID = response['id']
+                    else:
+                        exit(f"The upload failed with an unexpected response: {response}")
+            except HttpError as e:
+                if e.resp.status in Channel.RETRIABLE_STATUS_CODES:
+                    error = f"A retriable HTTP error {e.resp.status} occurred:\n{e.content}"
+                else:
+                    raise e
+            except Channel.RETRIABLE_EXCEPTIONS as e:
+                error = f"A retriable error occurred: {e}"
+
+            if error is not None:
+                print(error)
+                retry += 1
+                if retry > Video.MAX_RETRIES:
+                    exit('No longer attempting to retry.')
+
+                max_sleep = 2 ** retry
+                sleep_seconds = random.random() * max_sleep
+                self.logger.info(f"Sleeping {sleep_seconds} seconds and then retrying...")
+                time.sleep(sleep_seconds)
+        self.logger.info(f"setting ID to {vidID}")
+        self.id = vidID
         
-    def __init__(self, settings : config.Settings, video_id=None, favorite_count='0', comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, made_for_kids=False, public_stats_viewable=True, embeddable=True, license='youtube', privacy_status="public", upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None):
+    def __get_web_data(self):
+        request = self.channel.service.videos().list(
+            part="snippet,contentDetails,statistics,status",
+            id=self.id
+        )
+        result = request.execute()
+        
+        return result['items'][0]
+        
+    def __init__(self, channel, video_id=None, favorite_count='0', 
+                 comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, 
+                 made_for_kids=False, public_stats_viewable=True, embeddable=True, lic='youtube', privacy_status="public", 
+                 upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, 
+                 default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, 
+                 thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None, new_video=False):
         '''
         Constructor
         '''
-        self.logger = settings.YouTube_logger
+        self.logger = channel.settings.YouTube_logger
         self.logger.info('initializing Video Object')
-        self.settings = settings
+        self.settings = channel.settings
         self.id = video_id
         self.published_at = published_at
         self.channel_id = channel_id
@@ -292,12 +387,13 @@ class Video(object):
         self.category_id = category_id
         self.live_broadcast_content = live_broadcast_content
         self.default_audio_language = default_audio_language
+        self.default_language = default_audio_language
         self.licensed_content = licensed_content
         self.content_rating = content_rating
         self.has_custom_thumbnail = has_custom_thumbnail
         self.upload_status = upload_status
         self.privacy_status = privacy_status
-        self.license = license
+        self.license = lic
         self.embeddable = embeddable
         self.public_stats_viewable = public_stats_viewable
         self.made_for_kids = made_for_kids
@@ -308,12 +404,103 @@ class Video(object):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         self.downloaded = self.__is_downloaded()
-        self.pytube_obj = self.__get_pytube()
+        if new_video:
+            self.pytube_obj = None
+        else:
+            self.pytube_obj = self.__get_pytube()
+        self.channel = channel
+    
+    def update_to_web(self):
+        current_web_status = self.__get_web_data()
+        
+        current_web_snippet = current_web_status['snippet']
+        current_web_status = current_web_status['status']
+    
+        need_to_update=False
+        
+        update_snippet = {}
+        update_snippet['categoryId']=self.category_id
+        update_snippet['defaultLanguage']=self.default_language
+        update_snippet['description']=self.description
+        update_snippet['tags']=self.tags
+        update_snippet['title']=self.title
+        update_status = {}
+        update_status['embeddable']=self.embeddable
+        update_status['license']=self.license
+        update_status['privacyStatus']=self.privacy_status
+        update_status['publicStatsViewable']=self.public_stats_viewable
+        update_status['selfDeclaredMadeForKids']=self.self_declared_made_for_kids
+        
+        if not (update_snippet == current_web_snippet and update_status == current_web_status):
+            need_to_update = True
+        
+        if not need_to_update:
+            self.logger.info("No need to update returning None")
+            return None
+
+        request = self.channel.service.videos().update(
+            part='snippet,status',
+            body=dict(
+                snippet=update_snippet,
+                status=update_status,
+                id=self.id
+            )
+        )
+        
+        return request.execute()
+        
+    def update_from_web(self):
+        video = self.__get_web_data()
+        if 'tags' not in video['snippet']:
+            tags = []
+        else:
+            tags = video['snippet']['tags']
+        if 'description' not in video['snippet']:
+            description = ""
+        else:
+            description = video['snippet']['description']
+        if 'selfDeclaredMadeForKids' not in video['status']:
+            self_declared_made_for_kids = False
+        else:
+            self_declared_made_for_kids = video['status']['selfDeclaredMadeForKids']
+        if 'defaultAudioLanguage' not in video['snippet']:
+            default_audio_language = 'en-US'
+        else:
+            default_audio_language = video['snippet']['defaultAudioLanguage']
+    
+        self.published_at = video['snippet']['publishedAt']
+        self.channel_id = video['snippet']['channelId']
+        self.title = video['snippet']['title']
+        self.description = description
+        self.thumbnails = video['snippet']['thumbnails']
+        self.channel_title = video['snippet']['channelTitle']
+        self.tags = tags
+        self.category_id = video['snippet']['categoryId']
+        self.live_broadcast_content = video['snippet']['liveBroadcastContent']
+        self.default_audio_language = default_audio_language
+        self.licensed_content = video['contentDetails']['licensedContent']
+        self.content_rating = video['contentDetails']['contentRating']
+        self.has_custom_thumbnail = video['contentDetails']['hasCustomThumbnail']
+        self.upload_status = video['status']['uploadStatus']
+        self.privacy_status = video['status']['privacyStatus']
+        self.license = video['status']['license']
+        self.embeddable = video['status']['embeddable']
+        self.public_stats_viewable = video['status']['publicStatsViewable']
+        self.made_for_kids = video['status']['madeForKids']
+        self.self_declared_made_for_kids = self_declared_made_for_kids
+        self.view_count = video['statistics']['viewCount']
+        self.like_count = video['statistics']['likeCount']
+        self.dislike_count = video['statistics']['dislikeCount']
+        self.comment_count = video['statistics']['commentCount']
+        self.favorite_count = video['statistics']['favoriteCount']
+        self.downloaded = self.__is_downloaded()
+        
     
     def download(self, overwrite=False):
-        self.logger.info(f"Downloading {self.__file_name()}")
-        if pathlib.Path(f"{os.getcwd()}\\{self.__file_name()}").is_file():
-            self.logger.info(f"File {self.__file_name()} already exists.")
+        file_name = self.__file_name()
+        self.logger.info(f"Downloading {file_name}")
+        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
+            self.logger.info(f"File {file_name} already exists.")
             if overwrite:
                 self.logger.info("Overwrite set removing file re-downloading")
                 os.remove(self.__file_name())
@@ -337,7 +524,7 @@ class Video(object):
                     raise Exception()
                 self.logger.error(f"got error:\n{e}\nGoing to try again")
                 tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
                 finished = False
         
     
@@ -357,7 +544,7 @@ class Video(object):
                     raise Exception()
                 self.logger.error(f"got error:\n{e}\nGoing to try again")
                 tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
                 finished = False
         
         self.logger.info(f"Downloaded audio for {self.title}")
@@ -386,7 +573,7 @@ class Video(object):
                 self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
                 finished = False
         
-        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {self.__file_name()}")
+        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
         finished = False
         tries = 0
         while not finished and tries < self.MAX_RETRIES + 2:
@@ -400,13 +587,26 @@ class Video(object):
                     raise Exception()
                 self.logger.error(f"got error:\n{e}\nGoing to try again")
                 tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
                 finished = False
                 
-        self.logger.info(f"Files merged as {self.__file_name()}")
+        self.logger.info(f"Files merged as {file_name}")
     
         self.logger.info("Cleaning up source files....")
         self.logger.info(f"Removing {audFile}")
         os.remove(audFile)
         self.logger.info(f"Removing {vidFile}")
         os.remove(vidFile)
+        
+    def upload(self):
+        file = os.path.join(os.getcwd(),self.__file_name())
+        self.logger.info("Creating YouTube Service to allow uploading")
+        
+        try:
+            self.logger.info(f"Attempting to upload {file}")
+            self.__initialize_upload()
+        except HttpError as e:
+            raise e
+        
+        self.pytube_obj = self.__get_pytube()
+        self.update_from_web()
