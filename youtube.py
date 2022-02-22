@@ -3,6 +3,7 @@ Created on Feb 20, 2022
 
 @author: tiff
 '''
+from __future__ import unicode_literals
 import config
 import content
 import ffmpeg
@@ -18,10 +19,13 @@ import pickle
 import pytube
 import google_auth_oauthlib
 import googleapiclient.discovery
+import youtube_dl
 import google.oauth2.credentials
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from google.auth.transport.requests import Request as GoogleAuthRequest
+
+
 
 def make_video(video,channel):
     if 'tags' not in video['snippet']:
@@ -269,6 +273,8 @@ class Video(object):
     
     MAX_RETRIES = 25
     
+    DOWNLOADERS = {'youtube-dl':0, 'pytube':1}
+    
     def __thumb_path(self):
         title = f"thumb_{self.title}.jpg"
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -379,13 +385,144 @@ class Video(object):
         result = request.execute()
         
         return result['items'][0]
+    
+    def __URL(self):
+        base = Video.BASE_URL
+        end = self.id
+        return f"{base}{end}"
+    
+    def __youtubedl_download(self, overwrite):
+        file_name = self.__file_name()
+        self.logger.info(f"Downloading {file_name}")
+        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
+            self.logger.info(f"File {file_name} already exists.")
+            if overwrite:
+                self.logger.info("Overwrite set removing file re-downloading")
+                os.remove(self.__file_name())
+            else:
+                self.logger.info("Overwrite not set not downloading")
+                return
+        
+        url = self.__URL()
+        
+        ydl_opts = {}
+        
+        #ydl_opts['format'] = 299
+        #ydl_opts['nooverwrites']=(not overwrite)
+        #ydl_opts['logger']=self.logger
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            result = ydl.download([url])
+        return result
+    
+    def __pytube_download(self, overwrite):
+        file_name = self.__file_name()
+        self.logger.info(f"Downloading {file_name}")
+        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
+            self.logger.info(f"File {file_name} already exists.")
+            if overwrite:
+                self.logger.info("Overwrite set removing file re-downloading")
+                os.remove(self.__file_name())
+            else:
+                self.logger.info("Overwrite not set not downloading")
+                return
+        
+        self.logger.info(f"Attempting to download video portion of {self.title}")
+        video_file = None
+        vid = self.pytube_obj
+        finished = False
+        tries = 0
+       
+        while not finished and tries < Video.MAX_RETRIES + 2:
+            try:
+                video_file = vid.streams.order_by('resolution').desc().first().download(filename_prefix="video_")
+                finished = True
+            except Exception as e:
+                if tries > Video.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
+                finished = False
+        
+    
+        self.logger.info(f"Downloaded video for {self.title}")
+        
+        self.logger.info(f"Attempting to download audio portion of {self.title}")
+        
+        finished = False
+        tries = 0
+        while not finished and tries < Video.MAX_RETRIES + 2:
+            try:
+                audio_file = vid.streams.filter(only_audio=True).order_by('abr').desc().first().download(filename_prefix="audio_") 
+                finished = True
+            except Exception as e:
+                if tries > Video.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
+                finished = False
+        
+        self.logger.info(f"Downloaded audio for {self.title}")
+        
+        audFile = None
+        vidFile = None
+        source_audio = None
+        source_video = None
+        
+        finished = False
+        tries = 0
+        while not finished and tries < self.MAX_RETRIES + 2:
+            try:
+                self.logger.info("Attempting to prep source audio and video to merge")
+                source_audio = ffmpeg.input(audio_file)
+                source_video = ffmpeg.input(video_file)
+                audFile = content.getInputFilename(source_audio)
+                vidFile = content.getInputFilename(source_video)
+                finished = True
+            except Exception as e:
+                if tries > self.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
+                finished = False
+        
+        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
+        finished = False
+        tries = 0
+        while not finished and tries < self.MAX_RETRIES + 2:
+            try:
+                self.logger.info("Attempting to merge audio and video")
+                ffmpeg.concat(source_video, source_audio, v=1, a=1).output(self.__file_name()).run()
+                finished = True
+            except Exception as e:
+                if tries > self.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
+                finished = False
+                
+        self.logger.info(f"Files merged as {file_name}")
+    
+        self.logger.info("Cleaning up source files....")
+        self.logger.info(f"Removing {audFile}")
+        os.remove(audFile)
+        self.logger.info(f"Removing {vidFile}")
+        os.remove(vidFile)
         
     def __init__(self, channel, video_id=None, favorite_count='0', 
                  comment_count='0', dislike_count='0', like_count='0', view_count='0', self_declared_made_for_kids=False, 
                  made_for_kids=False, public_stats_viewable=True, embeddable=True, lic='youtube', privacy_status="public", 
                  upload_status='notUploaded', has_custom_thumbnail=False, content_rating={}, licensed_content=False, 
                  default_audio_language='en-US', published_at=None, channel_id=None, title=None, description=None, 
-                 thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None, new_video=False):
+                 thumbnails={}, channel_title=None, tags=[], category_id=22, live_broadcast_content=None, new_video=False,
+                 downloader=DOWNLOADERS['pytube']):
         '''
         Constructor
         '''
@@ -420,11 +557,12 @@ class Video(object):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         self.downloaded = self.__is_downloaded()
-        if new_video:
+        if new_video or downloader != Video.DOWNLOADERS['pytube']:
             self.pytube_obj = None
         else:
             self.pytube_obj = self.__get_pytube()
         self.channel = channel
+        self.downloader = downloader
         
     def check_thumb(self):
         if 'maxres' in self.thumbnails:
@@ -569,106 +707,10 @@ class Video(object):
         
     
     def download(self, overwrite=False):
-        file_name = self.__file_name()
-        self.logger.info(f"Downloading {file_name}")
-        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
-            self.logger.info(f"File {file_name} already exists.")
-            if overwrite:
-                self.logger.info("Overwrite set removing file re-downloading")
-                os.remove(self.__file_name())
-            else:
-                self.logger.info("Overwrite not set not downloading")
-                return
-        
-        self.logger.info(f"Attempting to download video portion of {self.title}")
-        video_file = None
-        vid = self.pytube_obj
-        finished = False
-        tries = 0
-       
-        while not finished and tries < Video.MAX_RETRIES + 2:
-            try:
-                video_file = vid.streams.order_by('resolution').desc().first().download(filename_prefix="video_")
-                finished = True
-            except Exception as e:
-                if tries > Video.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
-                finished = False
-        
-    
-        self.logger.info(f"Downloaded video for {self.title}")
-        
-        self.logger.info(f"Attempting to download audio portion of {self.title}")
-        
-        finished = False
-        tries = 0
-        while not finished and tries < Video.MAX_RETRIES + 2:
-            try:
-                audio_file = vid.streams.filter(only_audio=True).order_by('abr').desc().first().download(filename_prefix="audio_") 
-                finished = True
-            except Exception as e:
-                if tries > Video.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
-                finished = False
-        
-        self.logger.info(f"Downloaded audio for {self.title}")
-        
-        audFile = None
-        vidFile = None
-        source_audio = None
-        source_video = None
-        
-        finished = False
-        tries = 0
-        while not finished and tries < self.MAX_RETRIES + 2:
-            try:
-                self.logger.info("Attempting to prep source audio and video to merge")
-                source_audio = ffmpeg.input(audio_file)
-                source_video = ffmpeg.input(video_file)
-                audFile = content.getInputFilename(source_audio)
-                vidFile = content.getInputFilename(source_video)
-                finished = True
-            except Exception as e:
-                if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
-                finished = False
-        
-        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
-        finished = False
-        tries = 0
-        while not finished and tries < self.MAX_RETRIES + 2:
-            try:
-                self.logger.info("Attempting to merge audio and video")
-                ffmpeg.concat(source_video, source_audio, v=1, a=1).output(self.__file_name()).run()
-                finished = True
-            except Exception as e:
-                if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
-                finished = False
-                
-        self.logger.info(f"Files merged as {file_name}")
-    
-        self.logger.info("Cleaning up source files....")
-        self.logger.info(f"Removing {audFile}")
-        os.remove(audFile)
-        self.logger.info(f"Removing {vidFile}")
-        os.remove(vidFile)
+        if self.downloader == Video.DOWNLOADERS['pytube']:
+            self.__pytube_download(overwrite)
+        if self.downloader == Video.DOWNLOADERS['youtube-dl']:
+            self.__youtubedl_download(overwrite)
         
     def upload(self):
         file = os.path.join(os.getcwd(),self.__file_name())
