@@ -6,7 +6,6 @@ Created on Feb 21, 2022
 import requests
 import config
 import os.path
-import pathlib
 
 def check_request_for_error(request, logger):
     if 'error' in request:
@@ -130,7 +129,7 @@ class Video(object):
         self.logger.info(f"Fix Name ran name is now: {self.name}")
     
     def __file_path(self):
-        return pathlib.Path(os.path.join(os.getcwd(), self.file_name))
+        return os.path.join(os.getcwd(), self.file_name)
     
     def __upload_new(self):
         params = {
@@ -261,7 +260,8 @@ class Video(object):
         return self.__update_to_lbry()
     
     def upload(self):
-        if pathlib.Path(os.path.join(os.getcwd(),self.file_name)).is_file() and self.claim_id is None:
+        file_path = os.path.join(os.getcwd(),self.file_name)
+        if os.path.isfile(file_path) and self.claim_id is None:
             if self.name is None:
                 self.logger.error("name required to upload stream")
             else:

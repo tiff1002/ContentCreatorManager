@@ -11,7 +11,6 @@ import time
 import httplib2
 import http.client
 import urllib.request
-import pathlib
 import os
 import math
 import pickle
@@ -75,7 +74,7 @@ class Channel(object):
     def __load__creds(self):
         pickle_file = os.path.join(os.getcwd(),self.__creds_pickle_file_name())
         
-        if not pathlib.Path(pickle_file).is_file():
+        if not os.path.isfile(pickle_file):
             self.logger.info("Pickle File for Google Creds does not exist...Returning None")
             return None
 
@@ -290,7 +289,7 @@ class Video(object):
     
     def __is_downloaded(self):
         f = os.path.join(os.getcwd(),self.__file_name())
-        return pathlib.Path(f).is_file()
+        return os.path.isfile(f)
     
     def __file_name(self):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -392,8 +391,9 @@ class Video(object):
     
     def __youtubedl_download(self, overwrite):
         file_name = self.__file_name()
+        file_path = os.path.join(os.getcwd(),self.__file_name())
         self.logger.info(f"Downloading {file_name}")
-        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
+        if os.path.isfile(file_path):
             self.logger.info(f"File {file_name} already exists.")
             if overwrite:
                 self.logger.info("Overwrite set removing file re-downloading")
@@ -415,8 +415,9 @@ class Video(object):
     
     def __pytube_download(self, overwrite):
         file_name = self.__file_name()
+        file_path = os.path.join(os.getcwd(),self.__file_name())
         self.logger.info(f"Downloading {file_name}")
-        if pathlib.Path(os.path.join(os.getcwd(),self.__file_name())).is_file():
+        if os.path.isfile(file_path):
             self.logger.info(f"File {file_name} already exists.")
             if overwrite:
                 self.logger.info("Overwrite set removing file re-downloading")
