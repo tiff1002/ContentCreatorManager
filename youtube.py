@@ -3,7 +3,6 @@ Created on Feb 20, 2022
 
 @author: tiff
 '''
-from __future__ import unicode_literals
 import config
 import content
 import ffmpeg
@@ -295,7 +294,7 @@ class Video(object):
     
     def __file_name(self):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        getVals = list([val for val in f"youtube_{self.title}.mp4" if val in valid_chars])
+        getVals = list([val for val in f"{self.title}.mp4" if val in valid_chars])
         return "".join(getVals)
         
     def __get_pytube(self, use_oauth=True):
@@ -349,7 +348,7 @@ class Video(object):
         while response is None:
             try:
                 self.logger.info('Uploading file...') 
-                status, response = request.next_chunk()
+                response = request.next_chunk()
                 if(response is not None):
                     if('id' in response):
                         self.logger.info(f"Video id \"{response['id']}\" was successfully uploaded.")
