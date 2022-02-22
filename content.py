@@ -6,6 +6,10 @@ Created on Feb 9, 2022
 import cv2
 import numpy as np
 
+def lbry_youtube_video_compare_title_only(lbry_video, youtube_video):
+    if lbry_video.title != youtube_video.title:
+        return False
+    return True
 
 def lbry_youtube_video_compare(lbry_video, youtube_video):
     differences = {'lbry':{},'youtube':{},'count':0}
@@ -37,8 +41,8 @@ def lbry_youtube_channel_compare(lbry_channel, youtube_channel):
     for x in lbry_vids:
         found = False
         for y in youtube_vids:
-            compare = lbry_youtube_video_compare(x, y)
-            if compare['count'] == 0:
+            compare = lbry_youtube_video_compare_title_only(x, y)
+            if compare:
                 found = True
                 
         if not found:
@@ -47,8 +51,8 @@ def lbry_youtube_channel_compare(lbry_channel, youtube_channel):
     for x in youtube_vids:
         found = False
         for y in lbry_vids:
-            compare = lbry_youtube_video_compare(x, y)
-            if compare['count'] == 0:
+            compare = lbry_youtube_video_compare_title_only(x, y)
+            if compare:
                 found = True
                 
         if not found:
