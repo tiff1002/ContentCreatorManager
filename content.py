@@ -6,7 +6,61 @@ Created on Feb 9, 2022
 import cv2
 import numpy as np
 
+def lbry_youtube_video_compare_title_only(lbry_video, youtube_video):
+    if lbry_video.title != youtube_video.title:
+        return False
+    return True
 
+def lbry_youtube_video_compare(lbry_video, youtube_video):
+    differences = {'lbry':{},'youtube':{},'count':0}
+    
+    if lbry_video.title != youtube_video.title:
+        differences['lbry']['title'] = lbry_video.title
+        differences['youtube']['title'] = youtube_video.title
+        differences['count'] += 1
+    
+    if lbry_video.description != youtube_video.description:
+        differences['lbry']['description'] = lbry_video.title
+        differences['youtube']['description'] = youtube_video.title
+        differences['count'] += 1
+        
+    if lbry_video.tags != youtube_video.tags:
+        differences['lbry']['tags'] = lbry_video.title
+        differences['youtube']['tags'] = youtube_video.title
+        differences['count'] += 1
+    
+    return differences
+
+def lbry_youtube_channel_compare(lbry_channel, youtube_channel):
+    lbry_vids = lbry_channel.videos
+    youtube_vids = youtube_channel.videos
+
+    vids_missing_from_lbry = []
+    vids_missing_from_youtube = []
+    
+    for x in lbry_vids:
+        found = False
+        for y in youtube_vids:
+            compare = lbry_youtube_video_compare_title_only(x, y)
+            if compare:
+                found = True
+                
+        if not found:
+            vids_missing_from_youtube.append(x)
+            
+    for x in youtube_vids:
+        found = False
+        for y in lbry_vids:
+            compare = lbry_youtube_video_compare_title_only(x, y)
+            if compare:
+                found = True
+                
+        if not found:
+            vids_missing_from_lbry.append(x)        
+    
+    
+    result = {'lbry':{'missing':vids_missing_from_lbry},'youtube':{'missing':vids_missing_from_youtube}}
+    return result
 
 def compare_images(img1, img2, settings):
     file_1 = cv2.imread(img1)
