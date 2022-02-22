@@ -7,6 +7,7 @@ import youtube
 import config
 import content
 import os
+import lbry
 
 
 
@@ -14,10 +15,4 @@ import os
 settings = config.Settings(os.path.join(os.getcwd(),"test"))
 
 
-channel = youtube.Channel(settings, init_vids=False)
-
-test = youtube.Video(channel=channel, video_id="uFEOds5gfVo")
-
-test.update_from_web()
-
-test.download(overwrite=True)
+channel = lbry.Channel(settings=settings, claim_id='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed')
