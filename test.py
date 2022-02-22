@@ -3,9 +3,7 @@ Created on Feb 14, 2022
 
 @author: tiff
 '''
-import youtube
 import config
-import content
 import os
 import lbry
 import json
@@ -13,9 +11,16 @@ import json
 def json_print(value):
     print(json.dumps(value, sort_keys=True, indent=4))
 
-settings = config.Settings(os.path.join(os.getcwd(),"test"))
+settings = config.Settings(os.path.join(os.getcwd(),"test2"))
 
 
-channel = lbry.Channel(settings=settings, claim_id='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed')
+channel = lbry.Channel(settings=settings, claim_id='8be45e4ba05bd6961619489f6408a0dc62f4e650', init_vids=False)
 
-print(len(channel.videos))
+video = lbry.Video(channel=channel,claim_id="1d1e00753d9998505b2fb2542827e10823cc8ef3")
+
+video.update_local()
+
+video.title = "LBRY Upload Test"
+video.description = "Test upload and update with content creator manager dev project"
+
+video.update_lbry()
