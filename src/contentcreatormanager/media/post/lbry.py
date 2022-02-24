@@ -3,9 +3,9 @@ Created on Feb 24, 2022
 
 @author: tiff
 '''
-from contentcreatormanager.media.post.post import Post
+import contentcreatormanager.media.post
 
-class LBRYTextPost(Post):
+class LBRYTextPost(contentcreatormanager.media.post.post.Post):
     '''
     classdocs
     '''

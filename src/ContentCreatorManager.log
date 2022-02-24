@@ -1,0 +1,1080 @@
+2022-02-24 13:36:50,130 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 13:36:50,130 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 13:36:50,131 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 13:53:47,800 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 13:53:47,800 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 13:53:47,801 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 13:53:47,801 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 13:53:47,801 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 13:53:47,903 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 13:53:47,903 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 13:59:09,909 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 13:59:09,910 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 13:59:09,910 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 13:59:09,910 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 13:59:09,911 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 13:59:10,020 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 13:59:10,021 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:02:47,665 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:02:47,665 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:02:47,665 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:02:47,666 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:02:47,666 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:02:47,767 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:02:47,767 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:02:55,488 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:02:55,489 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:02:55,489 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:02:55,489 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:02:55,489 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:02:55,583 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:02:55,583 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:03:04,130 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:03:04,130 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:03:04,130 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:03:04,131 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:03:04,131 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:03:04,229 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:03:04,229 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:03:35,552 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:03:35,552 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:03:35,552 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:03:35,553 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:03:35,553 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:03:35,659 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:03:35,660 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:03:46,312 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:03:46,312 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:03:46,313 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:03:46,313 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:03:46,313 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:03:46,409 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:03:46,410 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:03:46,531 - LBRYLogger - INFO - Found 61 videos on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:03:46,531 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:03:57,310 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:03:57,310 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:03:57,310 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:03:57,311 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:03:57,311 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:03:57,417 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:03:57,417 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:03:57,542 - LBRYLogger - INFO - Found 61 videos on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:03:57,543 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:03:57,543 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:03:57,671 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:03:57,803 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:03:57,896 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:03:57,896 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:03:57,896 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:03:57,897 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:03:57,897 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:03:57,897 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:03:57,897 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:03:57,898 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:03:57,898 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:03:57,898 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:03:57,898 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:03:57,898 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:03:57,899 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:03:57,899 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:03:57,899 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:03:57,899 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:03:57,899 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:03:57,900 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:03:57,901 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:03:57,902 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:03:57,902 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:03:57,902 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:03:57,902 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:03:57,902 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:03:57,903 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:03:57,903 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:03:57,903 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:03:57,903 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:03:57,903 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:03:57,904 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:03:57,904 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:03:57,904 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:03:57,904 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:03:57,905 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:03:57,905 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:03:57,905 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:03:57,905 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:03:57,906 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:03:57,906 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:03:57,906 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:03:57,906 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:03:57,906 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:03:57,907 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:03:57,907 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:03:57,907 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:03:57,907 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:03:57,907 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:03:57,908 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:03:57,908 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:03:57,908 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:05:43,405 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:05:43,405 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:05:43,405 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:05:43,405 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:05:43,406 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:05:43,501 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:05:43,502 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:05:43,643 - LBRYLogger - INFO - Found 61 videos on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:05:43,643 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:05:43,644 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:05:43,813 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:05:43,954 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:05:44,056 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:05:44,056 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:05:44,056 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:05:44,056 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:05:44,057 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:05:44,057 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:05:44,057 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:05:44,057 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:05:44,058 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:05:44,059 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:05:44,059 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:05:44,059 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:05:44,059 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:05:44,059 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:05:44,060 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:05:44,060 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:05:44,060 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:05:44,061 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:05:44,061 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:05:44,061 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:05:44,062 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:05:44,062 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:05:44,062 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:05:44,062 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:05:44,062 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:05:44,063 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:05:44,063 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:05:44,063 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:05:44,063 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:05:44,064 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:05:44,065 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:05:44,065 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:05:44,065 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:05:44,065 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:05:44,066 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:05:44,067 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:05:44,067 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:05:44,067 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:05:44,067 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:05:44,067 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:05:44,068 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:05:44,068 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:05:44,068 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:05:44,068 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:05:44,068 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:06:12,562 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:06:12,562 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:06:12,564 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:06:12,564 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:06:12,564 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:06:12,669 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:06:12,670 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:06:12,797 - LBRYLogger - INFO - Found 61 videos on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:06:12,797 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:06:12,798 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:06:12,924 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:06:13,059 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:06:13,157 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:06:13,157 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:06:13,157 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:06:13,157 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:06:13,158 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:06:13,159 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:06:13,160 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:06:13,161 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:06:13,162 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:06:13,162 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:06:13,162 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:06:13,162 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:06:13,163 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:06:13,164 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:06:13,165 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:06:13,166 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:06:13,167 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:06:13,167 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:06:13,167 - MediaLogger - INFO - Initializing Media Object with id da2a0de618473135706c90a0f570d75a6f9791c2
+2022-02-24 14:06:13,167 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:13,167 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:23,344 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:06:23,345 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:06:23,345 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:06:23,345 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:06:23,346 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:06:23,440 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:06:23,440 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:06:23,572 - LBRYLogger - INFO - Found 61 videos on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:06:23,573 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:06:23,573 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:06:23,689 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:06:23,808 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:06:23,910 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:06:23,910 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:06:23,910 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:06:23,911 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:06:23,911 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:06:23,911 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:06:23,911 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:06:23,912 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:06:23,912 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:06:23,912 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:06:23,912 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:06:23,913 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:06:23,913 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:06:23,913 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:06:23,913 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:06:23,913 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:06:23,914 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:06:23,914 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:06:23,914 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:06:23,914 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:06:23,914 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:06:23,915 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:06:23,915 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:06:23,915 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:06:23,915 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:06:23,915 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:06:23,916 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:06:23,916 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:06:23,916 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:06:23,916 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:06:23,916 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:06:23,917 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:06:23,917 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:06:23,917 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:06:23,917 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:06:23,918 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:06:23,918 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:06:23,918 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:06:23,918 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:06:23,919 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:06:23,919 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:06:23,919 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:06:23,920 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:06:23,920 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:06:23,921 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:06:23,921 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:06:23,921 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:06:23,922 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:06:23,923 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:06:23,923 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:06:23,923 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:06:23,923 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:06:23,923 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:06:23,924 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:06:23,924 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:06:23,924 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:06:23,924 - MediaLogger - INFO - Initializing Media Object with id da2a0de618473135706c90a0f570d75a6f9791c2
+2022-02-24 14:06:23,924 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:23,924 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:24,118 - MediaLogger - INFO - Initializing Media Object with id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd
+2022-02-24 14:06:24,118 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:24,118 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:24,307 - MediaLogger - INFO - Initializing Media Object with id f41f6ecd741e656c00c3c9d52696da6fadad89de
+2022-02-24 14:06:24,307 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:24,307 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:24,488 - MediaLogger - INFO - Initializing Media Object with id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad
+2022-02-24 14:06:24,489 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:24,489 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:24,682 - MediaLogger - INFO - Initializing Media Object with id 017b252ed988ac2ddcdf544eb1bba8659e28a238
+2022-02-24 14:06:24,682 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:24,683 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:24,867 - MediaLogger - INFO - Initializing Media Object with id a0607a104279d380dd31f3c2a91e4bddb6ef5221
+2022-02-24 14:06:24,868 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:24,868 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:25,058 - MediaLogger - INFO - Initializing Media Object with id cd548eadb8cba5c397fb3804589d274387207603
+2022-02-24 14:06:25,058 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:25,059 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:25,248 - MediaLogger - INFO - Initializing Media Object with id 6f14c5641fabd115c5adf21637877351ca844f7b
+2022-02-24 14:06:25,249 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:25,249 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:25,428 - MediaLogger - INFO - Initializing Media Object with id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6
+2022-02-24 14:06:25,429 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:25,429 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:25,615 - MediaLogger - INFO - Initializing Media Object with id 18c49f50d819c2ee9dde8b4409ed608b36ba3317
+2022-02-24 14:06:25,615 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:25,615 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:25,824 - MediaLogger - INFO - Initializing Media Object with id 76bd14bf620b60670d09702a336ef8e048ba91a8
+2022-02-24 14:06:25,824 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:25,825 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,013 - MediaLogger - INFO - Initializing Media Object with id 2d0694521dd92e44c15b22d3c45299417ede1fde
+2022-02-24 14:06:26,013 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,014 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,212 - MediaLogger - INFO - Initializing Media Object with id f336de587765ee23e1402670a7389822f3d49c56
+2022-02-24 14:06:26,212 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,212 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,406 - MediaLogger - INFO - Initializing Media Object with id c9d5b09b8c18f0381efc63e130cf3de3d069886c
+2022-02-24 14:06:26,406 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,406 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,596 - MediaLogger - INFO - Initializing Media Object with id 5bf8e59a6ca10ba4ee8788b076ac367821797a32
+2022-02-24 14:06:26,597 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,597 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,781 - MediaLogger - INFO - Initializing Media Object with id 30710f9860760f21b4960bb1fdf3c1218867525e
+2022-02-24 14:06:26,781 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,781 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:26,958 - MediaLogger - INFO - Initializing Media Object with id ab4ae53535ea1426f7896fce5c889ac82b4e8864
+2022-02-24 14:06:26,958 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:26,958 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:27,145 - MediaLogger - INFO - Initializing Media Object with id 086535c2fc361c0c2925dea72996c706de7a1f82
+2022-02-24 14:06:27,145 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:27,145 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:27,338 - MediaLogger - INFO - Initializing Media Object with id 3f32c712ef9e356775e0e91fa6e831d116556391
+2022-02-24 14:06:27,339 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:27,339 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:27,569 - MediaLogger - INFO - Initializing Media Object with id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c
+2022-02-24 14:06:27,569 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:27,570 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:27,778 - MediaLogger - INFO - Initializing Media Object with id 52c5f28cd1050887475e139256ad792583e61b6b
+2022-02-24 14:06:27,778 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:27,778 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:27,967 - MediaLogger - INFO - Initializing Media Object with id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a
+2022-02-24 14:06:27,967 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:27,968 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:28,148 - MediaLogger - INFO - Initializing Media Object with id f35919a6ca267c0a1a648253a2b478060610ef54
+2022-02-24 14:06:28,149 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:28,149 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:28,335 - MediaLogger - INFO - Initializing Media Object with id 22e7cb3efa34eb57f0d055443f345a379406d0f4
+2022-02-24 14:06:28,336 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:28,336 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:28,525 - MediaLogger - INFO - Initializing Media Object with id ffd568259556f316c6b8c6ca0f523f7f33ba2d98
+2022-02-24 14:06:28,525 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:28,525 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:28,709 - MediaLogger - INFO - Initializing Media Object with id 06f60410927015f7d9682a4ded20734dfa727e62
+2022-02-24 14:06:28,709 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:28,709 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:28,893 - MediaLogger - INFO - Initializing Media Object with id b2c46af31f73a33b3a0632b303ecf9b1b9daea82
+2022-02-24 14:06:28,894 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:28,894 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,079 - MediaLogger - INFO - Initializing Media Object with id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44
+2022-02-24 14:06:29,079 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,079 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,255 - MediaLogger - INFO - Initializing Media Object with id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079
+2022-02-24 14:06:29,255 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,255 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,444 - MediaLogger - INFO - Initializing Media Object with id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e
+2022-02-24 14:06:29,445 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,445 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,622 - MediaLogger - INFO - Initializing Media Object with id f7e31218da84b99c916f0a76c929e56d68a00cc1
+2022-02-24 14:06:29,622 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,622 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,801 - MediaLogger - INFO - Initializing Media Object with id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0
+2022-02-24 14:06:29,801 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,801 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:29,976 - MediaLogger - INFO - Initializing Media Object with id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8
+2022-02-24 14:06:29,976 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:29,976 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:30,153 - MediaLogger - INFO - Initializing Media Object with id 7d7620e6c197a788533cf9b85451a1fe653a3168
+2022-02-24 14:06:30,154 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:30,154 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:30,326 - MediaLogger - INFO - Initializing Media Object with id f066e9c55f22a11a9da77a7b5b21f5b0264f9276
+2022-02-24 14:06:30,326 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:30,326 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:30,523 - MediaLogger - INFO - Initializing Media Object with id e1c33b463cdaf8a388a824f4fb7341be02f52bf6
+2022-02-24 14:06:30,523 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:30,524 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:30,712 - MediaLogger - INFO - Initializing Media Object with id 203179a23263788ff4fb2c264d7c5882ea31401e
+2022-02-24 14:06:30,712 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:30,712 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:30,893 - MediaLogger - INFO - Initializing Media Object with id 78d324426aec090216adeab79d19b325e92ba7e6
+2022-02-24 14:06:30,893 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:30,893 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:31,074 - MediaLogger - INFO - Initializing Media Object with id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258
+2022-02-24 14:06:31,074 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:31,074 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:31,250 - MediaLogger - INFO - Initializing Media Object with id c78631029ed134b341f8dd41c910ceea4d0b7f4d
+2022-02-24 14:06:31,250 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:31,251 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:31,452 - MediaLogger - INFO - Initializing Media Object with id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171
+2022-02-24 14:06:31,453 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:31,453 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:31,640 - MediaLogger - INFO - Initializing Media Object with id 847858c87c018a65a2c89b98dcb64e10e19a3bb1
+2022-02-24 14:06:31,640 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:31,640 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:31,824 - MediaLogger - INFO - Initializing Media Object with id 0bf2734ad76274771249cc43c2b1846af229134d
+2022-02-24 14:06:31,824 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:31,824 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,003 - MediaLogger - INFO - Initializing Media Object with id 2ca1de3b105cb829112649547b35e040bfc2ff69
+2022-02-24 14:06:32,003 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,003 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,193 - MediaLogger - INFO - Initializing Media Object with id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a
+2022-02-24 14:06:32,193 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,193 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,389 - MediaLogger - INFO - Initializing Media Object with id e93a616e017335a60c319db07a3fbf19af7f5290
+2022-02-24 14:06:32,389 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,389 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,576 - MediaLogger - INFO - Initializing Media Object with id 308bd9c155008543a270b8c72d582095bdcbfe5c
+2022-02-24 14:06:32,576 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,576 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,786 - MediaLogger - INFO - Initializing Media Object with id 6cf9133b625aae09892c71ebe14abdebc02ff363
+2022-02-24 14:06:32,786 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,787 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:32,985 - MediaLogger - INFO - Initializing Media Object with id d3ef7d9a0a5248d02376de95f15834c68a27cb1f
+2022-02-24 14:06:32,986 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:32,986 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:33,166 - MediaLogger - INFO - Initializing Media Object with id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9
+2022-02-24 14:06:33,166 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:33,166 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:33,375 - MediaLogger - INFO - Initializing Media Object with id 37523b5d8632a6fde48d10cc6490431f145b0dc0
+2022-02-24 14:06:33,376 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:33,376 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:33,590 - MediaLogger - INFO - Initializing Media Object with id e365d92e3f8dceabdf747ee5c9b34fd108cd902e
+2022-02-24 14:06:33,590 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:33,591 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:33,775 - MediaLogger - INFO - Initializing Media Object with id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc
+2022-02-24 14:06:33,775 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:33,775 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:33,989 - MediaLogger - INFO - Initializing Media Object with id 4d961d38fc04b60e419b4d75f38229b8bc598be0
+2022-02-24 14:06:33,989 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:33,989 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:34,194 - MediaLogger - INFO - Initializing Media Object with id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415
+2022-02-24 14:06:34,194 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:34,195 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:34,396 - MediaLogger - INFO - Initializing Media Object with id 24b33582f7ab607a65645fda49ca69e6a9ab7c16
+2022-02-24 14:06:34,396 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:34,396 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:34,602 - MediaLogger - INFO - Initializing Media Object with id ed2867856eb2080a10e1354934eccf190f057bd9
+2022-02-24 14:06:34,602 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:34,603 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:34,786 - MediaLogger - INFO - Initializing Media Object with id d45445a55f785e9d94c7e71a33745e7fbe0a74df
+2022-02-24 14:06:34,786 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:06:34,786 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:06:34,995 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:12:22,007 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:12:22,007 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:12:22,007 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:12:22,007 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:12:22,008 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:12:22,109 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:12:22,110 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:12:22,238 - LBRYLogger - INFO - Found 61 claims on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:12:22,238 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:12:22,238 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:12:22,358 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:12:22,478 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:12:22,571 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:12:22,572 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:12:22,572 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:12:22,572 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:12:22,572 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:12:22,573 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:12:22,573 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:12:22,573 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:12:22,573 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:12:22,574 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:12:22,574 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:12:22,574 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:12:22,574 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:12:22,575 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:12:22,576 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:12:22,576 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:12:22,576 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:12:22,576 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:12:22,576 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:12:22,577 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:12:22,578 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:12:22,578 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:12:22,578 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:12:22,578 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:12:22,578 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:12:22,579 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:12:22,579 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:12:22,579 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:12:22,579 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:12:22,579 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:12:22,580 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:12:22,581 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:12:22,581 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:12:22,581 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:12:22,581 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:12:22,582 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:12:22,583 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:12:22,583 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:12:22,583 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:12:22,583 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:12:22,583 - MediaLogger - INFO - Initializing Media Object with id da2a0de618473135706c90a0f570d75a6f9791c2
+2022-02-24 14:12:22,583 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,584 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,584 - MediaLogger - INFO - Initializing Media Object with id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd
+2022-02-24 14:12:22,584 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,584 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,584 - MediaLogger - INFO - Initializing Media Object with id f41f6ecd741e656c00c3c9d52696da6fadad89de
+2022-02-24 14:12:22,584 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,585 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,585 - MediaLogger - INFO - Initializing Media Object with id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad
+2022-02-24 14:12:22,585 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,585 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,586 - MediaLogger - INFO - Initializing Media Object with id 017b252ed988ac2ddcdf544eb1bba8659e28a238
+2022-02-24 14:12:22,586 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,586 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,587 - MediaLogger - INFO - Initializing Media Object with id a0607a104279d380dd31f3c2a91e4bddb6ef5221
+2022-02-24 14:12:22,587 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,587 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,587 - MediaLogger - INFO - Initializing Media Object with id cd548eadb8cba5c397fb3804589d274387207603
+2022-02-24 14:12:22,587 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,588 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,588 - MediaLogger - INFO - Initializing Media Object with id 6f14c5641fabd115c5adf21637877351ca844f7b
+2022-02-24 14:12:22,588 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,588 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,588 - MediaLogger - INFO - Initializing Media Object with id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6
+2022-02-24 14:12:22,589 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,589 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,589 - MediaLogger - INFO - Initializing Media Object with id 18c49f50d819c2ee9dde8b4409ed608b36ba3317
+2022-02-24 14:12:22,589 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,589 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,589 - MediaLogger - INFO - Initializing Media Object with id 76bd14bf620b60670d09702a336ef8e048ba91a8
+2022-02-24 14:12:22,590 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,590 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,590 - MediaLogger - INFO - Initializing Media Object with id 2d0694521dd92e44c15b22d3c45299417ede1fde
+2022-02-24 14:12:22,590 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,590 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,590 - MediaLogger - INFO - Initializing Media Object with id f336de587765ee23e1402670a7389822f3d49c56
+2022-02-24 14:12:22,591 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,591 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,591 - MediaLogger - INFO - Initializing Media Object with id c9d5b09b8c18f0381efc63e130cf3de3d069886c
+2022-02-24 14:12:22,591 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,591 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,591 - MediaLogger - INFO - Initializing Media Object with id 5bf8e59a6ca10ba4ee8788b076ac367821797a32
+2022-02-24 14:12:22,592 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,592 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,592 - MediaLogger - INFO - Initializing Media Object with id 30710f9860760f21b4960bb1fdf3c1218867525e
+2022-02-24 14:12:22,592 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,592 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,592 - MediaLogger - INFO - Initializing Media Object with id ab4ae53535ea1426f7896fce5c889ac82b4e8864
+2022-02-24 14:12:22,593 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,593 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,593 - MediaLogger - INFO - Initializing Media Object with id 086535c2fc361c0c2925dea72996c706de7a1f82
+2022-02-24 14:12:22,593 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,594 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,594 - MediaLogger - INFO - Initializing Media Object with id 3f32c712ef9e356775e0e91fa6e831d116556391
+2022-02-24 14:12:22,594 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,594 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,594 - MediaLogger - INFO - Initializing Media Object with id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c
+2022-02-24 14:12:22,595 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,595 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,595 - MediaLogger - INFO - Initializing Media Object with id 52c5f28cd1050887475e139256ad792583e61b6b
+2022-02-24 14:12:22,595 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,595 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,596 - MediaLogger - INFO - Initializing Media Object with id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a
+2022-02-24 14:12:22,596 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,596 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,596 - MediaLogger - INFO - Initializing Media Object with id f35919a6ca267c0a1a648253a2b478060610ef54
+2022-02-24 14:12:22,597 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,597 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,597 - MediaLogger - INFO - Initializing Media Object with id 22e7cb3efa34eb57f0d055443f345a379406d0f4
+2022-02-24 14:12:22,597 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,597 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,598 - MediaLogger - INFO - Initializing Media Object with id ffd568259556f316c6b8c6ca0f523f7f33ba2d98
+2022-02-24 14:12:22,598 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,598 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,598 - MediaLogger - INFO - Initializing Media Object with id 06f60410927015f7d9682a4ded20734dfa727e62
+2022-02-24 14:12:22,598 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,598 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,599 - MediaLogger - INFO - Initializing Media Object with id b2c46af31f73a33b3a0632b303ecf9b1b9daea82
+2022-02-24 14:12:22,599 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,599 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,599 - MediaLogger - INFO - Initializing Media Object with id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44
+2022-02-24 14:12:22,599 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,599 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,600 - MediaLogger - INFO - Initializing Media Object with id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079
+2022-02-24 14:12:22,600 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,600 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,600 - MediaLogger - INFO - Initializing Media Object with id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e
+2022-02-24 14:12:22,600 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,600 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,601 - MediaLogger - INFO - Initializing Media Object with id f7e31218da84b99c916f0a76c929e56d68a00cc1
+2022-02-24 14:12:22,601 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,601 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,601 - MediaLogger - INFO - Initializing Media Object with id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0
+2022-02-24 14:12:22,601 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,601 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,602 - MediaLogger - INFO - Initializing Media Object with id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8
+2022-02-24 14:12:22,602 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,602 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,602 - MediaLogger - INFO - Initializing Media Object with id 7d7620e6c197a788533cf9b85451a1fe653a3168
+2022-02-24 14:12:22,602 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,603 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,603 - MediaLogger - INFO - Initializing Media Object with id f066e9c55f22a11a9da77a7b5b21f5b0264f9276
+2022-02-24 14:12:22,603 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,603 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,604 - MediaLogger - INFO - Initializing Media Object with id e1c33b463cdaf8a388a824f4fb7341be02f52bf6
+2022-02-24 14:12:22,604 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,604 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,604 - MediaLogger - INFO - Initializing Media Object with id 203179a23263788ff4fb2c264d7c5882ea31401e
+2022-02-24 14:12:22,604 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,604 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,605 - MediaLogger - INFO - Initializing Media Object with id 78d324426aec090216adeab79d19b325e92ba7e6
+2022-02-24 14:12:22,605 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,605 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,605 - MediaLogger - INFO - Initializing Media Object with id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258
+2022-02-24 14:12:22,605 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,606 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,606 - MediaLogger - INFO - Initializing Media Object with id c78631029ed134b341f8dd41c910ceea4d0b7f4d
+2022-02-24 14:12:22,606 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,606 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,606 - MediaLogger - INFO - Initializing Media Object with id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171
+2022-02-24 14:12:22,606 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,607 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,607 - MediaLogger - INFO - Initializing Media Object with id 847858c87c018a65a2c89b98dcb64e10e19a3bb1
+2022-02-24 14:12:22,607 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,607 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,607 - MediaLogger - INFO - Initializing Media Object with id 0bf2734ad76274771249cc43c2b1846af229134d
+2022-02-24 14:12:22,607 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,608 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,608 - MediaLogger - INFO - Initializing Media Object with id 2ca1de3b105cb829112649547b35e040bfc2ff69
+2022-02-24 14:12:22,608 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,608 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,608 - MediaLogger - INFO - Initializing Media Object with id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a
+2022-02-24 14:12:22,608 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,609 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,609 - MediaLogger - INFO - Initializing Media Object with id e93a616e017335a60c319db07a3fbf19af7f5290
+2022-02-24 14:12:22,609 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,609 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,609 - MediaLogger - INFO - Initializing Media Object with id 308bd9c155008543a270b8c72d582095bdcbfe5c
+2022-02-24 14:12:22,609 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,610 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,610 - MediaLogger - INFO - Initializing Media Object with id 6cf9133b625aae09892c71ebe14abdebc02ff363
+2022-02-24 14:12:22,610 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,610 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,610 - MediaLogger - INFO - Initializing Media Object with id d3ef7d9a0a5248d02376de95f15834c68a27cb1f
+2022-02-24 14:12:22,611 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,611 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,611 - MediaLogger - INFO - Initializing Media Object with id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9
+2022-02-24 14:12:22,611 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,612 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,612 - MediaLogger - INFO - Initializing Media Object with id 37523b5d8632a6fde48d10cc6490431f145b0dc0
+2022-02-24 14:12:22,612 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,612 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,612 - MediaLogger - INFO - Initializing Media Object with id e365d92e3f8dceabdf747ee5c9b34fd108cd902e
+2022-02-24 14:12:22,613 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,613 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,613 - MediaLogger - INFO - Initializing Media Object with id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc
+2022-02-24 14:12:22,613 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,613 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,613 - MediaLogger - INFO - Initializing Media Object with id 4d961d38fc04b60e419b4d75f38229b8bc598be0
+2022-02-24 14:12:22,614 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,614 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,614 - MediaLogger - INFO - Initializing Media Object with id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415
+2022-02-24 14:12:22,614 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,614 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,614 - MediaLogger - INFO - Initializing Media Object with id 24b33582f7ab607a65645fda49ca69e6a9ab7c16
+2022-02-24 14:12:22,615 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,615 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,615 - MediaLogger - INFO - Initializing Media Object with id ed2867856eb2080a10e1354934eccf190f057bd9
+2022-02-24 14:12:22,615 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,615 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:22,615 - MediaLogger - INFO - Initializing Media Object with id d45445a55f785e9d94c7e71a33745e7fbe0a74df
+2022-02-24 14:12:22,616 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:22,616 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:40,427 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:12:40,427 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:12:40,427 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:12:40,428 - BaseLogger - INFO - Initializing Platform Object with id 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed
+2022-02-24 14:12:40,428 - LBRYLogger - INFO - Initializing Platform Object as LBRY Platform object
+2022-02-24 14:12:40,529 - LBRYLogger - INFO - Setting address, bid, name, normalized_name, permanent_url, description, email, title, languages, tags, and thumbnail based on api call results
+2022-02-24 14:12:40,529 - LBRYLogger - INFO - init_videos set to true grabbing video data and adding to media_objects
+2022-02-24 14:12:40,656 - LBRYLogger - INFO - Found 61 claims on channel 5e79dc0b3a00f643a0a964c87538ae2d66ddbbed with 4 page(s) of data
+2022-02-24 14:12:40,656 - LBRYLogger - INFO - adding initial request as 1st page of data
+2022-02-24 14:12:40,656 - LBRYLogger - INFO - getting page 2 of data and adding it
+2022-02-24 14:12:40,781 - LBRYLogger - INFO - getting page 3 of data and adding it
+2022-02-24 14:12:40,903 - LBRYLogger - INFO - getting page 4 of data and adding it
+2022-02-24 14:12:40,997 - LBRYLogger - INFO - Adding claim with claim_id da2a0de618473135706c90a0f570d75a6f9791c2 and name 0001Lockpickingprogressunedited from page 1 of the results
+2022-02-24 14:12:40,997 - LBRYLogger - INFO - Adding claim with claim_id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd and name 0002Failedattempttopickallmylocksfasteronvideo from page 1 of the results
+2022-02-24 14:12:40,997 - LBRYLogger - INFO - Adding claim with claim_id f41f6ecd741e656c00c3c9d52696da6fadad89de and name 0003PickingClearPadlockallstandardpins from page 1 of the results
+2022-02-24 14:12:40,997 - LBRYLogger - INFO - Adding claim with claim_id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad and name 0004Pickingclearpadlock2spools from page 1 of the results
+2022-02-24 14:12:40,997 - LBRYLogger - INFO - Adding claim with claim_id 017b252ed988ac2ddcdf544eb1bba8659e28a238 and name 0005PickingPadlockthatlookslikemaster3 from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id a0607a104279d380dd31f3c2a91e4bddb6ef5221 and name 0006Pickingsmallblackmasterlock from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id cd548eadb8cba5c397fb3804589d274387207603 and name 0007Pickingmaster140DLF from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id 6f14c5641fabd115c5adf21637877351ca844f7b and name 0008Pickingmymaster140swellpicking2ofthemandfailingtopick1 from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6 and name 0009PickingMaster150D from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id 18c49f50d819c2ee9dde8b4409ed608b36ba3317 and name 0010PickingMasterWardedLock from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id 76bd14bf620b60670d09702a336ef8e048ba91a8 and name 0011Failingtopickmaster150D from page 1 of the results
+2022-02-24 14:12:40,998 - LBRYLogger - INFO - Adding claim with claim_id 2d0694521dd92e44c15b22d3c45299417ede1fde and name 0012FailingtopickMaster570 from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id f336de587765ee23e1402670a7389822f3d49c56 and name 0013PickingMaster570finallygotitopenonvideo from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id c9d5b09b8c18f0381efc63e130cf3de3d069886c and name 0014SecondPainfulfailureonMaster570 from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id 5bf8e59a6ca10ba4ee8788b076ac367821797a32 and name 0015PickinganAbus5530 from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id 30710f9860760f21b4960bb1fdf3c1218867525e and name 0016PickingtheAbus5540 from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id ab4ae53535ea1426f7896fce5c889ac82b4e8864 and name 0017PickingaMasterNo40DiskShapedPadlock from page 1 of the results
+2022-02-24 14:12:40,999 - LBRYLogger - INFO - Adding claim with claim_id 086535c2fc361c0c2925dea72996c706de7a1f82 and name 0018Failuretopickwhatshouldbeaneasydisklock from page 1 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id 3f32c712ef9e356775e0e91fa6e831d116556391 and name 0019NewYearsEveSnakeRakingBlueKeyRevolver from page 1 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c and name 0020NewToysPetersonHooksPetersonPrybarsViceMaster140D from page 1 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id 52c5f28cd1050887475e139256ad792583e61b6b and name 0021Devastatingfailureaftermyfirst911offcamopen from page 2 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a and name 0022Master911PickedGuttedandReassembledGreenBeltforTiffW00t from page 2 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id f35919a6ca267c0a1a648253a2b478060610ef54 and name 0023Abus54TI35PickedSurprisinglyhardtoSPPfora3pinlock from page 2 of the results
+2022-02-24 14:12:41,000 - LBRYLogger - INFO - Adding claim with claim_id 22e7cb3efa34eb57f0d055443f345a379406d0f4 and name 0024NewToysSpecialAbus7240Failure from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id ffd568259556f316c6b8c6ca0f523f7f33ba2d98 and name 0025Abus7240RestrictedKeywayPicked from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id 06f60410927015f7d9682a4ded20734dfa727e62 and name 0026UnboxingMyBrandNewHandmadePicks from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id b2c46af31f73a33b3a0632b303ecf9b1b9daea82 and name 0027CuttingaKeybyHandformyAmerican1100 from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44 and name 0028Master410LOTOPicked from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079 and name 0029Abus64TI40Picked from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e and name 0030BlueBeltQualifierAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:12:41,001 - LBRYLogger - INFO - Adding claim with claim_id f7e31218da84b99c916f0a76c929e56d68a00cc1 and name 0031BlueBeltQualifierEditedAmerican1100PickedGuttedReassembled from page 2 of the results
+2022-02-24 14:12:41,002 - LBRYLogger - INFO - Adding claim with claim_id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0 and name 0032ChallengeLockTeaser from page 2 of the results
+2022-02-24 14:12:41,002 - LBRYLogger - INFO - Adding claim with claim_id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8 and name 0033MyFirstChallengeLockPickedbyuMiskhar from page 2 of the results
+2022-02-24 14:12:41,002 - LBRYLogger - INFO - Adding claim with claim_id 7d7620e6c197a788533cf9b85451a1fe653a3168 and name 0034Asneakpeakatthedriversformynextchallengelock from page 2 of the results
+2022-02-24 14:12:41,003 - LBRYLogger - INFO - Adding claim with claim_id f066e9c55f22a11a9da77a7b5b21f5b0264f9276 and name 0035WhoWantsMy3rdChallengeLock from page 2 of the results
+2022-02-24 14:12:41,003 - LBRYLogger - INFO - Adding claim with claim_id e1c33b463cdaf8a388a824f4fb7341be02f52bf6 and name 0036MyDimpleLockJourneyBeginsAbusEC757540 from page 2 of the results
+2022-02-24 14:12:41,003 - LBRYLogger - INFO - Adding claim with claim_id 203179a23263788ff4fb2c264d7c5882ea31401e and name 0037NewStufffeelslikeXmas from page 2 of the results
+2022-02-24 14:12:41,003 - LBRYLogger - INFO - Adding claim with claim_id 78d324426aec090216adeab79d19b325e92ba7e6 and name 0038MakoMo427PickedandGutted from page 2 of the results
+2022-02-24 14:12:41,003 - LBRYLogger - INFO - Adding claim with claim_id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258 and name 0039DenBrassMakesQuickWorkofMySecondChallengeLock from page 2 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id c78631029ed134b341f8dd41c910ceea4d0b7f4d and name 0040AbusD10Failure from page 2 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171 and name 0041AbusD10PickedandsortofGutted from page 3 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id 847858c87c018a65a2c89b98dcb64e10e19a3bb1 and name 0042ACautionaryTale from page 3 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id 0bf2734ad76274771249cc43c2b1846af229134d and name 0043HoneywellDeadboltPickedandGutted from page 3 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id 2ca1de3b105cb829112649547b35e040bfc2ff69 and name 0044NextChallengeLockDelayedandsomeNewToys from page 3 of the results
+2022-02-24 14:12:41,004 - LBRYLogger - INFO - Adding claim with claim_id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a and name 0045HowIMakeaCustomKeypin from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id e93a616e017335a60c319db07a3fbf19af7f5290 and name 0046HowIMakeaCustomDriverPin from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id 308bd9c155008543a270b8c72d582095bdcbfe5c and name 0047NaswekCL8 from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id 6cf9133b625aae09892c71ebe14abdebc02ff363 and name 0048NewStuffW00TPlusFailedPickAttemptofUSLockDeadbolt from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id d3ef7d9a0a5248d02376de95f15834c68a27cb1f and name 0049USLockPickedandGutted from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9 and name 0050ChallengeLockComingYourWayNaswek from page 3 of the results
+2022-02-24 14:12:41,005 - LBRYLogger - INFO - Adding claim with claim_id 37523b5d8632a6fde48d10cc6490431f145b0dc0 and name 0051LockSportAdjacentArrivalandmuchDisappointment from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id e365d92e3f8dceabdf747ee5c9b34fd108cd902e and name 0052SomewhatSatisfyingPuzzleLock from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc and name 0053AnHourSpentFailingtoPickNasweks10CLFML from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id 4d961d38fc04b60e419b4d75f38229b8bc598be0 and name 0054AnotherHourFailingtogetNasweksLockOpen from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415 and name 0055HopefullytheLastSuperLongFailonNasweks10 from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id 24b33582f7ab607a65645fda49ca69e6a9ab7c16 and name 0056Naswekhasclaimedanother32minutesofmylife from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id ed2867856eb2080a10e1354934eccf190f057bd9 and name 0057AnotherFingFailonNasweksLock from page 3 of the results
+2022-02-24 14:12:41,006 - LBRYLogger - INFO - Adding claim with claim_id d45445a55f785e9d94c7e71a33745e7fbe0a74df and name 0058AbusD10PickedandGuttedfinallyasuccess from page 3 of the results
+2022-02-24 14:12:41,007 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00001 is a document not a video.  Not adding it
+2022-02-24 14:12:41,007 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00002 is a document not a video.  Not adding it
+2022-02-24 14:12:41,007 - LBRYLogger - INFO - claim ContentCreatorManager_Dev_Project_Update_00003 is a document not a video.  Not adding it
+2022-02-24 14:12:41,007 - MediaLogger - INFO - Initializing Media Object with id da2a0de618473135706c90a0f570d75a6f9791c2
+2022-02-24 14:12:41,007 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,007 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,008 - MediaLogger - INFO - Initializing Media Object with id 0bb2b2a803fc7baeb5d66e32b282d85caa73fefd
+2022-02-24 14:12:41,008 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,008 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,008 - MediaLogger - INFO - Initializing Media Object with id f41f6ecd741e656c00c3c9d52696da6fadad89de
+2022-02-24 14:12:41,008 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,008 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,009 - MediaLogger - INFO - Initializing Media Object with id 7e777dec6cb75843dfde8cf51f6cb8d18bcb38ad
+2022-02-24 14:12:41,009 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,009 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,009 - MediaLogger - INFO - Initializing Media Object with id 017b252ed988ac2ddcdf544eb1bba8659e28a238
+2022-02-24 14:12:41,009 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,009 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,010 - MediaLogger - INFO - Initializing Media Object with id a0607a104279d380dd31f3c2a91e4bddb6ef5221
+2022-02-24 14:12:41,010 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,010 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,010 - MediaLogger - INFO - Initializing Media Object with id cd548eadb8cba5c397fb3804589d274387207603
+2022-02-24 14:12:41,010 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,011 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,011 - MediaLogger - INFO - Initializing Media Object with id 6f14c5641fabd115c5adf21637877351ca844f7b
+2022-02-24 14:12:41,011 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,011 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,012 - MediaLogger - INFO - Initializing Media Object with id fbe80cedd64babc61dcabed4e8bc6ed88b8bfab6
+2022-02-24 14:12:41,012 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,012 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,012 - MediaLogger - INFO - Initializing Media Object with id 18c49f50d819c2ee9dde8b4409ed608b36ba3317
+2022-02-24 14:12:41,013 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,013 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,013 - MediaLogger - INFO - Initializing Media Object with id 76bd14bf620b60670d09702a336ef8e048ba91a8
+2022-02-24 14:12:41,013 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,013 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,013 - MediaLogger - INFO - Initializing Media Object with id 2d0694521dd92e44c15b22d3c45299417ede1fde
+2022-02-24 14:12:41,014 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,014 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,014 - MediaLogger - INFO - Initializing Media Object with id f336de587765ee23e1402670a7389822f3d49c56
+2022-02-24 14:12:41,014 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,015 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,015 - MediaLogger - INFO - Initializing Media Object with id c9d5b09b8c18f0381efc63e130cf3de3d069886c
+2022-02-24 14:12:41,016 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,016 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,017 - MediaLogger - INFO - Initializing Media Object with id 5bf8e59a6ca10ba4ee8788b076ac367821797a32
+2022-02-24 14:12:41,017 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,017 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,017 - MediaLogger - INFO - Initializing Media Object with id 30710f9860760f21b4960bb1fdf3c1218867525e
+2022-02-24 14:12:41,017 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,017 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,017 - MediaLogger - INFO - Initializing Media Object with id ab4ae53535ea1426f7896fce5c889ac82b4e8864
+2022-02-24 14:12:41,018 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,018 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,018 - MediaLogger - INFO - Initializing Media Object with id 086535c2fc361c0c2925dea72996c706de7a1f82
+2022-02-24 14:12:41,018 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,019 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,019 - MediaLogger - INFO - Initializing Media Object with id 3f32c712ef9e356775e0e91fa6e831d116556391
+2022-02-24 14:12:41,019 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,019 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,020 - MediaLogger - INFO - Initializing Media Object with id a537a3508e53fb6b3e71041e2a40b98fa0f5c42c
+2022-02-24 14:12:41,020 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,020 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,020 - MediaLogger - INFO - Initializing Media Object with id 52c5f28cd1050887475e139256ad792583e61b6b
+2022-02-24 14:12:41,021 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,021 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,021 - MediaLogger - INFO - Initializing Media Object with id 5d3e816ed7e2e5263c5858bfda856c7fdfac713a
+2022-02-24 14:12:41,021 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,021 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,022 - MediaLogger - INFO - Initializing Media Object with id f35919a6ca267c0a1a648253a2b478060610ef54
+2022-02-24 14:12:41,022 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,022 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,022 - MediaLogger - INFO - Initializing Media Object with id 22e7cb3efa34eb57f0d055443f345a379406d0f4
+2022-02-24 14:12:41,022 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,022 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,023 - MediaLogger - INFO - Initializing Media Object with id ffd568259556f316c6b8c6ca0f523f7f33ba2d98
+2022-02-24 14:12:41,023 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,023 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,023 - MediaLogger - INFO - Initializing Media Object with id 06f60410927015f7d9682a4ded20734dfa727e62
+2022-02-24 14:12:41,024 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,024 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,024 - MediaLogger - INFO - Initializing Media Object with id b2c46af31f73a33b3a0632b303ecf9b1b9daea82
+2022-02-24 14:12:41,024 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,025 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,025 - MediaLogger - INFO - Initializing Media Object with id 93445bb2cb37e5c702bd9b7e4b81738eea53bf44
+2022-02-24 14:12:41,025 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,025 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,025 - MediaLogger - INFO - Initializing Media Object with id f3a3fc89c08927c924f50d5fc0f0f5128d9f5079
+2022-02-24 14:12:41,025 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,026 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,026 - MediaLogger - INFO - Initializing Media Object with id 2a36c4a91e93161bb0993aa1e11d6c304b2eea8e
+2022-02-24 14:12:41,026 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,027 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,027 - MediaLogger - INFO - Initializing Media Object with id f7e31218da84b99c916f0a76c929e56d68a00cc1
+2022-02-24 14:12:41,027 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,027 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,028 - MediaLogger - INFO - Initializing Media Object with id 510ea0b526cca85384bcf9164b0e2f27f2aca4c0
+2022-02-24 14:12:41,028 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,028 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,029 - MediaLogger - INFO - Initializing Media Object with id ef574c24f4236b09cad69470b4e8bc1ddd2e3bc8
+2022-02-24 14:12:41,029 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,029 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,029 - MediaLogger - INFO - Initializing Media Object with id 7d7620e6c197a788533cf9b85451a1fe653a3168
+2022-02-24 14:12:41,029 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,030 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,030 - MediaLogger - INFO - Initializing Media Object with id f066e9c55f22a11a9da77a7b5b21f5b0264f9276
+2022-02-24 14:12:41,030 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,030 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,030 - MediaLogger - INFO - Initializing Media Object with id e1c33b463cdaf8a388a824f4fb7341be02f52bf6
+2022-02-24 14:12:41,031 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,031 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,031 - MediaLogger - INFO - Initializing Media Object with id 203179a23263788ff4fb2c264d7c5882ea31401e
+2022-02-24 14:12:41,031 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,031 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,032 - MediaLogger - INFO - Initializing Media Object with id 78d324426aec090216adeab79d19b325e92ba7e6
+2022-02-24 14:12:41,032 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,032 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,032 - MediaLogger - INFO - Initializing Media Object with id c4c4b11c3c44e77465e68eb7773bb5e0deb7b258
+2022-02-24 14:12:41,033 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,033 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,033 - MediaLogger - INFO - Initializing Media Object with id c78631029ed134b341f8dd41c910ceea4d0b7f4d
+2022-02-24 14:12:41,033 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,033 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,033 - MediaLogger - INFO - Initializing Media Object with id 8f15c93c64ab08dce4fa226fb73bfe05a1bcc171
+2022-02-24 14:12:41,034 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,034 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,034 - MediaLogger - INFO - Initializing Media Object with id 847858c87c018a65a2c89b98dcb64e10e19a3bb1
+2022-02-24 14:12:41,034 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,034 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,034 - MediaLogger - INFO - Initializing Media Object with id 0bf2734ad76274771249cc43c2b1846af229134d
+2022-02-24 14:12:41,035 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,035 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,035 - MediaLogger - INFO - Initializing Media Object with id 2ca1de3b105cb829112649547b35e040bfc2ff69
+2022-02-24 14:12:41,035 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,036 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,036 - MediaLogger - INFO - Initializing Media Object with id dba85c5ee5b8f0cb08bff38d10cf0ccd81cec89a
+2022-02-24 14:12:41,036 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,037 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,037 - MediaLogger - INFO - Initializing Media Object with id e93a616e017335a60c319db07a3fbf19af7f5290
+2022-02-24 14:12:41,037 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,037 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,037 - MediaLogger - INFO - Initializing Media Object with id 308bd9c155008543a270b8c72d582095bdcbfe5c
+2022-02-24 14:12:41,038 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,038 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,038 - MediaLogger - INFO - Initializing Media Object with id 6cf9133b625aae09892c71ebe14abdebc02ff363
+2022-02-24 14:12:41,038 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,038 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,039 - MediaLogger - INFO - Initializing Media Object with id d3ef7d9a0a5248d02376de95f15834c68a27cb1f
+2022-02-24 14:12:41,039 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,039 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,039 - MediaLogger - INFO - Initializing Media Object with id 104e82ba344a1f0cb88debc63a6e39d7d9b90cc9
+2022-02-24 14:12:41,039 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,039 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,040 - MediaLogger - INFO - Initializing Media Object with id 37523b5d8632a6fde48d10cc6490431f145b0dc0
+2022-02-24 14:12:41,040 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,040 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,040 - MediaLogger - INFO - Initializing Media Object with id e365d92e3f8dceabdf747ee5c9b34fd108cd902e
+2022-02-24 14:12:41,040 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,041 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,041 - MediaLogger - INFO - Initializing Media Object with id 18c807b7beecaa1e3ff477e64f0c5a659df1d4cc
+2022-02-24 14:12:41,041 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,041 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,041 - MediaLogger - INFO - Initializing Media Object with id 4d961d38fc04b60e419b4d75f38229b8bc598be0
+2022-02-24 14:12:41,041 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,042 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,042 - MediaLogger - INFO - Initializing Media Object with id 505ec0cc8bc91c05dfb4c5635cfe9552b36e2415
+2022-02-24 14:12:41,042 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,042 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,042 - MediaLogger - INFO - Initializing Media Object with id 24b33582f7ab607a65645fda49ca69e6a9ab7c16
+2022-02-24 14:12:41,042 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,043 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,043 - MediaLogger - INFO - Initializing Media Object with id ed2867856eb2080a10e1354934eccf190f057bd9
+2022-02-24 14:12:41,043 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,043 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,044 - MediaLogger - INFO - Initializing Media Object with id d45445a55f785e9d94c7e71a33745e7fbe0a74df
+2022-02-24 14:12:41,044 - VideoLogger - INFO - Initializing Media Object as a Video object
+2022-02-24 14:12:41,045 - LBRYLogger - INFO - Initializing Video Object as a LBRY Video Object
+2022-02-24 14:12:41,045 - LBRYLogger - INFO - Total of 58 LBRY Video Objects added to media_objects list
+2022-02-24 14:12:41,045 - LBRYLogger - INFO - LBRY Platform object initialized
+2022-02-24 14:59:47,263 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 14:59:47,263 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 14:59:47,263 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 14:59:47,264 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 14:59:47,264 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 14:59:47,264 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 14:59:47,493 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:00:34,562 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 15:00:34,562 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 15:00:34,562 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 15:00:34,562 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 15:00:34,562 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 15:00:34,563 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 15:00:34,762 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:00:35,017 - MediaLogger - INFO - Initializing Media Object with id 
+2022-02-24 15:00:35,018 - PostLogger - INFO - Initializing Media object as a Post
+2022-02-24 15:00:35,018 - TwitterLogger - INFO - Initializing Post object as a Tweet
+2022-02-24 15:02:40,336 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 15:02:40,337 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 15:02:40,337 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 15:02:40,337 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 15:02:40,337 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 15:02:40,337 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 15:02:40,507 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:02:40,762 - MediaLogger - INFO - Initializing Media Object with id 
+2022-02-24 15:02:40,762 - PostLogger - INFO - Initializing Media object as a Post
+2022-02-24 15:02:40,762 - TwitterLogger - INFO - Initializing Post object as a Tweet
+2022-02-24 15:02:51,506 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 15:02:51,506 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 15:02:51,506 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 15:02:51,507 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 15:02:51,507 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 15:02:51,507 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 15:02:51,658 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:02:51,845 - MediaLogger - INFO - Initializing Media Object with id 
+2022-02-24 15:02:51,845 - PostLogger - INFO - Initializing Media object as a Post
+2022-02-24 15:02:51,845 - TwitterLogger - INFO - Initializing Post object as a Tweet
+2022-02-24 15:02:51,845 - TwitterLogger - ERROR - __post() in Post run this should not happen
+2022-02-24 15:03:35,617 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 15:03:35,617 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 15:03:35,617 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 15:03:35,618 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 15:03:35,618 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 15:03:35,618 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 15:03:35,770 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:03:35,979 - MediaLogger - INFO - Initializing Media Object with id 
+2022-02-24 15:03:35,980 - PostLogger - INFO - Initializing Media object as a Post
+2022-02-24 15:03:35,980 - TwitterLogger - INFO - Initializing Post object as a Tweet
+2022-02-24 15:03:35,980 - TwitterLogger - ERROR - __post() in Post run this should not happen
+2022-02-24 15:03:54,089 - SettingsLogger - INFO - Loggers initialized
+2022-02-24 15:03:54,089 - SettingsLogger - INFO - setting folder_location:D:\Python\workspace\Content Creator Manager\src\test
+2022-02-24 15:03:54,089 - SettingsLogger - INFO - Changing to that folder
+2022-02-24 15:03:54,089 - BaseLogger - INFO - Initializing Platform Object with id 
+2022-02-24 15:03:54,090 - TwitterLogger - INFO - Initializing Platform Object as Twitter Platform object
+2022-02-24 15:03:54,090 - TwitterLogger - INFO - Loading Twitter Creds
+2022-02-24 15:03:54,262 - TwitterLogger - INFO - Authentication OK
+2022-02-24 15:03:54,459 - MediaLogger - INFO - Initializing Media Object with id 
+2022-02-24 15:03:54,460 - PostLogger - INFO - Initializing Media object as a Post
+2022-02-24 15:03:54,460 - TwitterLogger - INFO - Initializing Post object as a Tweet
+2022-02-24 15:03:54,461 - TwitterLogger - INFO - Sending out tweet: Test tweet from the new class structure of content creator manager
