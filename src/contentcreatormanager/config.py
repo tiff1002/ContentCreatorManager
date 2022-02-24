@@ -14,6 +14,7 @@ class Settings(object):
         '''
         Constructor
         '''
+        #configures loggers for everything using the configuration file provided
         logging.config.fileConfig(logging_config_file)
         self.logger = logging.getLogger('SettingsLogger')
 
@@ -34,7 +35,8 @@ class Settings(object):
         self.logger.info("Loggers initialized")
         
         
-        
+        #sets self.original_dir so that classes can use this to return to the location configuration/credential files will live
+        #sets self.folder_location and changes to that directory
         self.logger.info(f"setting folder_location:{folder_location}")
         self.logger.info("Changing to that folder")
         self.folder_location = folder_location

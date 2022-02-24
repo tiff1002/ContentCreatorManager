@@ -11,25 +11,36 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     '''
     classdocs
     '''
+    #URL used to make LBRY API calls
     API_URL = "http://localhost:5279"
 
+    #Private method to make api call to get channel info based on claim_id which is property self.id and return the results
     def __get_channel(self):
         params = {
             'claim_id':self.id
         }
         result = requests.post(LBRY.API_URL, json={"method": "channel_list", "params": params}).json()
+        
+        #check if API call returned an error if so throw an exception
         if self.check_request_for_error(result):
+            #more detailed exception could probably be made to use here
             raise Exception()
         return result
     
+    #Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to property self.media_objects
     def __add_channel_videos(self):
+        #channel's claim_id is self.id ordering results by name
         params = {
             "channel_id": [self.id],
             "order_by":'name'
         }
+        
         #grab first page of data for api call to get all claims assosiated with lbry channel
         intial_result = requests.post(LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
+        
+        #check if API call returned an error if so throw an exception
         if self.check_request_for_error(intial_result):
+            #more detailed exception could probably be made to use here
             raise Exception()
         
         #stores num of pages and items total returned
@@ -69,7 +80,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
                 else:
                     self.logger.info(f"claim {i['name']} is a {i['value']['stream_type']} not a video.  Not adding it")
         
-        claims_before = len(self.media_objects)
+        #in case there were objects already in the list grab current length
+        num_claims_before = len(self.media_objects)
         
         #loops through the claims turns them into lbry video objects and adds them as media to the platform
         for c in claims:
@@ -77,14 +89,18 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             
             self.add_media(v)
         
-        num_vids_added = len(self.media_objects) - claims_before
+        #using before and after lengths to determine how many LBRYVideo objects were added to self.media_objects
+        num_vids_added = len(self.media_objects) - num_claims_before
         self.logger.info(f"Total of {num_vids_added} LBRY Video Objects added to media_objects list")
 
     def __init__(self, settings : contentcreatormanager.config.Settings, ID : str, init_videos : bool = False):
         '''
         Constructor
         '''
+        #Call the constructor of the super class to set a few things
         super(LBRY, self).__init__(settings=settings, ID=ID)
+        
+        #Set appropriate logger for the object
         self.logger = self.settings.LBRY_logger
         self.logger.info("Initializing Platform Object as LBRY Platform object")
         
@@ -101,6 +117,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         self.email = result['result']['items'][0]['value']['email']
         self.title = result['result']['items'][0]['value']['title']
         
+        #Some fields are not required for a channel to have and will be missing from the results requiring this filtering to prevent throwing an error
         if 'languages' in result['result']['items'][0]['value']:
             self.languages = result['result']['items'][0]['value']['languages']
         else:
@@ -114,12 +131,14 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         else:
             self.thumbnail = None
             
+        #If the init_videos flag is set on object creation will run appropriate methods to grab all Videos from the channel and add them to self.media_objects as LBRYVideo Objects
         if init_videos:
             self.logger.info("init_videos set to true grabbing video data and adding to media_objects")
             self.__add_channel_videos()
             
         self.logger.info("LBRY Platform object initialized")
-        
+    
+    #public method that will check if the result of the LBRY API call provided returned an error or not and if it did will log some errors and return True otherwise it will return False    
     def check_request_for_error(self, request):
         if 'error' in request:
             self.logger.error("API call returned an error:")

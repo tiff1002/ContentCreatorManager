@@ -14,7 +14,9 @@ settings = contentcreatormanager.config.Settings(logging_config_file=logging_con
 
 twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
 
-twitter.tweet("Test tweet from the new class structure of content creator manager")
+twitter.tweet("And another Test tweet from the new class structure of content creator manager")
+
+print(twitter.media_objects[0].posted)
 
 #lbry_channel = contentcreatormanager.platform.lbry.LBRY(settings=settings, ID='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed', init_videos=True)
 
