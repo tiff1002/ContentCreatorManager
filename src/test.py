@@ -7,16 +7,20 @@ import os.path
 
 import contentcreatormanager.platform.lbry
 import contentcreatormanager.platform.twitter
+import contentcreatormanager.platform.youtube
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
 
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 
-twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
+
+yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
+
+'''twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
 
 twitter.tweet("And this is yet another Test tweet from the new class structure of content creator manager")
-'''
+
 print(twitter.media_objects[0].posted)
 
 lbry_channel = contentcreatormanager.platform.lbry.LBRY(settings=settings, ID='8be45e4ba05bd6961619489f6408a0dc62f4e650', init_videos=True) # test channel

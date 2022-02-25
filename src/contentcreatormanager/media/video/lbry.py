@@ -10,8 +10,6 @@ import contentcreatormanager.platform.lbry
 import time
 import shutil
 import hashlib
-from numpy.core.defchararray import title
-from Tools.scripts.ptags import tags
 
 class LBRYVideo(contentcreatormanager.media.video.video.Video):
     '''
@@ -232,7 +230,7 @@ class LBRYVideo(contentcreatormanager.media.video.video.Video):
             self.description = request['value']['description']
 
     #Constructor
-    def __init__(self, settings : contentcreatormanager.config.Settings, lbry_channel, ID : str = '', file_hash : str = '', file_name : str = '', name : str = '', thumbnail_url : str = '', bid : str = '0.001', normalized_name : str = '', address : str = '', description : str = '', permanent_url : str = '', languages : list = ['en'], request = None):
+    def __init__(self, settings : contentcreatormanager.config.Settings, lbry_channel, ID : str = '', tags : list = [], title : str = '',file_hash : str = '', file_name : str = '', name : str = '', thumbnail_url : str = '', bid : str = '0.001', normalized_name : str = '', address : str = '', description : str = '', permanent_url : str = '', languages : list = ['en'], request = None):
         '''
         Constructor
         '''
