@@ -23,6 +23,14 @@ class Media(object):
         self.logger.info(f"Initializing Media Object with id {ID}")
         self.id = ID
         
+        self.title = ''
+        self.tags = []
+        self.description = ''
+    
+    #Method to add a single tag to Media Object    
+    def add_tag(self, tag : str):
+        self.tags.append(tag)
+        
     #skeleton method to be overridden by Classes that extend this one
     def upload(self):
         self.logger.error("Media.upload() is a skeleton method intended to be overridden by Classes that Extend this one")

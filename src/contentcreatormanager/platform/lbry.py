@@ -143,7 +143,38 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         if 'error' in request:
             self.logger.error("API call returned an error:")
             self.logger.error(f"Error Code: {request['error']['code']}")
-            self.logger.error(f"Error Type: {request['error']['data']['name']}")
+            try:
+                self.logger.error(f"Error Type: {request['error']['data']['name']}")
+            except:
+                pass
             self.logger.error(f"Error Message: {request['error']['message']}")
             return True
         return False
+    
+    #Method to add a LBRY Video Object to the media_objects property 
+    def add_video(self, name : str, file_name : str, update_from_web : bool = True, upload : bool = False, title : str = '', description : str = '', tags : list = [], bid : str = '0.001'):
+        #Makes sure both update from_web and upoad are not both set
+        if update_from_web and upload:
+            self.logger.error("Either update from web or upload to it not both :P")
+            return None
+        
+        #Create generic LBRY Video Object
+        vid = contentcreatormanager.media.video.lbry.LBRYVideo(settings=self.settings, lbry_channel=self, file_name=file_name)
+        #Set some properties based on inputs to the method
+        vid.name = name
+        vid.tags = tags
+        vid.title = title
+        vid.description = description
+        vid.bid = bid
+        
+        #If update from web is set then use the name to search and update the object properties
+        if update_from_web:
+            vid.update_local(use_name=True)
+        #If upload is set attempt to upload the vid to lbry now
+        elif upload:
+            if title == '' or description == '':
+                self.logger.error("Title and Description Required for new upload.  No upload made")
+            else:
+                vid.upload()
+        #Call add_media from base class and provide it the LBRY Video Object
+        self.add_media(vid)
