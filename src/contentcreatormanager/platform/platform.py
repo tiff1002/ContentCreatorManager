@@ -86,4 +86,10 @@ class Platform(object):
         for media in self.media_objects:
             media.download()
             
+    #Method to remove specific Media from the web
+    def delete_media_from_web(self, ID):
+        for media in self.media_objects:
+            if media.id == ID:
+                media.delete_web()
+            
             

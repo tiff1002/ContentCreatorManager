@@ -32,14 +32,10 @@ class Video(contentcreatormanager.media.media.Media):
         
         if file_does_not_exist and ID == '':
             self.logger.error("no file found for file_name and no ID set")
-            raise Exception()
         
-        self.title = ''
-        self.tags = []
-        self.description = ''
         
-    def add_tag(self, tag : str):
-        self.tags.append(tag)
+    
+    
         
         
         
