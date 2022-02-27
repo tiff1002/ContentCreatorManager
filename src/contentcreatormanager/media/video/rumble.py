@@ -13,8 +13,11 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
     '''
     UPLOAD_API_URL = "https://rumble.com/api/simple-upload.php"
     
-    NOT_FOR_SALE = 0
+    NOT_FOR_SALE = 0 # This is like an unlisted video on youtube as I understand it
+    
+    RUMBLE_LICENSE = 6 # I Think this is what a standard Rumble upload is
 
+    #Private Method to upload a video without a thumbnail
     def __upload_without_thumbnail(self):   
         files = {
             'access_token': (None, self.channel.access_token),
@@ -31,11 +34,27 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
         
         return response
     
+    #Private Method to upload a video with a thumbnail
     def __upload_with_thumbnail(self):
-        return
+        files = {
+            'access_token': (None, self.channel.access_token),
+            'title': (None, self.title),
+            'description': (None, self.description),
+            'license_type': (None, self.license_type),
+            'channel_id': (None, self.channel.id),
+            'thumb':(os.path.basename(self.thumbnail), open(self.thumbnail, 'rb')),
+            'video': (os.path.basename(self.file), open(self.file, 'rb'))
+        }
+        
+        response = requests.post(RumbleVideo.UPLOAD_API_URL, files=files)
+        
+        self.logger.info(f"Made Request to Rumble API to upload video got response:\n{response}")
+        
+        return response
     
+    #Constructor
     def __init__(self, rumble_channel, guid : str = '', title : str = '', description : str = '', thumbnail_file_name : str = '',
-                 video_file_name : str = '', license_type : int = NOT_FOR_SALE):
+                 video_file_name : str = '', license_type : int = RUMBLE_LICENSE):
         '''
         Constructor
         '''
@@ -45,6 +64,7 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
         
         self.channel = rumble_channel
         
+        #if a guid is not set then generate one otherwise set id to guid
         if guid == '':
             self.set_unique_id()
         else:
@@ -52,6 +72,7 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
 
         self.license_type = license_type
 
+    #Method to upload video
     def upload(self):
         if not os.path.isfile(self.file):
             self.logger.error("Can not find video file no upload will be made")
@@ -62,3 +83,19 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
         else:
             self.logger.info("Starting upload")
             self.__upload_with_thumbnail()
+            
+    def delete_web(self):
+        self.logger.warning("No Method to delete video from rumble yet")
+        return
+    
+    def download(self):
+        self.logger.warning("No Method to download video from rumble yet")
+        return
+    
+    def update_web(self):
+        self.logger.warning("No Method to update data to rumble yet")
+        return
+    
+    def update_local(self):
+        self.logger.warning("No Method to get data from rumble yet")
+        return

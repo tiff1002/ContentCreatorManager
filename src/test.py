@@ -15,8 +15,12 @@ settings = contentcreatormanager.config.Settings(logging_config_file=logging_con
 
 
 rumble_channel = contentcreatormanager.platform.rumble.Rumble(settings=settings)
-rumble_video = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble_channel, title='Video To Test Video Upload', description='with a test description', thumbnail_file_name='', video_file_name='upload_test.mp4')
+#rumble_video = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble_channel, title='The Video To Test Video Upload', description='with a test description', thumbnail_file_name='', video_file_name='upload_test.mp4')
 
-rumble_channel.add_video(rumble_video)
+rumble_video = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble_channel, guid='afb5Wxrt3tbhzUfJZZf6su')
 
-rumble_channel.upload_all_media()
+rumble_video.update_local()
+
+#rumble_channel.add_video(rumble_video)
+
+#rumble_channel.upload_all_media()
