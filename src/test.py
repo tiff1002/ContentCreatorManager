@@ -8,6 +8,8 @@ import os.path
 import contentcreatormanager.platform.lbry
 import contentcreatormanager.platform.twitter
 import contentcreatormanager.platform.youtube
+import contentcreatormanager.media.video.youtube
+import time
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
@@ -15,7 +17,14 @@ test_folder = os.path.join(os.getcwd(), "test")
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 
 
-yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
+yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=False)
+
+vid = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=yt, title="Title of the upload", description="upload description", tags=['upoad_tag'], file_name='upload_test.mp4', new_video=True)
+
+vid.privacy_status = 'private'
+yt.add_video(vid)
+
+yt.upload_all_media()
 
 '''twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
 

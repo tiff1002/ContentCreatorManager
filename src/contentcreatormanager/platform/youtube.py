@@ -113,7 +113,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
     def __set_videos(self):
         vids = self.__get_videos()
         for vid in vids:
-            self.add_media(self.make_video(vid,self))
+            self.add_video_with_request(vid,self)
             
     def __get_videos(self):
         result = None
@@ -226,21 +226,29 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         if init_videos:
             self.__set_videos()
             
-    def make_video(self,request,channel):
-        if 'tags' not in request['snippet']:
-            tags = []
-        else:
+    def add_video_with_id(self, ID):
+        v = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=self, ID=ID)
+        
+        v.update_local()
+        
+        self.add_video(v)
+        
+    def add_video(self, vid : contentcreatormanager.media.video.youtube.YouTubeVideo):
+        self.add_media(vid)
+            
+    def add_video_with_request(self,request,channel):
+        tags = []
+        if not ('tags' not in request['snippet']):
             tags = request['snippet']['tags']
-        if 'description' not in request['snippet']:
-            description = ""
-        else:
+        description = ""
+        if not ('description' not in request['snippet']):
             description = request['snippet']['description']
-        if 'selfDeclaredMadeForKids' not in request['status']:
-            self_declared_made_for_kids = False
-        else:
+        self_declared_made_for_kids = False
+        if not ('selfDeclaredMadeForKids' not in request['status']):
             self_declared_made_for_kids = request['status']['selfDeclaredMadeForKids']
-        if 'defaultAudioLanguage' not in request['snippet']:
-            default_audio_language = 'en-US'
-        else:
+        default_audio_language = 'en-US'
+        if not ('defaultAudioLanguage' not in request['snippet']):
             default_audio_language = request['snippet']['defaultAudioLanguage']
-        return contentcreatormanager.media.video.youtube.YouTubeVideo(channel=channel, ID=request['id'], favorite_count=request['statistics']['favoriteCount'], comment_count=request['statistics']['commentCount'], dislike_count=request['statistics']['dislikeCount'], like_count=request['statistics']['likeCount'], view_count=request['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=request['status']['madeForKids'], public_stats_viewable=request['status']['publicStatsViewable'], embeddable=request['status']['embeddable'], lic=request['status']['license'], privacy_status=request['status']['privacyStatus'], upload_status=request['status']['uploadStatus'], has_custom_thumbnail=request['contentDetails']['hasCustomThumbnail'], content_rating=request['contentDetails']['contentRating'], licensed_content=request['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=request['snippet']['publishedAt'], channel_id=request['snippet']['channelId'], title=request['snippet']['title'], description=description, thumbnails=request['snippet']['thumbnails'], channel_title=request['snippet']['channelTitle'], tags=tags, category_id=request['snippet']['categoryId'], live_broadcast_content=request['snippet']['liveBroadcastContent'])
+        ytv = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=channel, ID=request['id'], favorite_count=request['statistics']['favoriteCount'], comment_count=request['statistics']['commentCount'], dislike_count=request['statistics']['dislikeCount'], like_count=request['statistics']['likeCount'], view_count=request['statistics']['viewCount'], self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=request['status']['madeForKids'], public_stats_viewable=request['status']['publicStatsViewable'], embeddable=request['status']['embeddable'], lic=request['status']['license'], privacy_status=request['status']['privacyStatus'], upload_status=request['status']['uploadStatus'], has_custom_thumbnail=request['contentDetails']['hasCustomThumbnail'], content_rating=request['contentDetails']['contentRating'], licensed_content=request['contentDetails']['licensedContent'], default_audio_language=default_audio_language, published_at=request['snippet']['publishedAt'], channel_id=request['snippet']['channelId'], title=request['snippet']['title'], description=description, thumbnails=request['snippet']['thumbnails'], channel_title=request['snippet']['channelTitle'], tags=tags, category_id=request['snippet']['categoryId'], live_broadcast_content=request['snippet']['liveBroadcastContent'])
+        
+        self.add_video(ytv)

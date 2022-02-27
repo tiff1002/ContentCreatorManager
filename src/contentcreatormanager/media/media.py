@@ -26,6 +26,13 @@ class Media(object):
         self.title = ''
         self.tags = []
         self.description = ''
+        
+    def getInputFilename(self, stream):
+        while stream.node._KwargReprNode__incoming_edge_map != {}:
+            stream = stream.node._KwargReprNode__incoming_edge_map[None][0]
+            if not hasattr(stream, 'node'):
+                return stream.__dict__['kwargs']['filename']
+        return stream.node.__dict__['kwargs']['filename']
     
     #Method to add a single tag to Media Object    
     def add_tag(self, tag : str):

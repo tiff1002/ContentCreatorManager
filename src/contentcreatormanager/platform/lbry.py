@@ -151,8 +151,11 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             return True
         return False
     
+    def add_video(self, vid : contentcreatormanager.media.video.lbry.LBRYVideo):
+        self.add_media(vid)
+    
     #Method to add a LBRY Video Object to the media_objects property 
-    def add_video(self, name : str, file_name : str, update_from_web : bool = True, upload : bool = False, title : str = '', description : str = '', tags : list = [], bid : str = '0.001'):
+    def add_video_with_name(self, name : str, file_name : str, update_from_web : bool = True, upload : bool = False, title : str = '', description : str = '', tags : list = [], bid : str = '0.001'):
         #Makes sure both update from_web and upoad are not both set
         if update_from_web and upload:
             self.logger.error("Either update from web or upload to it not both :P")
@@ -177,4 +180,4 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             else:
                 vid.upload()
         #Call add_media from base class and provide it the LBRY Video Object
-        self.add_media(vid)
+        self.add_video(vid)
