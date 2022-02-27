@@ -4,6 +4,7 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import contentcreatormanager.platform.platform
+import contentcreatormanager.media.video.rumble
 import os
 import json
 
@@ -42,3 +43,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
             self.logger.info("Grabbing video data from Rumble")
         
         self.logger.info("Rumble Platform Object initialized")
+        
+    #Method to add a YouTube video to media_objects    
+    def add_video(self, vid : contentcreatormanager.media.video.rumble.RumbleVideo):
+        self.add_media(vid)

@@ -5,6 +5,7 @@ Created on Feb 24, 2022
 '''
 import contentcreatormanager.media.media
 import os.path
+import shortuuid
 
 class Video(contentcreatormanager.media.media.Media):
     '''
@@ -12,7 +13,7 @@ class Video(contentcreatormanager.media.media.Media):
     '''
 
 
-    def __init__(self, settings, ID : str = '', file_name : str = ''):
+    def __init__(self, settings, ID : str = '', file_name : str = '', title : str = "", description : str = "", thumbnail_file_name : str = ''):
         '''
         Constructor
         '''
@@ -27,12 +28,23 @@ class Video(contentcreatormanager.media.media.Media):
         
         
         self.file = os.path.join(os.getcwd(), file_name)
+        self.thumbnail = os.path.join(os.getcwd(), thumbnail_file_name)
         
         file_does_not_exist = not os.path.isfile(self.file)
         
         if file_does_not_exist and ID == '':
-            self.logger.error("no file found for file_name and no ID set")
+            self.logger.error(f"no file found for file_name {file_name} and no ID set")
         
+        self.title = title
+        self.description = description
+        
+    def set_unique_id(self, ID=None):
+        if ID is None:
+            self.id = shortuuid.uuid()
+            self.logger.info(f"Object is set to random unique ID ({self.id})")
+        else:
+            self.logger.info(f"ID provided setting object id to {ID}")
+            self.id = ID
         
     
     

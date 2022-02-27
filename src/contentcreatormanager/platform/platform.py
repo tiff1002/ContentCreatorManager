@@ -4,6 +4,7 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import contentcreatormanager.media.media
+import contentcreatormanager.media.video.video
 import os
 import json
 
@@ -37,6 +38,10 @@ class Platform(object):
         os.chdir(self.settings.folder_location)
         
         return data
+    
+    #Add a video to Media Objects
+    def add_video(self, video : contentcreatormanager.media.video.video.Video):
+        self.add_media(video)
     
     #Method to add a Media object to the self.media_objects list    
     def add_media(self, media : contentcreatormanager.media.media.Media):
