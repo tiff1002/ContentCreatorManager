@@ -4,7 +4,8 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import os.path
-import contentcreatormanager.platform.youtube
+import contentcreatormanager.platform.rumble
+import contentcreatormanager.media.video.rumble
 
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
@@ -13,9 +14,9 @@ test_folder = os.path.join(os.getcwd(), "test")
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 
 
-yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
+rumble_channel = contentcreatormanager.platform.rumble.Rumble(settings=settings)
+rumble_video = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble_channel, title='Video To Test Video Upload', description='with a test description', thumbnail_file_name='', video_file_name='upload_test.mp4')
 
-for v in yt.media_objects:
-    print(v.title)
-    
-print(f"There are {len(yt.media_objects)} uploads to this YouTube")
+rumble_channel.add_video(rumble_video)
+
+rumble_channel.upload_all_media()
