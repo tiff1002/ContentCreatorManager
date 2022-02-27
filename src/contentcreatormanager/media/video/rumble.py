@@ -83,3 +83,19 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
         else:
             self.logger.info("Starting upload")
             self.__upload_with_thumbnail()
+            
+    def delete_web(self):
+        self.logger.warning("No Method to delete video from rumble yet")
+        return
+    
+    def download(self):
+        self.logger.warning("No Method to download video from rumble yet")
+        return
+    
+    def update_web(self):
+        self.logger.warning("No Method to update data to rumble yet")
+        return
+    
+    def update_local(self):
+        self.logger.warning("No Method to get data from rumble yet")
+        return
