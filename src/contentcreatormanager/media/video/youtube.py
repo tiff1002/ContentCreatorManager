@@ -3,7 +3,7 @@ Created on Feb 24, 2022
 
 @author: tiff
 '''
-import contentcreatormanager.media.video
+import contentcreatormanager.media.video.video
 import pytube
 import os.path
 import random
@@ -46,7 +46,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         finished = False
         tries = 0
        
-        #pytube has weird intermitent failures that you just keep trying and things work so this loop does that to a point
+        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the video
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
             try:
                 video_file = vid.streams.order_by('resolution').desc().first().download(filename_prefix="video_")
@@ -64,7 +64,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info(f"Downloaded video for {self.title}")
         
         self.logger.info(f"Attempting to download audio portion of {self.title}")
-        
+        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the audio
         finished = False
         tries = 0
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
@@ -87,6 +87,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         source_audio = None
         source_video = None
         
+        #preps things to ffmpeg the audio and video together
         finished = False
         tries = 0
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
@@ -109,6 +110,8 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
         finished = False
         tries = 0
+        
+        #FFMPEG is used to combine the audio and video files
         while not finished and tries < self.MAX_RETRIES + 2:
             try:
                 self.logger.info("Attempting to merge audio and video")
@@ -125,12 +128,14 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 
         self.logger.info(f"Files merged as {file_name}")
     
+        #cleanup the audio and video files
         self.logger.info("Cleaning up source files....")
         self.logger.info(f"Removing {audFile}")
         os.remove(audFile)
         self.logger.info(f"Removing {vidFile}")
         os.remove(vidFile)
     
+    #private Method to run a video.list on the object using id
     def __get_web_data(self):
         request = self.channel.service.videos().list(
             part="snippet,contentDetails,statistics,status",
@@ -140,18 +145,22 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         return result['items'][0]
   
+    #Private method that just checks for the file'e existance
     def __is_downloaded(self):
         return os.path.isfile(self.file)
     
+    #Private Method to construct a filename that is valid from the title
     def __file_name(self):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         getVals = list([val for val in f"{self.title}.mp4" if val in valid_chars])
         return "".join(getVals)
     
+    #Private Method to get a pytube YouTube object for this video
     def __get_pytube(self, use_oauth=True):
         url = f"{YouTubeVideo.BASE_URL}{self.id}"
         return pytube.YouTube(url, use_oauth=use_oauth)
     
+    #Slightly modified version of method on the google example git hub to initialize an upload
     def __initialize_upload(self):
         self.logger.info(f"Preparing to upload video to youtube with title: {self.title} ad other stored details")
         body=dict(
@@ -191,6 +200,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info("returning resumable_upload private method to create a resumable upload")
         return self.__resumable_upload(insert_request)
     
+    #Slightly modified version of google example code for a resumable upload to youtube
     def __resumable_upload(self, request):
         response = None
         error = None
@@ -228,11 +238,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info(f"setting ID to {vidID}")
         self.id = vidID
     
+    #Constructor
     def __init__(self, channel, ID : str = None, favorite_count : str ='0', comment_count : str ='0', dislike_count : str ='0', like_count : str ='0',
                  view_count : str ='0', self_declared_made_for_kids : bool =False, made_for_kids : bool =False, public_stats_viewable : bool =True,
                  embeddable : bool =True, lic : str ='youtube', privacy_status : str ="public", upload_status : str ='notUploaded',
                  has_custom_thumbnail : bool =False, content_rating : dict ={}, licensed_content : bool =False, 
-                 default_audio_language : str ='en-US', published_at=None, channel_id=None, title=None, description=None, file_name : str = '',
+                 default_audio_language : str ='en-US', published_at=None, channel_id=None, title=None, description=None, file_name : str = '', update_from_web : bool = False,
                  thumbnails : dict ={}, channel_title=None, tags : list =[], category_id : int =22, live_broadcast_content=None, new_video : bool =False):
         '''
         Constructor
@@ -272,13 +283,19 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         self.downloaded = self.__is_downloaded()
+        
+        #if the new_video flag is set we do not set the pytube object since we cant
         if new_video:
             self.pytube_obj = None
+        #if it is not new it should be uploaded and we can make the pytube object
         else:
             self.pytube_obj = self.__get_pytube()
+            if update_from_web:
+                self.update_local()
             
         self.logger.info("YouTube Video Object initialized")
         
+    #Method to call videos.delete to remove this video from youtube
     def delete_web(self):
         request = self.channel.service.videos().delete(
             id=self.id
@@ -287,6 +304,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         return result
     
+    #Updates the Video on youtube based on local properties
     def update_web(self):
         current_web_status = self.__get_web_data()
         
@@ -326,6 +344,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         return request.execute()
     
+    #Method to update local properties based on the results of a videos.list call
     def update_local(self):
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
@@ -376,6 +395,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         self.logger.info("Update from web complete")
         
+    #Method to upload video to YouTube
     def upload(self):
         file = self.file
         
@@ -387,7 +407,8 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         self.pytube_obj = self.__get_pytube()
         self.update_from_web()
-        
+    
+    #Method to download the video from youtube
     def download(self, overwrite=False):
         self.__pytube_download(overwrite=overwrite)
         
