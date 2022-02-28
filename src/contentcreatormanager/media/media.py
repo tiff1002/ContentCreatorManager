@@ -3,7 +3,6 @@ Created on Feb 24, 2022
 
 @author: tiff
 '''
-import contentcreatormanager.platform.platform
 import shortuuid
 
 class Media(object):
@@ -12,7 +11,7 @@ class Media(object):
     '''
 
 
-    def __init__(self, platform : contentcreatormanager.platform.platform.Platform, ID : str):
+    def __init__(self, platform, ID : str):
         '''
         Constructor takes a Settings Object and an ID in the form of a string
         '''
@@ -24,6 +23,9 @@ class Media(object):
         #Set id property
         self.logger.info(f"Initializing Media Object with id {ID}")
         self.id = ID
+        
+        if self.id == '' or self.id is None:
+            self.set_unique_id()
         
         self.title = ''
         self.tags = []

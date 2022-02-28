@@ -159,9 +159,10 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 self.logger.info('Uploading file...') 
                 response = request.next_chunk()
                 if(response is not None):
-                    if('id' in response):
-                        self.logger.info(f"Video id \"{response['id']}\" was successfully uploaded.")
-                        vidID = response['id']
+                    self.logger.info(f"Checking Response for id:\n{response}")
+                    if('id' in response[1]):
+                        self.logger.info(f"Video id \"{response[1]['id']}\" was successfully uploaded.")
+                        vidID = response[1]['id']
                     else:
                         self.logger.warning(f"The upload failed with an unexpected response: {response}")
                         return
@@ -198,7 +199,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         with the ID set the update_local flag to True.
         '''
         self.title = title
-        super(YouTubeVideo, self).__init__(settings=channel.settings,ID=ID,file_name=file_name)
+        super(YouTubeVideo, self).__init__(platform=channel,ID=ID,file_name=file_name)
         self.logger = self.settings.YouTube_logger
         
         self.logger.info("Initializing Video Object as a YouTube Video Object")
@@ -263,10 +264,16 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         )
         result = request.execute()
         
+        tries_left = YouTubeVideo.MAX_RETRIES
+        while self.is_uploaded() and tries_left > 0:
+            self.logger.warning(f"Video still found on YouTube.  Sleeping a minute and checking again.")
+            time.sleep(60)
+            tries_left -= 1
+        
         if self.is_uploaded():
             self.logger.error(f"Video still found on YouTube.  Something must have gone wrong with the API delete call.  Results of the call:\n{result}")
         else:
-            self.logger.info("Video removed from YouTube")
+            self.logger.info("Delete successful")
         
         return result
 
@@ -385,7 +392,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         #set pytube_obj and update local object from the web to grab any new details
         self.pytube_obj = self.__get_pytube()
-        self.update_from_web()
+        self.update_local()
         
         #If private is desired status leave things as is otherwise set the correct status and update
         if self.privacy_status == privStatus:

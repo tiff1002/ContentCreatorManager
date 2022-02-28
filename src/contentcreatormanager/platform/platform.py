@@ -5,6 +5,7 @@ Created on Feb 24, 2022
 '''
 import contentcreatormanager.media.media
 import contentcreatormanager.media.video.video
+import contentcreatormanager.config
 import os
 import json
 
@@ -23,6 +24,12 @@ class Platform(object):
         
         self.logger.info(f"Initializing Platform Object with id {ID}")
         self.id = ID
+    
+    def get_media(self, ID : str):
+        """Returns the Media Object with the given ID"""
+        for media in self.media_objects:
+            if media.id == ID:
+                return media
     
     def read_json(self, file):
         """Method for reading in JSON files and returning a dict with the json data in it"""
