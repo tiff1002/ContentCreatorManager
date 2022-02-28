@@ -14,7 +14,7 @@ class Platform(object):
     '''
     def __init__(self, settings : contentcreatormanager.config.Settings, ID : str):
         '''
-        Constructor
+        Constructor takes a Settings object and an ID as string
         '''
         #Sets up some base properties that should be useful to most Platforms that will extend this class
         self.settings = settings
@@ -24,8 +24,8 @@ class Platform(object):
         self.logger.info(f"Initializing Platform Object with id {ID}")
         self.id = ID
     
-    #Method for reading in JSON files
     def read_json(self, file):
+        """Method for reading in JSON files and returning a dict with the json data in it"""
         #Change back to original_dir to grab credentials file
         os.chdir(self.settings.original_dir)
         
@@ -39,60 +39,60 @@ class Platform(object):
         
         return data
     
-    #Add a video to Media Objects
     def add_video(self, video : contentcreatormanager.media.video.video.Video):
+        """Method to add a video to Media Objects"""
         self.add_media(video)
-    
-    #Method to add a Media object to the self.media_objects list    
+       
     def add_media(self, media : contentcreatormanager.media.media.Media):
+        """Method to add a Media object to the media_objects list property"""
         self.media_objects.append(media)
         
-    #Method to call upload() on all Media objects in self.media_objects
     def upload_all_media(self):
+        """Method to call upload() on all Media objects in self.media_objects"""
         for media in self.media_objects:
             media.upload()
-        
-    #Method to call upload() on the media object with ID provided       
+               
     def upload_media(self, ID : str):
+        """Method to call upload() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
                 media.upload()
-    
-    #Method to call update_local() on all Media objects in self.media_objects            
+                
     def update_all_media_local(self):
+        """Method to call update_local() on all Media objects in the media_objects list property"""
         for media in self.media_objects:
             media.update_local()
             
-    #Method to call update_web() on all Media objects in self.media_objects
     def update_all_media_web(self):
+        """Method to call update_web() on all Media objects in self.media_objects"""
         for media in self.media_objects:
             media.update_web()
-    
-    #Method to call update_local() on the media object with ID provided        
+            
     def update_media_local(self, ID : str):
+        """Method to call update_local() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
                 media.update_local()
-                
-    #Method to call update_web() on the media object with ID provided       
+                       
     def update_media_web(self, ID : str):
+        """Method to call update_web() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
                 media.update_web()
-                
-    #Method to call download() on the media object with ID provided       
+                       
     def download_media(self, ID : str):
+        """Method to call download() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
                 media.download()
                 
-    #Method to call download() on all Media objects in self.media_objects
     def download_all_media(self):
+        """Method to call download() on all Media objects in media_objects list property"""
         for media in self.media_objects:
             media.download()
             
-    #Method to remove specific Media from the web
     def delete_media_from_web(self, ID):
+        """Method to call delete_web() on a Media Object in media_objects with the given ID"""
         for media in self.media_objects:
             if media.id == ID:
                 media.delete_web()

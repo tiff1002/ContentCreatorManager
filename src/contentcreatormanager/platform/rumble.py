@@ -16,7 +16,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
 
     def __init__(self, settings : contentcreatormanager.config.Settings, init_videos : bool = False):
         '''
-        Constructor
+        Constructor takes a Settings object.  ID set in credentials file.  Set flag init_videos to True to initialize all videos already on the Rumble Channel (not implemented yet)
         '''
         super(Rumble, self).__init__(settings=settings, ID='')
         self.logger = self.settings.Rumble_logger
@@ -26,7 +26,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
         #change to the directory with the cred files
         os.chdir(self.settings.original_dir)
 
-        #opent the rumble cred file and read with json
+        #open the rumble cred file and read with json
         with open(Rumble.CLIENT_SECRETS_FILE) as f:
             creds = json.load(f)
             
@@ -43,7 +43,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
             self.logger.info("Grabbing video data from Rumble")
         
         self.logger.info("Rumble Platform Object initialized")
-        
-    #Method to add a YouTube video to media_objects    
+          
     def add_video(self, vid : contentcreatormanager.media.video.rumble.RumbleVideo):
+        """Method to add a Rumble video to media_objects list property"""
         self.add_media(vid)
