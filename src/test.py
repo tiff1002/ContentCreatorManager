@@ -11,17 +11,22 @@ import contentcreatormanager.platform.rumble
 import contentcreatormanager.media.video.rumble
 import contentcreatormanager.media.video.youtube
 import contentcreatormanager.platform.facebook
+import contentcreatormanager.platform.reddit
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
 
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 
-fb = contentcreatormanager.platform.facebook.Facebook(settings=settings)
+#fb = contentcreatormanager.platform.facebook.Facebook(settings=settings)
 
-test = fb.post("Test Post")
+reddit = contentcreatormanager.platform.reddit.Reddit(settings=settings)
 
-print(test)
+reddit.post(subr='lbry', title='One More Test Post From Content Creator Manager', body="Sorry for the noise here is the latest update: https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
+
+#test = fb.post("Test Post")
+
+#print(test)
 
 '''
 yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
