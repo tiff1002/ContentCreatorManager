@@ -4,12 +4,21 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import contentcreatormanager.media.post.post
+import facebook
 
 class FacebookPost(contentcreatormanager.media.post.post.Post):
     '''
     classdocs
     '''
+    def __post_init(self):
+        self.platform.graph = facebook.GraphAPI(self.platform.access_token)
+        self.platform.resp = self.platform.graph.get_object('me/accounts')
 
+        for page in self.platform.resp['data']:
+            if page['id'] == self.platform.id:
+                self.platform.page_access_token = page['access_token']
+                
+        self.platform.graph = facebook.GraphAPI(self.platform.page_access_token)
 
     def __init__(self, facebook, post : str):
         '''
@@ -23,3 +32,8 @@ class FacebookPost(contentcreatormanager.media.post.post.Post):
         self.logger.info("Initializing Post object as a Facebook Post")
         
         self.logger.info("Facebook Post Object initialized")
+        
+    def upload(self):
+        self.__post_init()
+        result = self.platform.graph.put_object(self.platform.id, "feed", message=self.body)
+        return result

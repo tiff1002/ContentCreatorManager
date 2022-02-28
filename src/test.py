@@ -10,11 +10,18 @@ import contentcreatormanager.platform.lbry
 import contentcreatormanager.platform.rumble
 import contentcreatormanager.media.video.rumble
 import contentcreatormanager.media.video.youtube
+import contentcreatormanager.platform.facebook
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
 
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
+
+fb = contentcreatormanager.platform.facebook.Facebook(settings=settings)
+
+test = fb.post("Test Post")
+
+print(test)
 
 '''
 yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
@@ -63,7 +70,7 @@ rvid = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumbl
 rumble.add_video(rvid)
 
 rumble.upload_all_media()
-'''
+
 twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
 
-twitter.tweet("If this gets tweeted that means lunch time testing worked and things are going smoothly.")
+twitter.tweet("If this gets tweeted that means lunch time testing worked and things are going smoothly.")'''
