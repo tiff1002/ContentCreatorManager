@@ -35,6 +35,7 @@ class Facebook(contentcreatormanager.platform.platform.Platform):
         self.logger.info("Facebook Platform Object initialized")
         
     def post(self, msg):
+        """Method to create and send a Facebook post."""
         post = contentcreatormanager.media.post.facebook.FacebookPost(self, msg)
         result = None
         try:
@@ -45,16 +46,13 @@ class Facebook(contentcreatormanager.platform.platform.Platform):
             self.add_media(post)
             return
         
-        '''
-        if result has error:
+        
+        if result is not None:
             self.logger.error(f"Failed to send post to Facebook got error:\n{e}")
             self.logger.info("Leaving posted set to False and adding to media_objects")
             self.add_media(post)
             return
-        '''
+        
+        self.logger.info(f"Facebook post made:\n{post.body}")
         post.posted = True
         self.add_media(post)
-        
-        self.logger.info(f"Post sent to Facebook:\n{post.body}")
-        
-        
