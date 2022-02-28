@@ -85,7 +85,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         #loops through the claims turns them into lbry video objects and adds them as media to the platform
         for c in claims:
-            v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], settings=self.settings, lbry_channel=self, request=c)
+            v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], lbry_channel=self, request=c)
             
             self.add_media(v)
         

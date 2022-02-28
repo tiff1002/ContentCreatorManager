@@ -50,7 +50,7 @@ class Twitter(contentcreatormanager.platform.platform.Platform):
     def tweet(self, post : str):
         """Method to create and send a Tweet."""
         #Create Tweet
-        tweet = contentcreatormanager.media.post.twitter.Tweet(settings=self.settings, twitter=self, post=post)
+        tweet = contentcreatormanager.media.post.twitter.Tweet(twitter=self, post=post)
         #Call upload() method which will call the Tweet's __post() method
         tweet.upload()
         #Add Tweet to self.media_objects that way if it failed to post and has a False posted flag a retry could be attempted
