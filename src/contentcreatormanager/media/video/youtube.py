@@ -7,12 +7,10 @@ import contentcreatormanager.media.video.video
 import pytube
 import os.path
 import random
-import ffmpeg
 import time
 import contentcreatormanager.platform.youtube
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-
 
 class YouTubeVideo(contentcreatormanager.media.video.video.Video):
     '''
@@ -23,8 +21,58 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
     
     MAX_RETRIES = 25
     
-    #Private method to download a YouTube Video with pytube
-    def __pytube_download(self, overwrite):
+    def __pytube_download_video(self):
+        """Private Method to download the video portion of this YouTube Video Object"""
+        self.logger.info(f"Attempting to download video portion of {self.title}")
+        video_file = None
+        finished = False
+        tries = 0
+       
+        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the video
+        while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
+            try:
+                video_file = self.pytube_obj.streams.order_by('resolution').desc().first().download(filename_prefix="video_")
+                finished = True
+            except Exception as e:
+                if tries > YouTubeVideo.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {YouTubeVideo.MAX_RETRIES}")
+                finished = False
+        
+    
+        self.logger.info(f"Downloaded video for {self.title}")
+        
+        return video_file
+        
+        
+    def __pytube_download_audio(self):
+        """Private Method to download the audio portion of the YouTube Video Object"""
+        self.logger.info(f"Attempting to download audio portion of {self.title}")
+        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the audio
+        finished = False
+        tries = 0
+        while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
+            try:
+                audio_file = self.pytube_obj.streams.filter(only_audio=True).order_by('abr').desc().first().download(filename_prefix="audio_") 
+                finished = True
+            except Exception as e:
+                if tries > YouTubeVideo.MAX_RETRIES:
+                    self.logger.error("Too many failed download attempts raising new exception")
+                    raise Exception()
+                self.logger.error(f"got error:\n{e}\nGoing to try again")
+                tries += 1
+                self.logger.info(f"Attempted {tries} time(s) of a possible {YouTubeVideo.MAX_RETRIES}")
+                finished = False
+        
+        self.logger.info(f"Downloaded audio for {self.title}")
+        
+        return audio_file
+    
+    def __pytube_download(self, overwrite : bool = False):
+        """Private Method to download a video from YouTube using pytube.  Optional parameter overwrite is a bool that defaults to False.  If set to true an existing file will be overwritten."""
         #set variables for file name and path
         file_name = os.path.basename(self.file)
         file_path = self.file
@@ -40,103 +88,13 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 self.logger.info("Overwrite not set not downloading")
                 return
         
-        self.logger.info(f"Attempting to download video portion of {self.title}")
-        video_file = None
-        vid = self.pytube_obj
-        finished = False
-        tries = 0
-       
-        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the video
-        while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
-            try:
-                video_file = vid.streams.order_by('resolution').desc().first().download(filename_prefix="video_")
-                finished = True
-            except Exception as e:
-                if tries > YouTubeVideo.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {YouTubeVideo.MAX_RETRIES}")
-                finished = False
+        video_file = self.__pytube_download_video()
+        audio_file = self.__pytube_download_audio()
         
+        self.combine_audio_and_video_files(video_file, audio_file)
     
-        self.logger.info(f"Downloaded video for {self.title}")
-        
-        self.logger.info(f"Attempting to download audio portion of {self.title}")
-        #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the audio
-        finished = False
-        tries = 0
-        while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
-            try:
-                audio_file = vid.streams.filter(only_audio=True).order_by('abr').desc().first().download(filename_prefix="audio_") 
-                finished = True
-            except Exception as e:
-                if tries > YouTubeVideo.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {YouTubeVideo.MAX_RETRIES}")
-                finished = False
-        
-        self.logger.info(f"Downloaded audio for {self.title}")
-        
-        audFile = None
-        vidFile = None
-        source_audio = None
-        source_video = None
-        
-        #preps things to ffmpeg the audio and video together
-        finished = False
-        tries = 0
-        while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
-            try:
-                self.logger.info("Attempting to prep source audio and video to merge")
-                source_audio = ffmpeg.input(audio_file)
-                source_video = ffmpeg.input(video_file)
-                audFile = self.getInputFilename(source_audio)
-                vidFile = self.getInputFilename(source_video)
-                finished = True
-            except Exception as e:
-                if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {self.MAX_RETRIES}")
-                finished = False
-        
-        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
-        finished = False
-        tries = 0
-        
-        #FFMPEG is used to combine the audio and video files
-        while not finished and tries < self.MAX_RETRIES + 2:
-            try:
-                self.logger.info("Attempting to merge audio and video")
-                ffmpeg.concat(source_video, source_audio, v=1, a=1).output(self.file).run()
-                finished = True
-            except Exception as e:
-                if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
-                    raise Exception()
-                self.logger.error(f"got error:\n{e}\nGoing to try again")
-                tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {YouTubeVideo.MAX_RETRIES}")
-                finished = False
-                
-        self.logger.info(f"Files merged as {file_name}")
-    
-        #cleanup the audio and video files
-        self.logger.info("Cleaning up source files....")
-        self.logger.info(f"Removing {audFile}")
-        os.remove(audFile)
-        self.logger.info(f"Removing {vidFile}")
-        os.remove(vidFile)
-    
-    #private Method to run a video.list on the object using id
     def __get_web_data(self):
+        """Private Method to make a call method videos.list to the YouTube API and returns the results.  This is using self.id for the lookup"""
         request = self.channel.service.videos().list(
             part="snippet,contentDetails,statistics,status",
             id=self.id
@@ -144,24 +102,14 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         result = request.execute()
         
         return result['items'][0]
-  
-    #Private method that just checks for the file'e existance
-    def __is_downloaded(self):
-        return os.path.isfile(self.file)
     
-    #Private Method to construct a filename that is valid from the title
-    def __file_name(self):
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        getVals = list([val for val in f"{self.title}.mp4" if val in valid_chars])
-        return "".join(getVals)
-    
-    #Private Method to get a pytube YouTube object for this video
     def __get_pytube(self, use_oauth=True):
+        """Private method that returns the pytube.YouTube object for this YouTubeVideo"""
         url = f"{YouTubeVideo.BASE_URL}{self.id}"
         return pytube.YouTube(url, use_oauth=use_oauth)
     
-    #Slightly modified version of method on the google example git hub to initialize an upload
     def __initialize_upload(self):
+        """Private Method to initialize a resumable upload of the Video to Youtube using the videos.insert API call.  This is a modified version of the example found at https://developers.google.com/youtube/v3/guides/uploading_a_video"""
         self.logger.info(f"Preparing to upload video to youtube with title: {self.title} ad other stored details")
         body=dict(
             snippet=dict(
@@ -200,8 +148,8 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info("returning resumable_upload private method to create a resumable upload")
         return self.__resumable_upload(insert_request)
     
-    #Slightly modified version of google example code for a resumable upload to youtube
     def __resumable_upload(self, request):
+        """Private Method to finish the 'resumable' upload that is initialized in the __initialize_upload method.  Slightly modified version of the example found here https://developers.google.com/youtube/v3/guides/uploading_a_video"""
         response = None
         error = None
         retry = 0
@@ -211,9 +159,10 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 self.logger.info('Uploading file...') 
                 response = request.next_chunk()
                 if(response is not None):
-                    if('id' in response):
-                        self.logger.info(f"Video id \"{response['id']}\" was successfully uploaded.")
-                        vidID = response['id']
+                    self.logger.info(f"Checking Response for id:\n{response}")
+                    if('id' in response[1]):
+                        self.logger.info(f"Video id \"{response[1]['id']}\" was successfully uploaded.")
+                        vidID = response[1]['id']
                     else:
                         self.logger.warning(f"The upload failed with an unexpected response: {response}")
                         return
@@ -238,7 +187,6 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info(f"setting ID to {vidID}")
         self.id = vidID
     
-    #Constructor
     def __init__(self, channel, ID : str = None, favorite_count : str ='0', comment_count : str ='0', dislike_count : str ='0', like_count : str ='0',
                  view_count : str ='0', self_declared_made_for_kids : bool =False, made_for_kids : bool =False, public_stats_viewable : bool =True,
                  embeddable : bool =True, lic : str ='youtube', privacy_status : str ="public", upload_status : str ='notUploaded',
@@ -246,10 +194,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                  default_audio_language : str ='en-US', published_at=None, channel_id=None, title=None, description=None, file_name : str = '', update_from_web : bool = False,
                  thumbnails : dict ={}, channel_title=None, tags : list =[], category_id : int =22, live_broadcast_content=None, new_video : bool =False):
         '''
-        Constructor
+        Constructor takes a YouTube Platform object as its only parameter without a default value.  All properties can be set on creation of the Object.  
+        If the object is a new video not yet on YouTube set the new_video flag to True, and if you want the object to be updated based on a web lookup
+        with the ID set the update_local flag to True.
         '''
         self.title = title
-        super(YouTubeVideo, self).__init__(settings=channel.settings,ID=ID,file_name=file_name)
+        super(YouTubeVideo, self).__init__(platform=channel,ID=ID,file_name=file_name)
         self.logger = self.settings.YouTube_logger
         
         self.logger.info("Initializing Video Object as a YouTube Video Object")
@@ -282,37 +232,58 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.dislike_count = dislike_count
         self.comment_count = comment_count
         self.favorite_count = favorite_count
-        self.downloaded = self.__is_downloaded()
         
         #if the new_video flag is set we do not set the pytube object since we cant
         if new_video:
+            self.logger.info("new_video flag set.  Not attempting to initialize pytube_obj variable")
             self.pytube_obj = None
         #if it is not new it should be uploaded and we can make the pytube object
         else:
+            self.logger.info("new_video flag not set.  Attempting to initialize pytube_obj property")
             self.pytube_obj = self.__get_pytube()
             if update_from_web:
+                self.logger.info("update_video flag set.  Grabbing Video details from YouTube")
                 self.update_local()
             
         self.logger.info("YouTube Video Object initialized")
         
-    #Method to call videos.delete to remove this video from youtube
-    def delete_web(self):
+    def delete_web(self, do_not_download_before_delete : bool = False):
+        """
+        Method to make the videos.delete API call to youtube and return the results.  If the video is not downloaded and you do 
+        not want to download it before removal from YouTube set the do_not_download_before_delete flag to True
+        """
+        self.logger.info(f"Preparing to delete video with ID {self.id} from YouTube")
+        
+        if not self.is_downloaded() and not do_not_download_before_delete:
+            self.logger.warning("File for video not found.  Downloading before removal")
+            self.download()
+        
+        self.logger.info("Making videos.delete api call")
         request = self.channel.service.videos().delete(
             id=self.id
         )
         result = request.execute()
         
+        tries_left = YouTubeVideo.MAX_RETRIES
+        while self.is_uploaded() and tries_left > 0:
+            self.logger.warning(f"Video still found on YouTube.  Sleeping a minute and checking again.")
+            time.sleep(60)
+            tries_left -= 1
+        
+        if self.is_uploaded():
+            self.logger.error(f"Video still found on YouTube.  Something must have gone wrong with the API delete call.  Results of the call:\n{result}")
+        else:
+            self.logger.info("Delete successful")
+        
         return result
-    
-    #Updates the Video on youtube based on local properties
-    def update_web(self):
-        current_web_status = self.__get_web_data()
+
+    def update_web(self, force_update : bool = False):
+        """Method to update Video details on YouTube based on the local object's properties.  This makes a videos.update call.  
+        This method checks to see if an update is needed by making a videos.list call and comparing the local and web properties 
+        before sending the update call.  This is because a videos.list API call is one quota unit where as the update is 50.  
+        Set force_update to ignore this check."""
         
-        current_web_snippet = current_web_status['snippet']
-        current_web_status = current_web_status['status']
-    
-        need_to_update=False
-        
+        #prepare snippet and status dicts to use in update call
         update_snippet = {}
         update_snippet['categoryId']=self.category_id
         update_snippet['defaultLanguage']=self.default_language
@@ -326,13 +297,23 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         update_status['publicStatsViewable']=self.public_stats_viewable
         update_status['selfDeclaredMadeForKids']=self.self_declared_made_for_kids
         
-        if not (update_snippet == current_web_snippet and update_status == current_web_status):
-            need_to_update = True
+        #if force_update is set do not bother making the videos.list call and comparing local and web
+        if not force_update:
+            current_web_status = self.__get_web_data()
         
-        if not need_to_update:
-            self.logger.info("No need to update returning None")
-            return None
+            current_web_snippet = current_web_status['snippet']
+            current_web_status = current_web_status['status']
+        
+            need_to_update=False
+            
+            if not (update_snippet == current_web_snippet and update_status == current_web_status):
+                need_to_update = True
+            
+            if not need_to_update:
+                self.logger.info("No need to update returning None")
+                return None
 
+        self.logger.info("Making videos.update call to YouTube API to update Video details")
         request = self.channel.service.videos().update(
             part='snippet,status',
             body=dict(
@@ -341,11 +322,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 id=self.id
             )
         )
-        
+        #return the results of the API call
         return request.execute()
     
-    #Method to update local properties based on the results of a videos.list call
     def update_local(self):
+        """Method to update the local properties based on the web properties"""
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
         video = self.__get_web_data()
@@ -391,24 +372,57 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.dislike_count = video['statistics']['dislikeCount']
         self.comment_count = video['statistics']['commentCount']
         self.favorite_count = video['statistics']['favoriteCount']
-        self.downloaded = self.__is_downloaded()
+        self.downloaded = self.is_downloaded()
         
         self.logger.info("Update from web complete")
         
-    #Method to upload video to YouTube
     def upload(self):
+        """Method to upload Video to YouTube"""
         file = self.file
+        privStatus = self.privacy_status
+        self.privacy_status = 'private'
         
+        #Attempt to upload to the web
         try:
             self.logger.info(f"Attempting to upload {file}")
             self.__initialize_upload()
-        except HttpError as e:
-            raise e
+        except Exception as e:
+            self.logger.error(f"Error during upload:\n{e}")
+            return
         
+        #set pytube_obj and update local object from the web to grab any new details
         self.pytube_obj = self.__get_pytube()
-        self.update_from_web()
+        self.update_local()
+        
+        #If private is desired status leave things as is otherwise set the correct status and update
+        if self.privacy_status == privStatus:
+            self.logger.info("Video Upload Complete")
+            return
+        self.logger.info(f"Setting privacy status to {privStatus} and running an update")
+        self.privacy_status = privStatus
+        self.update_web()
+        
+        self.logger.info("Video Upload Complete")
     
-    #Method to download the video from youtube
     def download(self, overwrite=False):
+        """Method to download the video from YouTube.  Set overwrite to True if you want an existing file overwritten"""
         self.__pytube_download(overwrite=overwrite)
+        
+    def is_uploaded(self):
+        """
+        Method to check if the Video is uploaded to Youtube.  This should only have a quota cost of 1.  
+        Returns True if the video is found on YouTube.  Check is done with API so that private users videos 
+        will be found and checked appropriately.
+        """
+        #Make video.list api call with id just requesting contentDetails to determine if the Object is uploaded
+        request = self.channel.service.videos().list(
+            part="contentDetails",
+            id=self.id
+        )
+        result = request.execute()
+        
+        
+        if result['pageInfo']['totalResults'] == 0:
+            return False
+        return True
         

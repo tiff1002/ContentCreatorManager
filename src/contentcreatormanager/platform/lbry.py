@@ -14,8 +14,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     #URL used to make LBRY API calls
     API_URL = "http://localhost:5279"
 
-    #Private method to make api call to get channel info based on claim_id which is property self.id and return the results
     def __get_channel(self):
+        """Private method to make api call to get channel info based on claim_id (which is the id property) and return the results"""
         params = {
             'claim_id':self.id
         }
@@ -27,8 +27,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             raise Exception()
         return result
     
-    #Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to property self.media_objects
     def __add_channel_videos(self):
+        """Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to media_objects list property"""
         #channel's claim_id is self.id ordering results by name
         params = {
             "channel_id": [self.id],
@@ -85,7 +85,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         #loops through the claims turns them into lbry video objects and adds them as media to the platform
         for c in claims:
-            v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], settings=self.settings, lbry_channel=self, request=c)
+            v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], lbry_channel=self, request=c)
             
             self.add_media(v)
         
@@ -95,7 +95,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
 
     def __init__(self, settings : contentcreatormanager.config.Settings, ID : str, init_videos : bool = False):
         '''
-        Constructor
+        Constructor takes a Settings object.  ID string required (claim_id of the channel to be used).  Set init_videos flag to True to grab all video data from LBRY on creation of LBRY Platform Object.
         '''
         #Call the constructor of the super class to set a few things
         super(LBRY, self).__init__(settings=settings, ID=ID)
@@ -137,9 +137,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             self.__add_channel_videos()
             
         self.logger.info("LBRY Platform object initialized")
-    
-    #public method that will check if the result of the LBRY API call provided returned an error or not and if it did will log some errors and return True otherwise it will return False    
+       
     def check_request_for_error(self, request):
+        """Method that will check if the result of the LBRY API call provided returned an error or not and if it did will log some errors and return True otherwise it will return False"""
         if 'error' in request:
             self.logger.error("API call returned an error:")
             self.logger.error(f"Error Code: {request['error']['code']}")
@@ -152,10 +152,14 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         return False
     
     def add_video(self, vid : contentcreatormanager.media.video.lbry.LBRYVideo):
+        """Method to add a LBRY Video Object to the media_objects list property"""
         self.add_media(vid)
-    
-    #Method to add a LBRY Video Object to the media_objects property 
+     
     def add_video_with_name(self, name : str, file_name : str, update_from_web : bool = True, upload : bool = False, title : str = '', description : str = '', tags : list = [], bid : str = '0.001'):
+        """
+        Method to add a LBRY Video Object to the media_objects list property.  This uses the name provided to lookup other details about the video to add if the update_from_web flag 
+        is set to True which is the default.  If the upload flag is set to True (default is False) the video will be uploaded after the object is created. upload and update_from_web can not both be True.
+        """
         #Makes sure both update from_web and upoad are not both set
         if update_from_web and upload:
             self.logger.error("Either update from web or upload to it not both :P")

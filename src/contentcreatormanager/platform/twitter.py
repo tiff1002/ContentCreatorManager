@@ -15,7 +15,7 @@ class Twitter(contentcreatormanager.platform.platform.Platform):
 
     def __init__(self, settings : contentcreatormanager.config.Settings):
         '''
-        Constructor
+        Constructor takes a Settings object.  No ID for Twitter Platform
         '''
         #Calls constructor of super class to set the settings and blank ID as that property is not needed for Twitter Object
         super(Twitter, self).__init__(settings=settings, ID='')
@@ -47,27 +47,27 @@ class Twitter(contentcreatormanager.platform.platform.Platform):
             
         self.logger.info("Twitter Platform Object initialized")
     
-    #Method to create and send a Tweet
     def tweet(self, post : str):
+        """Method to create and send a Tweet."""
         #Create Tweet
-        tweet = contentcreatormanager.media.post.twitter.Tweet(settings=self.settings, twitter=self, post=post)
+        tweet = contentcreatormanager.media.post.twitter.Tweet(twitter=self, post=post)
         #Call upload() method which will call the Tweet's __post() method
         tweet.upload()
         #Add Tweet to self.media_objects that way if it failed to post and has a False posted flag a retry could be attempted
         self.add_media(tweet)
-     
-    #overriding of method to disable it for this type of object    
+         
     def update_all_media_local(self):
+        """Method overridden to disable it for this type of object"""
         self.logger.info("Tweets are not loaded in from the web")
     
-    #overriding of method to disable it for this type of object    
     def update_media_local(self, ID:str):
+        """Method overridden to disable it for this type of object"""
         self.logger.info("Tweets are not loaded in from the web")
         
-    #overriding of method to disable it for this type of object
     def update_all_media_web(self):
+        """Method overridden to disable it for this type of object"""
         self.logger.info("Tweets are not sent with this function use tweet")
         
-    #overriding of method to disable it for this type of object
     def update_media_web(self):
+        """Method overridden to disable it for this type of object"""
         self.logger.info("Tweets are not sent with this function use tweet")
