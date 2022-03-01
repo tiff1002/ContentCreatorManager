@@ -101,6 +101,9 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         )
         result = request.execute()
         
+        if result['pageInfo']['totalResults'] == 0:
+            self.logger.warning(f"Could not find video with ID {self.id} on youtube")
+            return None
         return result['items'][0]
     
     def __get_pytube(self, use_oauth=True):
@@ -198,7 +201,6 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         If the object is a new video not yet on YouTube set the new_video flag to True, and if you want the object to be updated based on a web lookup
         with the ID set the update_local flag to True.
         '''
-        self.title = title
         super(YouTubeVideo, self).__init__(platform=channel,ID=ID,file_name=file_name)
         self.logger = self.settings.YouTube_logger
         
@@ -244,7 +246,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             if update_from_web:
                 self.logger.info("update_video flag set.  Grabbing Video details from YouTube")
                 self.update_local()
+                
+        if file_name == '':
+            file_name = self.title
             
+        self.file = os.path.join(os.getcwd(), self.get_valid_video_file_name(desired_file_name=file_name))
+        
         self.logger.info("YouTube Video Object initialized")
         
     def delete_web(self, do_not_download_before_delete : bool = False):
@@ -330,6 +337,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
         video = self.__get_web_data()
+        
+        if video is None:
+            self.logger.error(f"Trying to run update local but can not find video with id {self.id} on youtube")
+            return None
+        
         if 'tags' not in video['snippet']:
             tags = []
         else:
@@ -381,6 +393,14 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         file = self.file
         privStatus = self.privacy_status
         self.privacy_status = 'private'
+        
+        if self.is_uploaded():
+            self.logger.warning("Vid already uploaded not running upload again")
+            return
+        
+        if not os.path.isfile(file):
+            self.logger.error("Can not find file no upload made")
+            return
         
         #Attempt to upload to the web
         try:

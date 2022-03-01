@@ -117,7 +117,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         """Private Method to add all videos on the channel to the media_objects list property"""
         vids = self.__get_videos()
         for vid in vids:
-            self.add_video_with_request(vid,self)
+            self.add_video_with_request(vid)
     
     def __get_playlist_video_ids(self):
         """
@@ -309,12 +309,13 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         v = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=self, ID=ID, update_from_web=True)
         # Add the video to the media_objects list with the add_video method
         self.add_video(v)
+        return v
         
     def add_video(self, vid : contentcreatormanager.media.video.youtube.YouTubeVideo):
         """Method to add a YouTube video to media_objects"""
         self.add_media(vid)
             
-    def add_video_with_request(self,request,channel):
+    def add_video_with_request(self,request):
         """Method that will add a video to the media_objects list.  First object data will be set using provided request (results from an API call)"""
         #Checks some of the request results that are optional and initialize them to something to prevent exceptions
         tags = []
@@ -331,7 +332,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             default_audio_language = request['snippet']['defaultAudioLanguage']
             
         #use all the details to create the YouTube Video Object
-        ytv = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=channel, ID=request['id'], favorite_count=request['statistics']['favoriteCount'],
+        ytv = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=self, ID=request['id'], favorite_count=request['statistics']['favoriteCount'],
                                                                      comment_count=request['statistics']['commentCount'], dislike_count=request['statistics']['dislikeCount'],
                                                                      like_count=request['statistics']['likeCount'], view_count=request['statistics']['viewCount'],
                                                                      self_declared_made_for_kids=self_declared_made_for_kids, made_for_kids=request['status']['madeForKids'],
@@ -344,3 +345,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
                                                                      tags=tags, category_id=request['snippet']['categoryId'], live_broadcast_content=request['snippet']['liveBroadcastContent'])
         #Adds the new video to media_objects with add_video method
         self.add_video(ytv)
+        
+    def upload_media(self, ID : str = ''):
+        """Method overridden so it will not be used by this type of object"""
+        self.logger.warning(f"Can not possibly know the ID of a video that is not uploaded so will not look for {ID} to upload")
