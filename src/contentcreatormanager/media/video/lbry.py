@@ -5,22 +5,17 @@ Created on Feb 24, 2022
 '''
 import os.path
 import requests
-import contentcreatormanager.media.video.video
+import contentcreatormanager.media.lbry
 import contentcreatormanager.platform.lbry
 import time
 import shutil
 import hashlib
 
-class LBRYVideo(contentcreatormanager.media.video.video.Video):
+class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
     '''
     classdocs
     '''
-    def __get_valid_name(self, name : str):
-        """Private Method to get a valid LBRY stream name from provided input"""
-        valid_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-'
-        getVals = list([val for val in name if val in valid_chars])
-        self.name = "".join(getVals)
-        self.logger.info(f"Fix Name ran name is now: {self.name}")
+    
     
     def __check_file_hash(self):
         """Private method to calculate the file_hash of the video file and compare it to what is on LBRY blockchain.  Returns True if it matches."""
@@ -237,24 +232,16 @@ class LBRYVideo(contentcreatormanager.media.video.video.Video):
         Constructor takes LBRY Platform object as required parameter.  LBRY Video Object can be constructed with the results of an API call to claim_list just set the request parameter.
         All details can be manually set on creation.  bid defaults very low, language defaults to en
         '''
-        super(LBRYVideo, self).__init__(platform=lbry_channel,ID=ID,file_name=file_name)
+        super(LBRYVideo, self).__init__(lbry_channel=lbry_channel, file_name=file_name, thumbnail_url=thumbnail_url, 
+                                        description=description, languages=languages, permanent_url=permanent_url, 
+                                        tags=tags, bid=bid, title=title, name=name, ID=ID)
         self.logger = self.settings.LBRY_logger
         
         self.logger.info("Initializing Video Object as a LBRY Video Object")
         
         #Set various object properties
-        self.name = self.__get_valid_name(name)
         self.address = address
-        self.bid = bid
-        self.title = title
-        self.thumbnail_url = thumbnail_url
-        self.description = description
-        self.tags = tags
-        self.permanent_url = permanent_url
         self.file_hash = file_hash
-        self.languages = languages
-        #Set up appropriate file_path to live in the file property
-        self.file = os.path.join(os.getcwd(), file_name)
         
         #If request is supplied update the object with that
         if request is not None:
@@ -359,24 +346,3 @@ class LBRYVideo(contentcreatormanager.media.video.video.Video):
                     self.update_local(use_name=True)
                     finished = True
         return result
-    
-    def is_uploaded(self):
-        """
-        Method to determine if the LBRY Video Object is uploaded to the LBRY.  It tries to find the video both via name and claim_id.  
-        If neither returns a result the method returns False.  Otherwise it returns True
-        """
-        #First try looking up via claim_id
-        try:
-            self.__request_data()
-        except:
-            #Exception means this failed so try looking up by name
-            self.logger.info(f"Could not find data looking up via ID: {self.id}")
-            try:
-                self.__request_data_with_name()
-            except:
-                #Exception means this also failed so return False
-                self.logger.info(f"Could not find data looking up via name: {self.name}")
-                return False
-        self.logger.info("Was able to find video returning True")
-        return True
-        
