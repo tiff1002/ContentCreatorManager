@@ -93,19 +93,6 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         self.combine_audio_and_video_files(video_file, audio_file)
     
-    def __get_web_data(self):
-        """Private Method to make a call method videos.list to the YouTube API and returns the results.  This is using self.id for the lookup"""
-        request = self.channel.service.videos().list(
-            part="snippet,contentDetails,statistics,status",
-            id=self.id
-        )
-        result = request.execute()
-        
-        if result['pageInfo']['totalResults'] == 0:
-            self.logger.warning(f"Could not find video with ID {self.id} on youtube")
-            return None
-        return result['items'][0]
-    
     def __get_pytube(self, use_oauth=True):
         """Private method that returns the pytube.YouTube object for this YouTubeVideo"""
         url = f"{YouTubeVideo.BASE_URL}{self.id}"
@@ -306,7 +293,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         #if force_update is set do not bother making the videos.list call and comparing local and web
         if not force_update:
-            current_web_status = self.__get_web_data()
+            current_web_status = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)
         
             current_web_snippet = current_web_status['snippet']
             current_web_status = current_web_status['status']
@@ -336,7 +323,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         """Method to update the local properties based on the web properties"""
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
-        video = self.__get_web_data()
+        video = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)
         
         if video is None:
             self.logger.error(f"Trying to run update local but can not find video with id {self.id} on youtube")
@@ -435,14 +422,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         will be found and checked appropriately.
         """
         #Make video.list api call with id just requesting contentDetails to determine if the Object is uploaded
-        request = self.channel.service.videos().list(
-            part="contentDetails",
-            id=self.id
-        )
-        result = request.execute()
+        result = self.platform.api_videos_list(contentDetails=True, ids=self.id)
         
         
         if result['pageInfo']['totalResults'] == 0:
             return False
+        
         return True
         

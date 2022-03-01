@@ -278,7 +278,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         self.logger.error(f"Something went wrong and there is no items in the result to return so returning as is:\n{result}")
         return result
     
-    def __init__(self, settings : contentcreatormanager.config.Settings, init_videos : bool = False):
+    def __init__(self, settings : contentcreatormanager.config.Settings, init_videos : bool = False, current_quota_usage : int = 0):
         '''
         Constructor takes a Settings object.  No ID needs to be provided it is grabbed using an API call.  
         init_videos flag (default False) set to True will grab all video data and use it to make video 
@@ -299,6 +299,8 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         
         self.logger.info("Setting Id for the Channel")
         self.id = self.__get_channel()
+        
+        self.quota_usage = current_quota_usage
         
         if init_videos:
             self.__set_videos()
@@ -349,3 +351,137 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
     def upload_media(self, ID : str = ''):
         """Method overridden so it will not be used by this type of object"""
         self.logger.warning(f"Can not possibly know the ID of a video that is not uploaded so will not look for {ID} to upload")
+        
+    def api_videos_list(self, ids : str, contentDetails : bool = False, snippet : bool = False, statistics : bool = False, status : bool = False, 
+                        fileDetails : bool = False, ID : bool = False, liveStreamingDetails : bool = False, localizations : bool = False,
+                        player : bool = False, processingDetails : bool = False, recordingDetails : bool = False, suggestions : bool = False,
+                        topicDetails : bool = False):
+        """
+        Method for making videos.list api call
+        Quota impact: A call to this method has a quota cost of 1 unit.
+        """
+        quota_cost = 1
+        
+        parts = []
+        
+        if contentDetails:
+            parts.append('contentDetails')
+            
+        if snippet:
+            parts.append('snippet')
+            
+        if statistics:
+            parts.append('statistics')
+            
+        if status:
+            parts.append('status')
+            
+        if fileDetails:
+            parts.append('fileDetails')
+        
+        if ID:
+            parts.append('id')
+        
+        if liveStreamingDetails:
+            parts.append('liveStreamingDetails')
+        
+        if localizations:
+            parts.append('localizations')
+        
+        if player:
+            parts.append('player')
+        
+        if processingDetails:
+            parts.append('processingDetails')
+        
+        if recordingDetails:
+            parts.append('recordingDetails')
+        
+        if suggestions:
+            parts.append('suggestions')
+        
+        if topicDetails:
+            parts.append('topicDetails')
+        
+        if len(parts) == 0:
+            self.logger.error("At least one part required api call will not be made")
+            return None
+        
+        part = ','.join(parts)
+        
+        body = {
+            'part':part,
+            'id':ids                        
+        }
+        
+        request = self.service.videos().list(body)
+        
+        result = request.execute()
+        
+        self.quota_usage += quota_cost
+        
+        return result
+    
+    def api_videos_insert(self):
+        """
+        Method for making videos.insert api call
+        Quota impact: A call to this method has a quota cost of 1600 units.
+        """
+        quota_cost = 1600
+        return
+    
+    def api_videos_update(self):
+        """
+        Method for making videos.update api call
+        Quota impact: A call to this method has a quota cost of 50 units.
+        """
+        quota_cost = 50
+        return
+    
+    def api_videos_delete(self):
+        """
+        Method for making videos.delete api call
+        Quota impact: A call to this method has a quota cost of 50 units.
+        """
+        quota_cost = 50
+        return
+    
+    def api_thumbnails_set(self):
+        """
+        Method for making thumbnails.set api call
+        Quota impact: A call to this method has a quota cost of approximately 50 units.
+        """
+        quota_cost = 50
+        return
+    
+    def api_playlistitems_list(self):
+        """
+        Method for making playlistitems.list api call
+        Quota impact: A call to this method has a quota cost of 1 unit.
+        """
+        quota_cost = 1
+        return
+    
+    def api_playlistitems_insert(self):
+        """
+        Method for making playlistitems.insert api call
+        Quota impact: A call to this method has a quota cost of 50 units.
+        """
+        quota_cost = 50
+        return
+    
+    def api_playlistitems_update(self):
+        """
+        Method for making playlistitems.update api call
+        Quota impact: A call to this method has a quota cost of 50 units.
+        """
+        quota_cost = 50
+        return
+    
+    def api_playlistitems_delete(self):
+        """
+        Method for making playlistitems.delete api call
+        Quota impact: A call to this method has a quota cost of 50 units.
+        """
+        quota_cost = 50
+        return
