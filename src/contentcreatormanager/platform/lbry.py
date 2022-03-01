@@ -5,6 +5,7 @@ Created on Feb 24, 2022
 '''
 import contentcreatormanager.platform.platform
 import contentcreatormanager.media.video.lbry
+import contentcreatormanager.media.post.lbry
 import requests
 
 class LBRY(contentcreatormanager.platform.platform.Platform):
@@ -185,3 +186,12 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
                 vid.upload()
         #Call add_media from base class and provide it the LBRY Video Object
         self.add_video(vid)
+        
+    def make_post(self, title : str, body : str, tags : list = [], languages : list = ['en'], bid : str = "0.001", thumbnail_url : str = ''):
+        post = contentcreatormanager.media.post.lbry.LBRYTextPost(lbry_channel=self, title=title, body=body, name=title, tags=tags, bid=bid, thumbnail_url=thumbnail_url, languages=languages)
+        
+        post.upload()
+        
+        self.add_media(post)
+        
+        return post
