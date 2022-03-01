@@ -5,11 +5,17 @@ This tool is still heavily under development and does not even have a UI yet.  I
 
 # Currently capable of:
 Posting to:
+
 -Facebook
+
 -Twitter
+
 -Reddit
+
 -YouTube
+
 -LBRY
+
 -Rumble
 
 Updating existing content on:
