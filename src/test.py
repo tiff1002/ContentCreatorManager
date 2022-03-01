@@ -54,7 +54,7 @@ yvid.update_web()
 '''
 lbry = contentcreatormanager.platform.lbry.LBRY(ID='8be45e4ba05bd6961619489f6408a0dc62f4e650', settings=settings, init_videos=True)
 vid = lbry.get_media("9df6f11c4581dc4deb48246582c638e4c7576af2")
-post = lbry.make_post(title="Test LBRY Post About Test Video", body=f"This is a test post so it may as well talk about a test video {vid.title} at {vid.permanent_url}", tags=['testposttag'])
+post = lbry.make_post(title="Another Test LBRY Post About Test Video", body=f"This is a test post so it may as well talk about a test video {vid.title} at {vid.permanent_url}", tags=['testposttag'])
 
 print(post.file)
 print(post.description)
