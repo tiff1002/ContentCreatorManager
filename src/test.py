@@ -4,72 +4,93 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import os.path
+import contentcreatormanager.config
 import contentcreatormanager.platform.youtube
-import contentcreatormanager.platform.twitter
-import contentcreatormanager.platform.lbry
-import contentcreatormanager.platform.rumble
-import contentcreatormanager.media.video.rumble
 import contentcreatormanager.media.video.youtube
-import contentcreatormanager.platform.facebook
-import contentcreatormanager.platform.reddit
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
 
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
+logger = settings.Base_logger
 
-#fb = contentcreatormanager.platform.facebook.Facebook(settings=settings)
+logger.info("Starting Youtube Platform Test:")
+logger.info("Creating a YouTube Platform Object without initializing videos")
+yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=False)
 
-#reddit = contentcreatormanager.platform.reddit.Reddit(settings=settings)
-
-#reddit.post(subr='lbry', title='One More Test Post From Content Creator Manager', body="Sorry for the noise here is the latest update: https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
-
-#test = fb.post("Test Post")
-
-#print(test)
-
-'''
-yt = contentcreatormanager.platform.youtube.YouTube(settings=settings, init_videos=True)
-
-#yvid = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=yt, self_declared_made_for_kids=False, made_for_kids=False, public_stats_viewable=True, embeddable=True, privacy_status='unlisted', title='THis is a unlisted video for content creator manager', description='initial description', file_name='upload_test.mp4', update_from_web=False, tags=['initialtag'], new_video=True)
-
-#yt.add_video(yvid)
-
-yvid = yt.get_media("9tHc0FDjE80")
-
-yvid.privacy_status = 'unlisted'
-
-yvid.title = "This is a cool upload from Content Creator Manager"
-
-yvid.description = "This is a cool new description"
-
-yvid.add_tag("newtesttag1")
-yvid.add_tag("Anotherone")
-
-#yvid.upload()
-
-yvid.description = "We have to modify it tho"
-
-yvid.update_web()
-'''
-lbry = contentcreatormanager.platform.lbry.LBRY(ID='8be45e4ba05bd6961619489f6408a0dc62f4e650', settings=settings, init_videos=True)
-vid = lbry.get_media("9df6f11c4581dc4deb48246582c638e4c7576af2")
-post = lbry.make_post(title="Another Test LBRY Post About Test Video", body=f"This is a test post so it may as well talk about a test video {vid.title} at {vid.permanent_url}", tags=['testposttag'])
-
-print(post.file)
-print(post.description)
-print(post.id)
+logger.info("Creating YouTube Video Object to add to Platform object to test add_media and add_video")
+vid2 = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=yt, privacy_status='private', title="The Upload Test Via Content Creator Manager", description="THe super test description for the test upload", file_name="upload_test.mp4", update_from_web=False, tags=['testtag'], new_video=True)
 
 
-'''
-rumble = contentcreatormanager.platform.rumble.Rumble(settings=settings)
+logger.info("Testing add_video")
+yt.add_video(vid2)
 
-rvid = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble, title="Test Upload From Content Creator Manager", description="With its very own test description", video_file_name='upload_test.mp4', license_type=0)
 
-rumble.add_video(rvid)
+logger.info("Testing upload_all_media")
+yt.upload_all_media()
 
-rumble.upload_all_media()
 
-twitter = contentcreatormanager.platform.twitter.Twitter(settings=settings)
+logger.info("Testing delete_media_from_web")
 
-twitter.tweet("If this gets tweeted that means lunch time testing worked and things are going smoothly.")'''
+yt.delete_media_from_web(vid2.id)
+
+logger.info("Re-uploading for further tests")
+
+vid2.upload()
+
+
+vid2.title = "The new and improved title"
+
+logger.info("Changing a title now testing update_all_media_local")
+
+yt.update_all_media_local()
+
+
+logger.info(f"if the title you see here is not The new and improved title it worked: {vid2.title}")
+
+vid2.title = "The new and improved title"
+
+logger.info("Changing a title now testing update_all_media_web (running update_all_media_local again after just to confirm change hit the web)")
+
+yt.update_all_media_web()
+
+
+yt.update_all_media_local()
+
+
+
+logger.info(f"if the title is the new and improved title it worked: {vid2.title}")
+
+vid2.title = "The second new and improved title"
+
+logger.info("Testing update_media_local")
+
+yt.update_media_local(vid2.id)
+
+
+logger.info(f"If it worked this will not be the second new and improved title: {vid2.title}")
+
+vid2.title = "The second new and improved title"
+
+logger.info("Testing update_media_web")
+
+yt.update_media_web(vid2.id)
+
+
+logger.info(f"If it worked this will be the second new and improved title: {vid2.title}")
+
+logger.info("Testing download_media so first deleting file")
+
+os.remove(vid2.file)
+
+yt.download_media(vid2.id)
+
+
+logger.info("Testing download_all_media so first deleting file")
+
+os.remove(vid2.file)
+
+yt.download_all_media()
+
+
+logger.info("YouTube Platform Test over")

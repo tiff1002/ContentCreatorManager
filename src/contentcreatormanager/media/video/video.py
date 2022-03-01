@@ -29,7 +29,7 @@ class Video(contentcreatormanager.media.media.Media):
         self.logger.info("Initializing Media Object as a Video object")
         
         #setting file and thumbnail based on provided name strings
-        self.file = os.path.join(os.getcwd(), self.get_valid_video_file_name(desired_file_name=file_name))
+        self.file = os.path.join(os.getcwd(), file_name)
         self.thumbnail = os.path.join(os.getcwd(), self.get_valid_thumbnail_file_name(thumbnail_file_name))
         
         file_does_not_exist = not os.path.isfile(self.file)
@@ -45,17 +45,20 @@ class Video(contentcreatormanager.media.media.Media):
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """Method to get a valid video filename either from title property or provided string."""
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        file_name = desired_file_name
+        if desired_file_name[-4:] == '.mp4':
+            self.logger.info("file name given already has .mp4 in it")
+            file_name = desired_file_name[:-4]
+        if desired_file_name == '':
+            file_name = self.title    
         
-        if desired_file_name == '':    
-            getVals = list([val for val in f"{self.title}.mp4" if val in valid_chars])
-        else:
-            if desired_file_name[-4:] == '.mp4':
-                file_name = desired_file_name[:-4]   
-            else:
-                file_name = desired_file_name 
-            getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
+        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
+        
+        result = "".join(getVals)
+        
+        self.logger.info(f"returning the following file name: {result}")
             
-        return "".join(getVals)
+        return result
     
     def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
         """Method to get a valid thumbnail filename either from title property or provided string."""

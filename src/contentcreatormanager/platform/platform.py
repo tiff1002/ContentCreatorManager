@@ -54,8 +54,11 @@ class Platform(object):
         """Method to add a Media object to the media_objects list property"""
         self.media_objects.append(media)
         
+        
+        
     def upload_all_media(self):
         """Method to call upload() on all Media objects in self.media_objects"""
+        self.logger.info("Running upload Method for all media objects")
         for media in self.media_objects:
             media.upload()
                
@@ -63,15 +66,18 @@ class Platform(object):
         """Method to call upload() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
+                self.logger.info(f"Running upload Method for {media.id}")
                 media.upload()
                 
     def update_all_media_local(self):
         """Method to call update_local() on all Media objects in the media_objects list property"""
+        self.logger.info("Running update local Method for all media objects")
         for media in self.media_objects:
             media.update_local()
             
     def update_all_media_web(self):
         """Method to call update_web() on all Media objects in self.media_objects"""
+        self.logger.info("Running update web Method for all media objects")
         for media in self.media_objects:
             media.update_web()
             
@@ -79,22 +85,26 @@ class Platform(object):
         """Method to call update_local() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
+                self.logger.info(f"Running Update local Method for {media.id}")
                 media.update_local()
                        
     def update_media_web(self, ID : str):
         """Method to call update_web() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
+                self.logger.info(f"Running Upadte Web Method for {media.id}")
                 media.update_web()
                        
     def download_media(self, ID : str):
         """Method to call download() on the media object in media_objects with ID provided"""
         for media in self.media_objects:
             if media.id == ID:
+                self.logger.info(f"Running Download Method for {media.id}")
                 media.download()
                 
     def download_all_media(self):
         """Method to call download() on all Media objects in media_objects list property"""
+        self.logger.info("Running Download Method for all media_objects")
         for media in self.media_objects:
             media.download()
             
@@ -102,6 +112,8 @@ class Platform(object):
         """Method to call delete_web() on a Media Object in media_objects with the given ID"""
         for media in self.media_objects:
             if media.id == ID:
+                self.logger.info(f"Running Delete Method for {media.id}")
                 media.delete_web()
+                
             
             
