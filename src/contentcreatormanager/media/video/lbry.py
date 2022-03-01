@@ -61,45 +61,7 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         
         self.logger.info(f"Sending get call to API to download {file_name} blobs")
         
-        return requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "get", "params": get_params}).json() 
-        
-    def __request_data(self):
-        """
-        Private method to request data via the claim_list api call using the claim_id stored in self.id.  
-        This Method will raise an exception if no results are found or if there is an error in the results
-        """
-        params = {
-            'claim_id':self.id
-        }
-        
-        #Make the API call
-        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
-        
-        #Check API call for errors
-        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
-            raise Exception()
-        
-        #return the result portion of the results
-        return res['result']['items'][0]
-    
-    def __request_data_with_name(self):
-        """
-        Private method to get API request data for claim_list using the self.name property as the name for lookup.
-        This Method will raise an exception if no results are found or if there is an error in the results
-        """
-        params = {
-            'name':self.name
-        }
-        
-        #Make API call
-        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
-        
-        #Check for Errors
-        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
-            raise Exception()
-        
-        #return the result portion of the results
-        return res['result']['items'][0]
+        return requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "get", "params": get_params}).json()     
     
     def __delete_from_lbry(self, do_not_download : bool = False):
         """Private Method to delete the Video object from LBRY."""
@@ -261,9 +223,9 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
     def update_local(self, use_name : bool = False):
         """Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True"""
         if use_name:
-            self.__update_from_request(self.__request_data_with_name())
+            self.__update_from_request(self.request_data_with_name())
         else:
-            self.__update_from_request(self.__request_data())
+            self.__update_from_request(self.request_data())
         
     def delete_web(self):
         """Method to remove Video from LBRY"""

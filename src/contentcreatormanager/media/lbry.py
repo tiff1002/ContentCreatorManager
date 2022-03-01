@@ -4,7 +4,9 @@ Created on Feb 28, 2022
 @author: tiff
 '''
 import contentcreatormanager.media.media
+import contentcreatormanager.platform.lbry
 import os.path
+import requests
 
 class LBRYMedia(contentcreatormanager.media.media.Media):
     '''
@@ -43,16 +45,53 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         """
         #First try looking up via claim_id
         try:
-            self.__request_data()
+            self.request_data()
         except:
             #Exception means this failed so try looking up by name
             self.logger.info(f"Could not find data looking up via ID: {self.id}")
             try:
-                self.__request_data_with_name()
+                self.request_data_with_name()
             except:
                 #Exception means this also failed so return False
                 self.logger.info(f"Could not find data looking up via name: {self.name}")
                 return False
-        self.logger.info("Was able to find video returning True")
+        self.logger.info("Was able to find Media returning True")
         return True
         
+    def request_data(self):
+        """
+        Private method to request data via the claim_list api call using the claim_id stored in self.id.  
+        This Method will raise an exception if no results are found or if there is an error in the results
+        """
+        params = {
+            'claim_id':self.id
+        }
+        
+        #Make the API call
+        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
+        
+        #Check API call for errors
+        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
+            raise Exception()
+        
+        #return the result portion of the results
+        return res['result']['items'][0]
+    
+    def request_data_with_name(self):
+        """
+        Private method to get API request data for claim_list using the self.name property as the name for lookup.
+        This Method will raise an exception if no results are found or if there is an error in the results
+        """
+        params = {
+            'name':self.name
+        }
+        
+        #Make API call
+        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
+        
+        #Check for Errors
+        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
+            raise Exception()
+        
+        #return the result portion of the results
+        return res['result']['items'][0]
