@@ -196,7 +196,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return post
     
-    def api_get(self):
+    def api_get(self, uri : str, download_directory : str):
         """
         Method to make a get call to the LBRY API
         Example Call: 
@@ -204,10 +204,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            uri=uri,
+            download_directory=download_directory
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "get", "params": parameters}).json()
         
@@ -215,7 +214,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_channel_list(self):
+    def api_channel_list(self, claim_id : list = [], page : int = 0, name : str = '', page_size : int = 20, resolve : bool = False):
         """
         Method to make a channel_list call to the LBRY API
         Example Call: 
@@ -223,10 +222,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            claim_id=claim_id,
+            resolve=resolve,
+            page_size=page_size
         )
         
-        if not ( or  is None):
-            parameters['']=
+        if not (page == 0 or page is None):
+            parameters['page'] = page
+            
+        if not (name == '' or name is None):
+            parameters['name'] = name
+
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_list", "params": parameters}).json()
         
@@ -234,7 +240,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_channel_create(self):
+    def api_channel_create(self, name : str, bid : float, title : str, description : str, email : str, website_url : str, featured : list, tags : list, languages : list, thumbnail_url : str, cover_url : str):
         """
         Method to make a channel_create call to the LBRY API
         Example Call: 
@@ -242,10 +248,20 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            name=name,
+            bid=bid,
+            title=title,
+            description=description,
+            email=email,
+            website_url=website_url,
+            featured=featured,
+            tags=tags,
+            languages=languages,
+            thumbnail_url=thumbnail_url,
+            cover_url=cover_url 
         )
         
-        if not ( or  is None):
-            parameters['']=
+
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_create", "params": parameters}).json()
         
@@ -253,7 +269,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_channel_abandon(self):
+    def api_channel_abandon(self, claim_id : str):
         """
         Method to make a channel_abandon call to the LBRY API
         Example Call: 
@@ -261,18 +277,19 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            claim_id=claim_id
         )
-        
-        if not ( or  is None):
-            parameters['']=
-        
+
         result = requests.post(LBRY.API_URL, json={"method": "channel_abandon", "params": parameters}).json()
         
         self.logger.info(f"channel_abandon call with parameters {parameters} made to the LBRY API")
         
         return result
     
-    def api_channel_update(self):
+    def api_channel_update(self, claim_id : str, bid : float, title : str, description : str, email : str, 
+                           website_url : str, cover_url : str, featured : list, tags : list, languages : list, 
+                           thumbnail_url : str, clear_tags : bool = True, clear_languages : bool = True, 
+                           replace : bool = True):
         """
         Method to make a channel_update call to the LBRY API
         Example Call: 
@@ -280,10 +297,21 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            claim_id=claim_id,
+            bid=bid,
+            title=title,
+            description=description,
+            email=email,
+            website_url=website_url,
+            featured=featured,
+            tags=tags,
+            clear_tags=clear_tags,
+            clear_languages=clear_languages,
+            thumbnail_url=thumbnail_url,
+            languages=languages,
+            cover_url=cover_url,
+            replace=replace
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_update", "params": parameters}).json()
         
@@ -291,7 +319,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_file_save(self):
+    def api_file_save(self, download_directory : str, claim_id : str):
         """
         Method to make a file_save call to the LBRY API
         Example Call: 
@@ -299,10 +327,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            download_directory=download_directory,
+            claim_id=claim_id
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "file_save", "params": parameters}).json()
         
@@ -310,7 +337,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_stream_abandon(self):
+    def api_stream_abandon(self, claim_id : str):
         """
         Method to make a stream_abandon call to the LBRY API
         Example Call: 
@@ -318,10 +345,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            claim_id=claim_id
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_abandon", "params": parameters}).json()
         
@@ -329,7 +354,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_stream_create(self):
+    def api_stream_create(self, name : str, bid : float, file_path : str, title : str, description: str, tags : list, languages : list, channel_id : str):
         """
         Method to make a stream_create call to the LBRY API
         Example Call: 
@@ -337,10 +362,15 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            name=name,
+            bid=bid,
+            file_path=file_path,
+            description=description,
+            title=title,
+            tags=tags,
+            languages=languages,
+            channel_id=channel_id
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_create", "params": parameters}).json()
         
@@ -348,7 +378,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_stream_update(self):
+    def api_stream_update(self, claim_id : str, bid : float, title : str, description : str, tags : list, 
+                          languages : list, channel_id : str, clear_languages : bool = True, 
+                          clear_tags : bool = True, replace : bool = True):
         """
         Method to make a stream_update call to the LBRY API
         Example Call: 
@@ -356,10 +388,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
+            claim_id=claim_id,
+            bid=bid,
+            title=title,
+            description=description,
+            tags=tags,
+            languages=languages,
+            channel_id=channel_id,
+            replace=replace,
+            clear_tags=clear_tags,
+            clear_languages=clear_languages
         )
-        
-        if not ( or  is None):
-            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_update", "params": parameters}).json()
         
