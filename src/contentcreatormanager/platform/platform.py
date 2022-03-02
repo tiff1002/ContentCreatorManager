@@ -52,7 +52,18 @@ class Platform(object):
        
     def add_media(self, media : contentcreatormanager.media.media.Media):
         """Method to add a Media object to the media_objects list property"""
+        duplicate = False
+        for media_obj in self.media_objects:
+            if media.id == media_obj.id:
+                duplicate = True
+        
+        if duplicate:
+            self.logger.error("Trying to add a Media Object with an ID that a media object in media_objects already has not adding duplicate")
+            return
+        
         self.media_objects.append(media)
+        
+        self.logger.info(f"Media Object with id {media.id} added to media_objects")
         
         
         
