@@ -203,8 +203,11 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "get", "params": parameters}).json()
         
@@ -219,14 +222,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_list", "params": parameters}).json()
         
         self.logger.info(f"channel_list call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_channel_create(self):
         """
@@ -235,14 +241,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_create", "params": parameters}).json()
         
         self.logger.info(f"channel_create call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_channel_abandon(self):
         """
@@ -251,14 +260,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_abandon", "params": parameters}).json()
         
         self.logger.info(f"channel_abandon call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_channel_update(self):
         """
@@ -267,14 +279,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "channel_update", "params": parameters}).json()
         
         self.logger.info(f"channel_update call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_file_save(self):
         """
@@ -283,14 +298,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "file_save", "params": parameters}).json()
         
         self.logger.info(f"file_save call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_stream_abandon(self):
         """
@@ -299,14 +317,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_abandon", "params": parameters}).json()
         
         self.logger.info(f"stream_abandon call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_stream_create(self):
         """
@@ -315,14 +336,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_create", "params": parameters}).json()
         
         self.logger.info(f"stream_create call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_stream_update(self):
         """
@@ -331,14 +355,17 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         Example Return: 
         """
         
-        parameters = {
-        }
+        parameters = dict(
+        )
+        
+        if not ( or  is None):
+            parameters['']=
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_update", "params": parameters}).json()
         
         self.logger.info(f"stream_update call with parameters {parameters} made to the LBRY API")
         
-        return 
+        return result
     
     def api_claim_list(self, claim_type : list, claim_id, list, channel_id: list, name : list, 
                        account_id : str, order_by : str = '', page : int = 0, resolve : bool = True, page_size: int = 20):
