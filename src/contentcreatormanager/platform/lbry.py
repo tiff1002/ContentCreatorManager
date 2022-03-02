@@ -340,18 +340,36 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return 
     
-    def api_claim_list(self):
+    def api_claim_list(self, claim_type : list, claim_id, list, channel_id: list, name : list, 
+                       account_id : str, order_by : str = '', page : int = 0, resolve : bool = True, page_size: int = 20):
         """
         Method to make a claim_list call to the LBRY API
         Example Call: 
         Example Return: 
         """
         
-        parameters = {
-        }
+    
+        parameters = dict(
+            claim_type=claim_type,
+            claim_id=claim_id,
+            channel_id=channel_id,
+            name=name,
+            page_size=page_size,
+            resolve=resolve,
+        )
+        
+        if not (account_id == '' or account_id is None):
+            parameters['account_id']=account_id
+        
+        if not (page == 0 or page is None):
+            parameters['page']=page
+        
+        if not (order_by == '' or order_by is None):
+            parameters['order_by']=order_by
+        
         
         result = requests.post(LBRY.API_URL, json={"method": "claim_list", "params": parameters}).json()
         
         self.logger.info(f"claim_list call with parameters {parameters} made to the LBRY API")
         
-        return
+        return result
