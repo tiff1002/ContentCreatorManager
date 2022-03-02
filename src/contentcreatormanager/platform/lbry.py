@@ -199,59 +199,159 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     def api_get(self):
         """
         Method to make a get call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
-        return 
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "get", "params": parameters}).json()
+        
+        self.logger.info(f"get call with parameters {parameters} made to the LBRY API")
+        
+        return result
     
     def api_channel_list(self):
         """
         Method to make a channel_list call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "channel_list", "params": parameters}).json()
+        
+        self.logger.info(f"channel_list call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_channel_create(self):
         """
         Method to make a channel_create call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "channel_create", "params": parameters}).json()
+        
+        self.logger.info(f"channel_create call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_channel_abandon(self):
         """
         Method to make a channel_abandon call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "channel_abandon", "params": parameters}).json()
+        
+        self.logger.info(f"channel_abandon call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_channel_update(self):
         """
         Method to make a channel_update call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "channel_update", "params": parameters}).json()
+        
+        self.logger.info(f"channel_update call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_file_save(self):
         """
         Method to make a file_save call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "file_save", "params": parameters}).json()
+        
+        self.logger.info(f"file_save call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_stream_abandon(self):
         """
         Method to make a stream_abandon call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "stream_abandon", "params": parameters}).json()
+        
+        self.logger.info(f"stream_abandon call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_stream_create(self):
         """
         Method to make a stream_create call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "stream_create", "params": parameters}).json()
+        
+        self.logger.info(f"stream_create call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_stream_update(self):
         """
         Method to make a stream_update call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "stream_update", "params": parameters}).json()
+        
+        self.logger.info(f"stream_update call with parameters {parameters} made to the LBRY API")
+        
         return 
     
     def api_claim_list(self):
         """
         Method to make a claim_list call to the LBRY API
+        Example Call: 
+        Example Return: 
         """
-        return 
+        
+        parameters = {
+        }
+        
+        result = requests.post(LBRY.API_URL, json={"method": "claim_list", "params": parameters}).json()
+        
+        self.logger.info(f"claim_list call with parameters {parameters} made to the LBRY API")
+        
+        return
