@@ -166,20 +166,18 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         self.logger.info("Making channels.list API call to get Id for the Channel of the authenticated user")
         #uses channels.list with mine set to true to get authed users channel
         try:
-            result = self.service.channels().list(
-                part="contentDetails",
-                mine=True
-            ).execute()
-        except Exception as e:
+            result = self.api_channels_list_mine(contentDetails=True)
+        except HttpError as e:
             self.logger.error(f"Error:\n{e}")
             return None
-        self.logger.info("API Call made")
+        self.logger.info("Chanels.list API Call made without Exception")
+        
         return result['items'][0]['contentDetails']['relatedPlaylists']['uploads']
     
     def __set_videos(self):
         """Private Method to add all videos on the channel to the media_objects list property"""
-        vids = self.__get_videos()
-        for vid in vids:
+        vid_data = self.__get_all_video_data()
+        for vid in vid_data:
             self.add_video_with_request(vid)
     
     def __get_playlist_video_ids(self):
@@ -194,24 +192,20 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         num_pages = 1
         
         self.logger.info("Making intial PlaylistItems.list API call to get first 50 results and the first next_page_token")
-        #Grab the first page of data for user's videos and store the results
+        #Grab the first page of data for user's videos and store the results        
         try:
-            result = self.service.playlistItems().list(
-                playlistId=self.id,
-                maxResults=50,
-                part="contentDetails"
-            ).execute()
-        except Exception as e:
-            self.logger.error(f"Error:\n{e}")
+            result = self.api_playlistitems_list(contentDetails=True, maxResults=50, playlistId=self.id)
+        except HttpError as e:
+            self.logger.error(f"Error During API call:\n{e}")
             return None
         self.logger.info("PlaylistIems.list API Call made without exception")
         
         self.logger.info("Adding first page of data to pages")
-        pages = []
-        pages.append(result['items'])
+        pages = [result['items']]
         
         #initializing the csv_length variable that will be returned it will be set to the number of items in the result and if there is more than one page of data this will get overwritten
         csv_length = result['pageInfo']['totalResults']
+        
         #initializing the next_page_token to None if there is one it will be set
         next_page_token = None
         
@@ -226,15 +220,11 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         while next_page_token is not None:
             self.logger.info("Making a playlistitems.list call in loop to get remaining data")
             try:
-                result = self.service.playlistItems().list(
-                    playlistId=self.id,
-                    maxResults=50,
-                    part="contentDetails",
-                    pageToken=next_page_token
-                ).execute()
-            except Exception as e:
+                result = self.api_playlistitems_list(contentDetails=True, maxResults=50, playlistId=self.id, pageToken=next_page_token)
+            except HttpError as e:
                 self.logger.error(f"Error:\n{e}")
                 return None
+            self.logger.info("PlaylistIems.list API Call made without exception")
             
             self.logger.info("Adding page of data to pages")
             pages.append(result['items'])
@@ -269,15 +259,15 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
                     return_data.append(r)
         return return_data
           
-    def __get_videos(self):
+    def __get_all_video_data(self):
         """Private Method to return a list of requests for all vids on the channel"""
         #get the channel video IDs and info about how many there are
-        playlist_ids = self.__get_playlist_video_ids()
+        response = self.__get_playlist_video_ids()
         
         #pull the parts of the dict out as individual variables
-        video_ids = playlist_ids['video_ids']
-        num_pages = playlist_ids['num_pages']
-        csv_length = playlist_ids['csv_length']
+        video_ids = response['video_ids']
+        num_pages = response['num_pages']
+        csv_length = response['csv_length']
         
         #initialize a list to hold the different csv strings that will be used to get the rest of the video data
         id_csvs = []
@@ -322,16 +312,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
     def __get_video_data_from_csv(self, csv : str):
         """Private Method to grab video data from a single csv string using the videos.list api call"""
         #initialize the result as None
-        result = None
-        
-        self.logger.info("Making videos.list api call with csv string of Video IDs")
-        try:
-            result = self.service.videos().list(
-                part="snippet,contentDetails,statistics,status",
-                id=csv
-            ).execute()
-        except Exception as e:
-            self.logger.error(f"Error:\n{e}")
+        result = self.api_videos_list(ids=csv, contentDetails=True, snippet=True, statistics=True, status=True)
         
         #return the results
         if 'items' in result:
@@ -351,6 +332,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         self.logger = settings.YouTube_logger
         self.logger.info("Initializing Platform Object as a YouTube Platform")
         
+        #setting starting quota usage
+        self.quota_usage = current_quota_usage
+        
         # Explicitly tell the underlying HTTP transport library not to retry, since
         # we are handling retry logic ourselves.
         httplib2.RETRIES = 1
@@ -362,8 +346,6 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         
         self.logger.info("Setting Id for the Channel")
         self.id = self.__get_channel()
-        
-        self.quota_usage = current_quota_usage
         
         if init_videos:
             self.__set_videos()

@@ -402,6 +402,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.update_local()
         
         #If private is desired status leave things as is otherwise set the correct status and update
+        
         if self.privacy_status == privStatus:
             self.logger.info("Video Upload Complete")
             return
