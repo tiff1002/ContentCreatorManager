@@ -12,7 +12,11 @@ import google.oauth2.credentials
 import google_auth_oauthlib
 import pickle
 import math
+import random
+import time
 import googleapiclient.discovery
+import googleapiclient.http
+from googleapiclient.errors import HttpError
 from google.auth.transport.requests import Request as GoogleAuthRequest
 
 class YouTube(contentcreatormanager.platform.platform.Platform):
@@ -36,7 +40,66 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
     VALID_PRIVACY_STATUSES = ('public', 'private', 'unlisted')
     
     # Maximum number of times to retry before giving up.
-    MAX_RETRIES = 50
+    MAX_RETRIES = 25
+    
+    def __get_parts(self, contentDetails : bool, snippet : bool, statistics : bool, status : bool, 
+                        fileDetails : bool, ID : bool, liveStreamingDetails : bool, localizations : bool,
+                        player : bool, processingDetails : bool, recordingDetails : bool, suggestions : bool,
+                        topicDetails : bool, auditDetails: bool, brandingSettings: bool, contentOwnerDetails : bool):
+        """
+        Private Method to turn a list of strings to make a part string for an API call based on several bool inputs
+        """
+        parts = []
+        
+        if brandingSettings:
+            parts.append('brandingSettings')
+            
+        if auditDetails:
+            parts.append('auditDetails')
+        
+        if contentOwnerDetails:
+            parts.append('contentOwnerDetails')
+        
+        if contentDetails:
+            parts.append('contentDetails')
+            
+        if snippet:
+            parts.append('snippet')
+            
+        if statistics:
+            parts.append('statistics')
+            
+        if status:
+            parts.append('status')
+            
+        if fileDetails:
+            parts.append('fileDetails')
+        
+        if ID:
+            parts.append('id')
+        
+        if liveStreamingDetails:
+            parts.append('liveStreamingDetails')
+        
+        if localizations:
+            parts.append('localizations')
+        
+        if player:
+            parts.append('player')
+        
+        if processingDetails:
+            parts.append('processingDetails')
+        
+        if recordingDetails:
+            parts.append('recordingDetails')
+        
+        if suggestions:
+            parts.append('suggestions')
+        
+        if topicDetails:
+            parts.append('topicDetails')
+            
+        return parts
     
     def __load__creds(self):
         """Private Method to load in credentials from pickle file returning none if no file is present"""
@@ -359,49 +422,20 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         """
         Method for making videos.list api call
         Quota impact: A call to this method has a quota cost of 1 unit.
+        Example Call with 0 results: api_videos_list(ids='', contentDetails=True)
+        Example Return with 0 results: {'kind': 'youtube#videoListResponse', 'etag': 'YIUPVpqNjppyCWOZfL-19bLb7uk', 'items': [], 'pageInfo': {'totalResults': 0, 'resultsPerPage': 0}}
+        Example Call with 1 result: api_videos_list(ids='j61rqh2q6Kg', contentDetails=True)
+        Example Return with 1 result: {'kind': 'youtube#videoListResponse', 'etag': 'K-Kq14CaYq6Y_bf5rHY6OjV_4bI', 'items': [{'kind': 'youtube#video', 'etag': '5EHl_ntuFowoftGC2-8fJT76YeE', 'id': 'j61rqh2q6Kg', 'contentDetails': {'duration': 'PT9M23S', 'dimension': '2d', 'definition': 'hd', 'caption': 'false', 'licensedContent': False, 'contentRating': {}, 'projection': 'rectangular', 'hasCustomThumbnail': True}}], 'pageInfo': {'totalResults': 1, 'resultsPerPage': 1}}
+        Example Call with multiple results: api_videos_list(ids='j61rqh2q6Kg,dNtR6iekI40', contentDetails=True)
+        Example Return with multiple results: {'kind': 'youtube#videoListResponse', 'etag': 'NB9j7iW8etTLjU9tc8mabfK-8vE', 'items': [{'kind': 'youtube#video', 'etag': '5EHl_ntuFowoftGC2-8fJT76YeE', 'id': 'j61rqh2q6Kg', 'contentDetails': {'duration': 'PT9M23S', 'dimension': '2d', 'definition': 'hd', 'caption': 'false', 'licensedContent': False, 'contentRating': {}, 'projection': 'rectangular', 'hasCustomThumbnail': True}}, {'kind': 'youtube#video', 'etag': 'm5p1cKOsvLDy_8urjLjnkAzAVQ0', 'id': 'dNtR6iekI40', 'contentDetails': {'duration': 'PT25M50S', 'dimension': '2d', 'definition': 'hd', 'caption': 'false', 'licensedContent': False, 'contentRating': {}, 'projection': 'rectangular', 'hasCustomThumbnail': False}}], 'pageInfo': {'totalResults': 2, 'resultsPerPage': 2}}
         """
+        self.logger.info("Making YouTube API Call to videos.list which costs 1 quota unit")
         quota_cost = 1
         
-        parts = []
-        
-        if contentDetails:
-            parts.append('contentDetails')
-            
-        if snippet:
-            parts.append('snippet')
-            
-        if statistics:
-            parts.append('statistics')
-            
-        if status:
-            parts.append('status')
-            
-        if fileDetails:
-            parts.append('fileDetails')
-        
-        if ID:
-            parts.append('id')
-        
-        if liveStreamingDetails:
-            parts.append('liveStreamingDetails')
-        
-        if localizations:
-            parts.append('localizations')
-        
-        if player:
-            parts.append('player')
-        
-        if processingDetails:
-            parts.append('processingDetails')
-        
-        if recordingDetails:
-            parts.append('recordingDetails')
-        
-        if suggestions:
-            parts.append('suggestions')
-        
-        if topicDetails:
-            parts.append('topicDetails')
+        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=statistics, status=status, 
+                        fileDetails=fileDetails, ID=ID, liveStreamingDetails=liveStreamingDetails, localizations=localizations,
+                        player=player, processingDetails=processingDetails, recordingDetails=recordingDetails, suggestions=suggestions,
+                        topicDetails=topicDetails, auditDetails=False, brandingSettings=False, contentOwnerDetails=False)
         
         if len(parts) == 0:
             self.logger.error("At least one part required api call will not be made")
@@ -409,42 +443,175 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         
         part = ','.join(parts)
         
-        body = {
-            'part':part,
-            'id':ids                        
-        }
+        self.logger.info(f"API call part: {part} id: {ids}")
         
-        request = self.service.videos().list(body)
+        request = self.service.videos().list(part=part, id=ids)
         
         result = request.execute()
         
         self.quota_usage += quota_cost
         
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
         return result
     
-    def api_videos_insert(self):
+    def api_videos_insert_req(self, file : str, snippet_title : str, snippet_description : str, snippet_tags : list, snippet_categoryId : int
+                          , snippet_defaultLanguage : str, status_embeddable : bool, status_license : str,
+                          status_privacyStatus : str, status_publicStatsViewable : bool, status_selfDeclaredMadeForKids : bool,
+                          contentDetails : bool = False, snippet : bool = False, statistics : bool = False, status : bool = False, 
+                        fileDetails : bool = False, ID : bool = False, liveStreamingDetails : bool = False, localizations : bool = False,
+                        player : bool = False, processingDetails : bool = False, recordingDetails : bool = False, suggestions : bool = False,
+                        topicDetails : bool = False, notifySubscribers : bool = True):
         """
         Method for making videos.insert api call
-        Quota impact: A call to this method has a quota cost of 1600 units.
+        Quota impact: A call to this method has a quota cost of 1600 units, but the call will not be made in this method.  This just returns the request ready to use.
+        Example Call: api_videos_insert_req(file="D:\\Python\\workspace\\Content Creator Manager\\src\\test\\upload_test.mp4", snippet_title='Test Upload', snippet_description='Test Description', snippet_tags=['test1','test2'], snippet_categoryId=22, snippet_defaultLanguage='en-US', status_embeddable=True, status_license='youtube', status_privacyStatus='private', status_publicStatsViewable=True, status_selfDeclaredMadeForKids=False, snippet=True, status=True)
+        Returns a googleapiclient.http.HttpRequest object to be fed to api_videos_insert_exec
+        """
+        self.logger.info("Making YouTube API Call to videos.insert which costs 1600 quota unit")
+        
+        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=statistics, status=status, 
+                        fileDetails=fileDetails, ID=ID, liveStreamingDetails=liveStreamingDetails, localizations=localizations,
+                        player=player, processingDetails=processingDetails, recordingDetails=recordingDetails, suggestions=suggestions,
+                        topicDetails=topicDetails, auditDetails=False, brandingSettings=False, contentOwnerDetails=False)
+        
+        
+        if len(parts) == 0:
+            self.logger.error("At least one part required api call will not be made")
+            return None
+        
+        part = ','.join(parts)
+        
+        snippet_dict = {'title':snippet_title, 'description':snippet_description, 'tags':snippet_tags, 'categoryId':snippet_categoryId, 'defaultLanguage':snippet_defaultLanguage}
+        status_dict = {'embeddable':status_embeddable, 'license':status_license, 'privacyStatus':status_privacyStatus, 'publicStatsViewable':status_publicStatsViewable, 'selfDeclaredMadeForKids':status_selfDeclaredMadeForKids}
+        
+        body = {'snippet':snippet_dict,'status':status_dict}        
+        
+        self.logger.info(f"API call part: {part}, body: {body}, notifySubscribers: {notifySubscribers}, video file: {file}")
+        
+        request = self.service.videos().insert(body=body, media_body=googleapiclient.http.MediaFileUpload(file, chunksize=-1, resumable=True), part=part, notifySubscribers=notifySubscribers)
+        
+        return request
+    
+    def api_videos_insert_exec(self, request):
+        """
+        Method that takes the videos.insert request and completes it in a resumable fashion
+        Example Call: api_videos_insert_exec(contentcreatormanager.platform.youtube.YouTube().api_videos_insert_req(file="D:\\Python\\workspace\\Content Creator Manager\\src\\test\\upload_test.mp4", snippet_title='Test Upload', snippet_description='Test Description', snippet_tags=['test1','test2'], snippet_categoryId=22, snippet_defaultLanguage='en-US', status_embeddable=True, status_license='youtube', status_privacyStatus='private', status_publicStatsViewable=True, status_selfDeclaredMadeForKids=False, snippet=True, status=True))
+        Example Result: (None, {'kind': 'youtube#video', 'etag': 'f0g_zDeZkHqi39F3hsc_MVvuhw0', 'id': 'I5VIcY3rjQI', 'snippet': {'publishedAt': '2022-03-02T17:23:18Z', 'channelId': 'UCidrHvFXBvyesh1hbOR2rTw', 'title': 'Test Upload', 'description': 'Test Description', 'thumbnails': {'default': {'url': 'https://i9.ytimg.com/vi/I5VIcY3rjQI/default.jpg?sqp=CMDO_pAG&rs=AOn4CLDWOQRH2ykKnWeEllu8sT9f7iKzaw', 'width': 120, 'height': 90}, 'medium': {'url': 'https://i9.ytimg.com/vi/I5VIcY3rjQI/mqdefault.jpg?sqp=CMDO_pAG&rs=AOn4CLD21pKxtGpntSd-cOYEZRz0EeDjJA', 'width': 320, 'height': 180}, 'high': {'url': 'https://i9.ytimg.com/vi/I5VIcY3rjQI/hqdefault.jpg?sqp=CMDO_pAG&rs=AOn4CLCB7sXMw2BEO_Kn6fwaZXJkWwvdMg', 'width': 480, 'height': 360}}, 'channelTitle': 'Tech Girl Tiff', 'tags': ['test1', 'test2'], 'categoryId': '22', 'liveBroadcastContent': 'none', 'defaultLanguage': 'en-US', 'localized': {'title': 'Test Upload', 'description': 'Test Description'}}, 'status': {'uploadStatus': 'uploaded', 'privacyStatus': 'private', 'license': 'youtube', 'embeddable': True, 'publicStatsViewable': True, 'selfDeclaredMadeForKids': False}})
         """
         quota_cost = 1600
-        return
+        self.logger.info("Completing YouTube videos.insert API call")
+        response = None
+        error = None
+        retry = 0
+
+        while response is None:
+            try:
+                self.logger.info('Uploading file...') 
+                response = request.next_chunk()
+                if(response is not None):
+                    self.logger.info(f"Checking Response for id:\n{response}")
+                    if('id' in response[1]):
+                        self.logger.info(f"Video id \"{response[1]['id']}\" was successfully uploaded.")
+                    else:
+                        self.logger.warning(f"The upload failed with an unexpected response: {response}")
+                        return response
+            except HttpError as e:
+                if e.resp.status in contentcreatormanager.platform.youtube.YouTube.RETRIABLE_STATUS_CODES:
+                    error = f"A retriable HTTP error {e.resp.status} occurred:\n{e.content}"
+                else:
+                    raise e
+            except contentcreatormanager.platform.youtube.YouTube.RETRIABLE_EXCEPTIONS as e:
+                error = f"A retriable error occurred: {e}"
+
+            if error is not None:
+                print(error)
+                retry += 1
+                if retry > YouTube.MAX_RETRIES:
+                    self.logger.error('No longer attempting to retry.')
+                    return response
+                    
+
+                max_sleep = 2 ** retry
+                sleep_seconds = random.random() * max_sleep
+                self.logger.info(f"Sleeping {sleep_seconds} seconds and then retrying...")
+                time.sleep(sleep_seconds)
+        
+        self.logger.info("Videos.insert call to YouTube API complete")
+        
+        self.quota_usage += quota_cost
+        
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
+        return response
     
-    def api_videos_update(self):
+    def api_videos_update(self, snippet_categoryId : int, snippet_defaultLanguage : str, snippet_description : str, snippet_tags : list, snippet_title : str, 
+                          status_embeddable : bool, status_license : str, status_privacyStatus : str, status_publicStatsViewable : bool, status_selfDeclaredMadeForKids : bool,
+                          vid_id : str, contentDetails : bool = False, snippet : bool = False, statistics : bool = False, status : bool = False, 
+                        fileDetails : bool = False, ID : bool = False, liveStreamingDetails : bool = False, localizations : bool = False,
+                        player : bool = False, processingDetails : bool = False, recordingDetails : bool = False, suggestions : bool = False,
+                        topicDetails : bool = False):
         """
         Method for making videos.update api call
         Quota impact: A call to this method has a quota cost of 50 units.
+        Example Call: api_videos_update(snippet_categoryId=22, snippet_defaultLanguage='en-US', snippet_description="So one of my passions/hobbies is cooking.  Often times I drop a hobby and seldom pick it back up.  With cooking I always come back (possibly because of my adjacent hobby of eating).  Lately I have been getting into baking in an attempt to ruin my diet and all the weight loss.  Anyway I decided to make and film the making of a 3 layer lemon flavored cake.  It is frosted with a lemon buttercream frosting and there is lemon curd between the middle layers in addition to the frosting.  I am mostly following recipes I found here:\n\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbGd1RXBwZjZpYUVnUTI4N3dCdVdMUmFtT00yUXxBQ3Jtc0tuNFBMUzVEQUs2R3g3aFVoQmc3Vk9GS0p5dnFDN25ONDhNRWZiS3RTOEpkNHhFUXctRUpoMjk1OUpwandQTVhNZlFydmZ1bkZGeWNpbl9yRW5oeExmZHUyMXhaU1psQ3htcmtuSGFWODBFTmVaeVJlRQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-curd%2F\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbENwUmlDZThveG1DWXhaZURaNHpjTkhuTjNUQXxBQ3Jtc0ttZ084aGREQ3JQaGs3Y3Noc19PQ3pvSXNLQ052ZzZLaVRLNkVrSjZuMmM1MUoxTFZQczhuS1BVTmtUUnU3R1RuaXlfaDdqdjZhNUZqNElneVBGZE91M1hPelBPOEZLT2tscmtZOXZZS0xPMDFwY0V6TQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-cake-with-lemon-buttercream%2F\n\nI hope you enjoy and let me know what you think :)", snippet_tags=['cooking','baking','lemon','lemon curd','curd','cake','layers','frosting','buttercream','buttercream frosting','american buttercream','lemon buttercream','lemon buttercream frosting','american lemon buttercream','american lemon buttercream frosting','cake making','decorating'], snippet_title='(0153) Tiff Makes a Three Layer Lemon Cake with Buttercream and Lemon Curd ! ! !', status_embeddable=True, status_license='youtube', status_privacyStatus='public', status_publicStatsViewable=True, status_selfDeclaredMadeForKids=False, vid_id='j61rqh2q6Kg', snippet=True, status=True)
+        Example Return: {'kind': 'youtube#video', 'etag': 'uQM_y4xDGhzWwVA6PKYObhbMRrc', 'id': 'j61rqh2q6Kg', 'snippet': {'publishedAt': '2022-02-11T23:13:19Z', 'channelId': 'UCidrHvFXBvyesh1hbOR2rTw', 'title': '(0153) Tiff Makes a Three Layer Lemon Cake with Buttercream and Lemon Curd ! ! !', 'description': 'So one of my passions/hobbies is cooking.  Often times I drop a hobby and seldom pick it back up.  With cooking I always come back (possibly because of my adjacent hobby of eating).  Lately I have been getting into baking in an attempt to ruin my diet and all the weight loss.  Anyway I decided to make and film the making of a 3 layer lemon flavored cake.  It is frosted with a lemon buttercream frosting and there is lemon curd between the middle layers in addition to the frosting.  I am mostly following recipes I found here:\n\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbGd1RXBwZjZpYUVnUTI4N3dCdVdMUmFtT00yUXxBQ3Jtc0tuNFBMUzVEQUs2R3g3aFVoQmc3Vk9GS0p5dnFDN25ONDhNRWZiS3RTOEpkNHhFUXctRUpoMjk1OUpwandQTVhNZlFydmZ1bkZGeWNpbl9yRW5oeExmZHUyMXhaU1psQ3htcmtuSGFWODBFTmVaeVJlRQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-curd%2F\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbENwUmlDZThveG1DWXhaZURaNHpjTkhuTjNUQXxBQ3Jtc0ttZ084aGREQ3JQaGs3Y3Noc19PQ3pvSXNLQ052ZzZLaVRLNkVrSjZuMmM1MUoxTFZQczhuS1BVTmtUUnU3R1RuaXlfaDdqdjZhNUZqNElneVBGZE91M1hPelBPOEZLT2tscmtZOXZZS0xPMDFwY0V6TQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-cake-with-lemon-buttercream%2F\n\nI hope you enjoy and let me know what you think :)', 'thumbnails': {'default': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/default.jpg', 'width': 120, 'height': 90}, 'medium': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/mqdefault.jpg', 'width': 320, 'height': 180}, 'high': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/hqdefault.jpg', 'width': 480, 'height': 360}}, 'channelTitle': 'Tech Girl Tiff', 'tags': ['american buttercream', 'american lemon buttercream', 'american lemon buttercream frosting', 'baking', 'buttercream', 'buttercream frosting', 'cake', 'cake making', 'cooking', 'curd', 'decorating', 'frosting', 'layers', 'lemon', 'lemon buttercream', 'lemon buttercream frosting', 'lemon curd'], 'categoryId': '22', 'liveBroadcastContent': 'none', 'defaultLanguage': 'en-US', 'localized': {'title': '(0153) Tiff Makes a Three Layer Lemon Cake with Buttercream and Lemon Curd ! ! !', 'description': 'So one of my passions/hobbies is cooking.  Often times I drop a hobby and seldom pick it back up.  With cooking I always come back (possibly because of my adjacent hobby of eating).  Lately I have been getting into baking in an attempt to ruin my diet and all the weight loss.  Anyway I decided to make and film the making of a 3 layer lemon flavored cake.  It is frosted with a lemon buttercream frosting and there is lemon curd between the middle layers in addition to the frosting.  I am mostly following recipes I found here:\n\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbGd1RXBwZjZpYUVnUTI4N3dCdVdMUmFtT00yUXxBQ3Jtc0tuNFBMUzVEQUs2R3g3aFVoQmc3Vk9GS0p5dnFDN25ONDhNRWZiS3RTOEpkNHhFUXctRUpoMjk1OUpwandQTVhNZlFydmZ1bkZGeWNpbl9yRW5oeExmZHUyMXhaU1psQ3htcmtuSGFWODBFTmVaeVJlRQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-curd%2F\nhttps://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbENwUmlDZThveG1DWXhaZURaNHpjTkhuTjNUQXxBQ3Jtc0ttZ084aGREQ3JQaGs3Y3Noc19PQ3pvSXNLQ052ZzZLaVRLNkVrSjZuMmM1MUoxTFZQczhuS1BVTmtUUnU3R1RuaXlfaDdqdjZhNUZqNElneVBGZE91M1hPelBPOEZLT2tscmtZOXZZS0xPMDFwY0V6TQ&q=https%3A%2F%2Fwww.biggerbolderbaking.com%2Flemon-cake-with-lemon-buttercream%2F\n\nI hope you enjoy and let me know what you think :)'}, 'defaultAudioLanguage': 'en-US'}, 'status': {'uploadStatus': 'processed', 'privacyStatus': 'public', 'license': 'youtube', 'embeddable': True, 'publicStatsViewable': True, 'selfDeclaredMadeForKids': False}}
         """
+        self.logger.info("Making YouTube API Call to videos.update which costs 50 quota units")
         quota_cost = 50
-        return
+        
+        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=statistics, status=status, 
+                        fileDetails=fileDetails, ID=ID, liveStreamingDetails=liveStreamingDetails, localizations=localizations,
+                        player=player, processingDetails=processingDetails, recordingDetails=recordingDetails, suggestions=suggestions,
+                        topicDetails=topicDetails, auditDetails=False, brandingSettings=False, contentOwnerDetails=False)
+        
+        if len(parts) == 0:
+            self.logger.error("At least one part required api call will not be made")
+            return None
+        
+        part = ','.join(parts)
+        
+        snippet_dict = {'categoryId':snippet_categoryId, 'defaultLanguage':snippet_defaultLanguage, 'description':snippet_description, 'tags':snippet_tags, 'title':snippet_title}
+        status_dict = {'embeddable':status_embeddable, 'license':status_license, 'privacyStatus':status_privacyStatus, 'publicStatsViewable':status_publicStatsViewable, 'selfDeclaredMadeForKids':status_selfDeclaredMadeForKids}
+        
+        body = {'snippet':snippet_dict, 'status':status_dict, 'id':vid_id}                       
+        
+        self.logger.info(f"API call part: {part} body: {body}")
+        
+        request = self.service.videos().update(body=body, part=part)
+        
+        result = request.execute()
+        
+        self.quota_usage += quota_cost
+        
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
+        return result
     
-    def api_videos_delete(self):
+    def api_videos_delete(self, ID : str):
         """
         Method for making videos.delete api call
         Quota impact: A call to this method has a quota cost of 50 units.
+        If successful, this method returns an HTTP 204 response code (No Content).  The response and request returned in a dict
+        Example Call: api_videos_delete(ID='I5VIcY3rjQI')
+        Example Return: {'response': '', 'request': <googleapiclient.http.HttpRequest object at 0x000001A492BA9F60>}
         """
+        self.logger.info("Making YouTube API Call to videos.delete which costs 50 quota units")
         quota_cost = 50
-        return
+        
+        self.logger.info(f"API call id: {ID}")
+        
+        request = self.service.videos().delete(id=ID)
+        
+        response = request.execute()
+        
+        result = {'response':response,'request':request}
+        
+        self.quota_usage += quota_cost
+        
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
+        return result
     
     def api_thumbnails_set(self):
         """
@@ -454,13 +621,66 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         quota_cost = 50
         return
     
-    def api_playlistitems_list(self):
+    def api_playlistitems_list(self, contentDetails : bool = False, snippet : bool = False, status : bool = False, ID : bool = False, ids : str = '', playlistId : str = '',
+                               maxResults : int = 50, pageToken : str = '', videoId : str = ''):
         """
         Method for making playlistitems.list api call
         Quota impact: A call to this method has a quota cost of 1 unit.
+        If the playlist is not found it will throw googleapiclient.errors.HttpError
+        Example Call without pageToken: api_playlistitems_list(contentDetails=True, playlistId='UUidrHvFXBvyesh1hbOR2rTw', maxResults=3)
+        Example Results without pageToken: {'kind': 'youtube#playlistItemListResponse', 'etag': 'tmoSEcMYkIzJ5mSfpKyhHz_6fxo', 'nextPageToken': 'EAAaBlBUOkNBTQ', 'items': [{'kind': 'youtube#playlistItem', 'etag': '3RVnrGFLI5QkgzRg7LbnUTtH62w', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3Lmo2MXJxaDJxNktn', 'contentDetails': {'videoId': 'j61rqh2q6Kg', 'videoPublishedAt': '2022-02-11T23:13:19Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'KbGLhEYOjfwxSQVdKE5Pf6Pp92Y', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmROdFI2aWVrSTQw', 'contentDetails': {'videoId': 'dNtR6iekI40', 'videoPublishedAt': '2021-10-02T18:00:08Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'QgGQdMYagwQGQm7i2hKZJ2X6tv4', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmhBTXBfQlFEZjAw', 'contentDetails': {'videoId': 'hAMp_BQDf00', 'videoPublishedAt': '2021-10-02T12:00:32Z'}}], 'pageInfo': {'totalResults': 158, 'resultsPerPage': 3}}
+        Example Call with pageToken: api_playlistitems_list(contentDetails=True, playlistId='UUidrHvFXBvyesh1hbOR2rTw', maxResults=3, pageToken='EAAaBlBUOkNBTQ')
+        Example Results with pageToken: {'kind': 'youtube#playlistItemListResponse', 'etag': '2ixEvQy_1aHNH3YpSIv_nplMJvs', 'nextPageToken': 'EAAaBlBUOkNBWQ', 'prevPageToken': 'EAEaBlBUOkNBTQ', 'items': [{'kind': 'youtube#playlistItem', 'etag': 'QgGQdMYagwQGQm7i2hKZJ2X6tv4', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmhBTXBfQlFEZjAw', 'contentDetails': {'videoId': 'hAMp_BQDf00', 'videoPublishedAt': '2021-10-02T12:00:32Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'R4AzQocoTVqgoUIHkVGWMx7OtAA', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LkhZTTZRT1dKT0Q4', 'contentDetails': {'videoId': 'HYM6QOWJOD8', 'videoPublishedAt': '2021-10-01T18:00:05Z'}}, {'kind': 'youtube#playlistItem', 'etag': '42I4J4EAopmbwZ3p9VtanWygqlM', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LkkyVTB2SUZzc2lz', 'contentDetails': {'videoId': 'I2U0vIFssis', 'videoPublishedAt': '2021-10-01T12:00:10Z'}}], 'pageInfo': {'totalResults': 158, 'resultsPerPage': 3}}
         """
+        if (playlistId == '' and ids == '') or (playlistId != '' and ids != ''):
+            self.logger.error("ids (comma-separated list of one or more unique playlist item IDs.) or playlistId (unique ID of the playlist for which you want to retrieve playlist items) must be set but both can not be")
+            return
+        
+        self.logger.info("Making YouTube API Call to playlistitems.list which costs 1 quota unit")
         quota_cost = 1
-        return
+        
+        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=False, status=status, 
+                        fileDetails=False, ID=ID, liveStreamingDetails=False, localizations=False,
+                        player=False, processingDetails=False, recordingDetails=False, suggestions=False,
+                        topicDetails=False, auditDetails=False, brandingSettings=False, contentOwnerDetails=False)
+        
+        if len(parts) == 0:
+            self.logger.error("At least one part required api call will not be made")
+            return None
+        
+        part = ','.join(parts)
+        
+        if playlistId == '':
+            if videoId != '' and pageToken != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, videoId=videoId, pageToken=pageToken)
+            elif pageToken != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, pageToken=pageToken)
+            elif videoId != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, videoId=videoId)
+            else:
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids)
+        elif ids == '':
+            if videoId != '' and pageToken != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, videoId=videoId, pageToken=pageToken)
+            elif pageToken != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, pageToken=pageToken)
+            elif videoId != '':
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, videoId=videoId)
+            else:
+                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId)
+            
+        
+        
+        
+        self.logger.info(f"API call being made")        
+        
+        result = request.execute()
+        
+        self.quota_usage += quota_cost
+        
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
+        return result
     
     def api_playlistitems_insert(self):
         """
@@ -485,3 +705,38 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         """
         quota_cost = 50
         return
+    
+    def api_channels_list_mine(self, auditDetails: bool = False, brandingSettings: bool = False, contentDetails : bool = False, 
+                               contentOwnerDetails : bool = False, ID : bool = False, localizations : bool = False, snippet : bool = False, 
+                               statistics : bool = False, status : bool = False, topicDetails : bool = False):
+        """
+        Method for making channels.list api call
+        Quota impact: A call to this method has a quota cost of 1 unit.
+        Example Call: api_channels_list_mine(contentDetails=True)
+        Example Result: {'kind': 'youtube#channelListResponse', 'etag': 'b4o7PvIgje6iZZ7iFDX25diGSSo', 'pageInfo': {'totalResults': 1, 'resultsPerPage': 5}, 'items': [{'kind': 'youtube#channel', 'etag': 'k87yoSbtKhfiY4D7eR6qtUEC7s8', 'id': 'UCidrHvFXBvyesh1hbOR2rTw', 'contentDetails': {'relatedPlaylists': {'likes': 'LL', 'uploads': 'UUidrHvFXBvyesh1hbOR2rTw'}}}]}
+        """
+        self.logger.info("Making YouTube API Call to channels.list with mine set to True which costs 1 quota unit")
+        quota_cost = 1
+        
+        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=statistics, status=status, 
+                        fileDetails=False, ID=ID, liveStreamingDetails=False, localizations=localizations,
+                        player=False, processingDetails=False, recordingDetails=False, suggestions=False,
+                        topicDetails=topicDetails, auditDetails=auditDetails, brandingSettings=brandingSettings, contentOwnerDetails=contentOwnerDetails)
+        
+        if len(parts) == 0:
+            self.logger.error("At least one part required api call will not be made")
+            return None
+        
+        part = ','.join(parts)
+        
+        self.logger.info(f"API call part: {part} mine: True")
+        
+        request = self.service.channels().list(part=part, mine=True)
+        
+        result = request.execute()
+        
+        self.quota_usage += quota_cost
+        
+        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        
+        return result
