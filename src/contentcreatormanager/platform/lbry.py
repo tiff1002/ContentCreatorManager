@@ -195,3 +195,63 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         self.add_media(post)
         
         return post
+    
+    def api_get(self):
+        """
+        Method to make a get call to the LBRY API
+        """
+        return 
+    
+    def api_channel_list(self):
+        """
+        Method to make a channel_list call to the LBRY API
+        """
+        return 
+    
+    def api_channel_create(self):
+        """
+        Method to make a channel_create call to the LBRY API
+        """
+        return 
+    
+    def api_channel_abandon(self):
+        """
+        Method to make a channel_abandon call to the LBRY API
+        """
+        return 
+    
+    def api_channel_update(self):
+        """
+        Method to make a channel_update call to the LBRY API
+        """
+        return 
+    
+    def api_file_save(self):
+        """
+        Method to make a file_save call to the LBRY API
+        """
+        return 
+    
+    def api_stream_abandon(self):
+        """
+        Method to make a stream_abandon call to the LBRY API
+        """
+        return 
+    
+    def api_stream_create(self):
+        """
+        Method to make a stream_create call to the LBRY API
+        """
+        return 
+    
+    def api_stream_update(self):
+        """
+        Method to make a stream_update call to the LBRY API
+        """
+        return 
+    
+    def api_claim_list(self):
+        """
+        Method to make a claim_list call to the LBRY API
+        """
+        return 
