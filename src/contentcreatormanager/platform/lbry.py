@@ -14,35 +14,29 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     '''
     #URL used to make LBRY API calls
     API_URL = "http://localhost:5279"
+    
+    #Default length for API Page Results
+    PAGE_RESULT_LENGTH = 20
 
     def __get_channel(self):
         """Private method to make api call to get channel info based on claim_id (which is the id property) and return the results"""
-        params = {
-            'claim_id':self.id
-        }
-        result = requests.post(LBRY.API_URL, json={"method": "channel_list", "params": params}).json()
+        result = self.api_channel_list(claim_id=[self.id])
         
         #check if API call returned an error if so throw an exception
         if self.check_request_for_error(result):
-            #more detailed exception could probably be made to use here
-            raise Exception()
+            self.logger.error("Can not return channel info")
+            
         return result
     
     def __add_channel_videos(self):
-        """Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to media_objects list property"""
-        #channel's claim_id is self.id ordering results by name
-        params = {
-            "channel_id": [self.id],
-            "order_by":'name'
-        }
-        
+        """Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to media_objects list property"""       
         #grab first page of data for api call to get all claims assosiated with lbry channel
-        intial_result = requests.post(LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
+        intial_result = self.api_claim_list(claim_type=['stream'], channel_id=[self.id], order_by='name', resolve=False, page_size=LBRY.PAGE_RESULT_LENGTH)
         
         #check if API call returned an error if so throw an exception
         if self.check_request_for_error(intial_result):
-            #more detailed exception could probably be made to use here
-            raise Exception()
+            self.logger.error("Can Not Add Videos")
+            return
         
         #stores num of pages and items total returned
         page_amount = intial_result['result']['total_pages']
@@ -59,13 +53,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         # if there is more than 1 page of data grab the rest
         if page_amount > 1:
             for x in range(page_amount-1):
-                params = {
-                    "page":x+2, 
-                    "channel_id": [self.id],
-                    "order_by":'name'      
-                }
                 self.logger.info(f"getting page {x+2} of data and adding it")
-                current_result = requests.post(LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
+                current_result = self.api_claim_list(claim_type=['stream'], channel_id=[self.id], order_by='name', page=x+2, resolve=False, page_size=LBRY.PAGE_RESULT_LENGTH)
                 pages.append(current_result['result']['items'])
         
         #loops through to get all the claims that are of type video and adds them to claims list    
@@ -196,7 +185,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return post
     
-    def api_get(self, uri : str, download_directory : str):
+    def api_get(self, uri : str, download_directory : str = '', file_name : str = ''):
         """
         Method to make a get call to the LBRY API
         Example Call: api_get(uri='lbry://@ComputingForever#9/hitat-2-3-2022-Broadband-High#1', download_directory=os.getcwd())
@@ -204,9 +193,14 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """
         
         parameters = dict(
-            uri=uri,
-            download_directory=download_directory
+            uri=uri
         )
+        
+        if not (file_name == '' or file_name is None):
+            parameters['file_name'] = file_name
+        
+        if not (download_directory == '' or download_directory is None):
+            parameters['download_directory'] = download_directory
         
         result = requests.post(LBRY.API_URL, json={"method": "get", "params": parameters}).json()
         
@@ -214,7 +208,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_channel_list(self, claim_id : list = [], page : int = 0, name : str = '', page_size : int = 20, resolve : bool = False):
+    def api_channel_list(self, claim_id : list = [], page : int = 0, name : str = '', page_size : int = PAGE_RESULT_LENGTH, resolve : bool = False):
         """
         Method to make a channel_list call to the LBRY API (setting resolve to True gives you more info on the channels listed not the claims on the channels themselves)
         Example Call: api_channel_list()
@@ -322,7 +316,42 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_file_save(self, download_directory : str, claim_id : str):
+    def api_file_delete(self, delete_from_download_dir : bool = False, delete_all : bool = False, sd_hash : str = '', file_name : str = '', claim_id : str = '', claim_name : str = ''):
+        """
+        Method to make a file_delete call to the LBRY API
+        Example Call: api_file_delete(claim_id='1ef601ec82b58b457214acf167583fc3fad079bd')
+        Example Good Return: {'jsonrpc': '2.0', 'result': True}
+        Example Bad Return: {'jsonrpc': '2.0', 'result': False}
+        """
+        
+        parameters = dict(
+            delete_from_download_dir=delete_from_download_dir,
+            delete_all=delete_all
+        )
+        
+        if not(sd_hash == '' or sd_hash is None):
+            parameters['sd_hash'] = sd_hash
+        
+        if not(file_name == '' or file_name is None):
+            parameters['file_name'] = file_name
+            
+        if not(claim_id == '' or claim_id is None):
+            parameters['claim_id'] = claim_id
+            
+        if not(claim_name == '' or claim_name is None):
+            parameters['claim_name'] = claim_name
+        
+        if not(len(parameters) > 2):
+            self.logger.error("Must provide something to delete")
+            return
+        
+        result = requests.post(LBRY.API_URL, json={"method": "file_delete", "params": parameters}).json()
+        
+        self.logger.info(f"file_save call with parameters {parameters} made to the LBRY API")
+        
+        return result
+    
+    def api_file_save(self, download_directory : str, claim_id : str, file_name : str = ''):
         """
         Method to make a file_save call to the LBRY API
         Example Call: api_file_save(download_directory=os.getcwd(), claim_id='1ef601ec82b58b457214acf167583fc3fad079bd')
@@ -334,6 +363,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             download_directory=download_directory,
             claim_id=claim_id
         )
+        
+        if not(file_name == '' or file_name is None):
+            parameters['file_name'] = file_name
         
         result = requests.post(LBRY.API_URL, json={"method": "file_save", "params": parameters}).json()
         
@@ -358,7 +390,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         return result
     
-    def api_stream_create(self, name : str, bid : float, file_path : str, title : str, description: str, channel_id : str, languages : list = [], tags : list = []):
+    def api_stream_create(self, name : str, bid : float, file_path : str, title : str, description: str, channel_id : str, languages : list = [], tags : list = [], thumbnail_url : str = ''):
         """
         Method to make a stream_create call to the LBRY API
         Example Call: api_stream_create(name='newapimethodstestupload', bid=.001, file_path=os.path.join(os.getcwd(), 'upload_test.mp4'), title="Yet another test", description="Test Description", channel_id='8be45e4ba05bd6961619489f6408a0dc62f4e650', languages=['en'], tags=['test'])
@@ -373,7 +405,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             title=title,
             tags=tags,
             languages=languages,
-            channel_id=channel_id
+            channel_id=channel_id,
+            thumbnail_url=thumbnail_url
         )
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_create", "params": parameters}).json()
@@ -411,7 +444,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         return result
     
     def api_claim_list(self, claim_type : list = [], claim_id : list = [], channel_id: list = [], name : list = [], 
-                       account_id : str = '', order_by : str = '', page : int = 0, resolve : bool = True, page_size: int = 20):
+                       account_id : str = '', order_by : str = '', page : int = 0, resolve : bool = True, page_size: int = PAGE_RESULT_LENGTH):
         """
         Method to make a claim_list call to the LBRY API
         Example Call: api_claim_list(claim_id=['0986a13ef9d562c9daa5793fcd33a41d929cd403'])

@@ -19,24 +19,13 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         Private Method for uploading a new video to LBRY.  This uses the stream_create api call.  This method will also set the id to the new claim_id from the upload.
         This method just makes the API call and does nothing to confirm it worked or is complete.
         """
-        params = {
-            "name":self.name,
-            "bid":self.bid,
-            "file_path":self.file,
-            "title":self.title,
-            "description":self.description,
-            "tags":self.tags,
-            "languages":self.languages,
-            "thumbnail_url":self.thumbnail_url,
-            "channel_id":self.platform.id
-        }
         #Make stream_create API call with params
-        result = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "stream_create", "params": params}).json()
+        result = self.platform.api_stream_create(name=self.name, bid=self.bid, file_path=self.file, title=self.title, description=self.description, channel_id=self.platform.id, languages=self.languages, tags=self.tags, thumbnail_url=self.thumbnail_url)
         
         #Check results for errors
         if self.platform.check_request_for_error(result):
             self.logger.error("No Upload Made")
-            return None
+            return result
         
         #Setting claim_id returned by the API call
         self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
@@ -46,7 +35,7 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         return result['result']
 
     def __init__(self, lbry_channel, ID : str = '', tags : list = [], title : str = '',file_hash : str = '', file_name : str = '', name : str = '', 
-                 thumbnail_url : str = '', bid : str = '0.001', address : str = '', description : str = '', permanent_url : str = '', 
+                 thumbnail_url : str = '', bid : float = .001, address : str = '', description : str = '', permanent_url : str = '', 
                  languages : list = ['en'], request = None):
         '''
         Constructor takes LBRY Platform object as required parameter.  LBRY Video Object can be constructed with the results of an API call to claim_list just set the request parameter.

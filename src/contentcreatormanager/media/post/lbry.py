@@ -24,7 +24,7 @@ class LBRYTextPost(contentcreatormanager.media.lbry.LBRYMedia):
         f.close()
 
     def __init__(self, lbry_channel, title : str, body : str, name : str, tags : list = [], 
-                 bid : str = "0.001", thumbnail_url : str = '', languages : list = ['en']):
+                 bid : float = .001, thumbnail_url : str = '', languages : list = ['en']):
         '''
         Constructor takes LBRY Platform object, title and body for the LBRY Post
         '''
@@ -40,25 +40,16 @@ class LBRYTextPost(contentcreatormanager.media.lbry.LBRYMedia):
         
     def upload(self):
         """Method to send this post to the LBRY Channel tied to the Platform object tied to the post"""
+        #Make md file to upload
         self.__write_description_to_file()
         
-        params = {
-            "name":self.name,
-            "bid":self.bid,
-            "file_path":self.file,
-            "title":self.title,
-            "tags":self.tags,
-            "languages":self.languages,
-            "thumbnail_url":self.thumbnail_url,
-            "channel_id":self.platform.id
-        }
-        #Make stream_create API call with params
-        result = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "stream_create", "params": params}).json()
+        #Make stream_create API call
+        result = self.platform.api_stream_create(name=self.name, bid=self.bid, file_path=self.file, title=self.title, description=self.description, channel_id=self.platform.id, languages=self.languages, tags=self.tags, thumbnail_url=self.thumbnail_url)
         
         #Check results for errors
         if self.platform.check_request_for_error(result):
             self.logger.error("No Upload Made")
-            return None
+            return result
         
         #Setting claim_id returned by the API call
         self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
