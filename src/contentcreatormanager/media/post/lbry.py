@@ -4,9 +4,7 @@ Created on Feb 24, 2022
 @author: tiff
 '''
 import contentcreatormanager.media.lbry
-import contentcreatormanager.platform.lbry
 import os.path
-import requests
 import time
 
 class LBRYTextPost(contentcreatormanager.media.lbry.LBRYMedia):

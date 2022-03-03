@@ -21,10 +21,6 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     def __get_channel(self):
         """Private method to make api call to get channel info based on claim_id (which is the id property) and return the results"""
         result = self.api_channel_list(claim_id=[self.id])
-        
-        #check if API call returned an error if so throw an exception
-        if self.check_request_for_error(result):
-            self.logger.error("Can not return channel info")
             
         return result
     
@@ -32,11 +28,6 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         """Private method to grab all videos for the channel via api and then use that data to create LBRYVideo objects and add them to media_objects list property"""       
         #grab first page of data for api call to get all claims assosiated with lbry channel
         intial_result = self.api_claim_list(claim_type=['stream'], channel_id=[self.id], order_by='name', resolve=False, page_size=LBRY.PAGE_RESULT_LENGTH)
-        
-        #check if API call returned an error if so throw an exception
-        if self.check_request_for_error(intial_result):
-            self.logger.error("Can Not Add Videos")
-            return
         
         #stores num of pages and items total returned
         page_amount = intial_result['result']['total_pages']
@@ -127,19 +118,6 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             self.__add_channel_videos()
             
         self.logger.info("LBRY Platform object initialized")
-       
-    def check_request_for_error(self, request):
-        """Method that will check if the result of the LBRY API call provided returned an error or not and if it did will log some errors and return True otherwise it will return False"""
-        if 'error' in request:
-            self.logger.error("API call returned an error:")
-            self.logger.error(f"Error Code: {request['error']['code']}")
-            try:
-                self.logger.error(f"Error Type: {request['error']['data']['name']}")
-            except:
-                pass
-            self.logger.error(f"Error Message: {request['error']['message']}")
-            return True
-        return False
     
     def add_video(self, vid : contentcreatormanager.media.video.lbry.LBRYVideo):
         """Method to add a LBRY Video Object to the media_objects list property"""
@@ -347,7 +325,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         result = requests.post(LBRY.API_URL, json={"method": "file_delete", "params": parameters}).json()
         
-        self.logger.info(f"file_save call with parameters {parameters} made to the LBRY API")
+        self.logger.info(f"file_delete call with parameters {parameters} made to the LBRY API")
         
         return result
     
@@ -417,7 +395,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     
     def api_stream_update(self, claim_id : str, bid : float, title : str, description : str, tags : list, 
                           languages : list, channel_id : str, clear_languages : bool = True, 
-                          clear_tags : bool = True, replace : bool = True):
+                          clear_tags : bool = True, replace : bool = True, thumbnail_url : str = ''):
         """
         Method to make a stream_update call to the LBRY API
         Example Call: api_stream_update(claim_id='9df6f11c4581dc4deb48246582c638e4c7576af2', bid=0.002, title='New Title', description='new description', tags=['newtag'], languages=['en'], channel_id='8be45e4ba05bd6961619489f6408a0dc62f4e650')
@@ -434,7 +412,8 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             channel_id=channel_id,
             replace=replace,
             clear_tags=clear_tags,
-            clear_languages=clear_languages
+            clear_languages=clear_languages,
+            thumbnail_url = thumbnail_url
         )
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_update", "params": parameters}).json()
