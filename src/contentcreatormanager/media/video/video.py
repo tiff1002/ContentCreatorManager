@@ -65,14 +65,14 @@ class Video(contentcreatormanager.media.media.Media):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         
         if desired_file_name == '':    
-            getVals = list([val for val in f"{self.title}.mp4" if val in valid_chars])
+            getVals = list([val for val in f"{self.title}.jpg" if val in valid_chars])
         else:
             if desired_file_name[-4:] == '.jpg':
                 file_name = desired_file_name[:-4]   
             else:
                 file_name = desired_file_name 
             getVals = list([val for val in f"{file_name}.jpg" if val in valid_chars])
-            
+    
         return "".join(getVals)
         
     def combine_audio_and_video_files(self, video_file, audio_file):

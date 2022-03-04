@@ -5,7 +5,8 @@ Created on Feb 24, 2022
 '''
 import os.path
 import contentcreatormanager.config
-import contentcreatormanager.platform.reddit
+import contentcreatormanager.platform.rumble
+import contentcreatormanager.media.video.rumble
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
@@ -13,12 +14,17 @@ test_folder = os.path.join(os.getcwd(), "test")
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 logger = settings.Base_logger
 
-reddit = contentcreatormanager.platform.reddit.Reddit(settings=settings)
+rumble = contentcreatormanager.platform.rumble.Rumble(settings=settings)
 
-post = reddit.post_text("Test", "This be another Text post", "Made by CCM: https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
+vid = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble, title='Test Title', description='Test Description',video_file_name='upload_test.mp4', license_type=0)
 
-print(post.get_post_url())
+print(vid.id)
+print(vid.guid)
 
-post = reddit.post_text('test', "This be Another URL CCM Test", "https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
+rumble.add_media(vid)
 
-print(post.get_post_url())
+rumble.upload_all_media()
+
+print(vid.id)
+print(vid.guid)
+print(vid.url)
