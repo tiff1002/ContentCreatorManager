@@ -14,14 +14,13 @@ class Tweet(contentcreatormanager.media.post.post.Post):
         self.logger.info(f"Sending out tweet: {self.body}")
         
         #Makes API call with Tweepy object from the Twitter object stored in self.twitter and store the results
-        try:
-            self.platform.api.update_status(self.body)
-            self.posted = True
-        except Exception as e:
-            self.logger.error(f"Failed to send Tweet got error:\n{e}")
-            self.posted = False
+        result = self.platform.api_update_status(status_text=self.body, possibly_sensitive=self.sensitive)
+        
+        self.logger.info(f"Setting Tweet ID to {result._json['id']}")
+        self.id = result._json['id']
+            
     
-    def __init__(self, twitter, post : str):
+    def __init__(self, twitter, post : str, sensitive : bool = False):
         '''
         Constructor takes a Twitter Platform object and a string to be the body of the Tweet
         '''
@@ -31,10 +30,12 @@ class Tweet(contentcreatormanager.media.post.post.Post):
         #Set appropriate logger
         self.logger = self.settings.Twitter_logger
         
+        self.sensitive = sensitive
+        
         self.logger.info("Initializing Post object as a Tweet")
         
         self.logger.info("Tweet Object initialized")
         
     def upload(self):
         """Public Method to send out the Tweet Object's body as a tweet"""
-        self.__post()
+        return self.__post()

@@ -15,7 +15,7 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
     classdocs
     '''
     def __init__(self, lbry_channel, file_name : str = "", thumbnail_url : str = '', description : str = "", languages : list = ['en'], 
-                 permanent_url : str = '', tags : list = [], bid : str = "0.001", title : str = '', name : str = "", ID : str=''):
+                 permanent_url : str = '', tags : list = [], bid : float = .001, title : str = '', name : str = "", ID : str=''):
         '''
         Constructor
         '''
@@ -45,74 +45,23 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         Method to determine if the LBRY Media Object is uploaded to the LBRY.  It tries to find the video both via name and claim_id.  
         If neither returns a result the method returns False.  Otherwise it returns True
         """
-        #First try looking up via claim_id
-        try:
-            self.request_data()
-        except:
-            #Exception means this failed so try looking up by name
-            self.logger.info(f"Could not find data looking up via ID: {self.id}")
-            try:
-                self.request_data_with_name()
-            except:
-                #Exception means this also failed so return False
-                self.logger.info(f"Could not find data looking up via name: {self.name}")
-                return False
-        self.logger.info("Was able to find Media returning True")
+        id_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
+        name_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
+        
+        
+        
+        if id_result['result']['total_items'] == 0 and name_result['result']['total_items'] == 0:
+            self.logger.info('Could Not Find Media on LBRY.  Returning False')
+            return False
+        
         return True
         
-    def request_data(self):
-        """
-        Method to request data via the claim_list api call using the claim_id stored in self.id.  
-        This Method will raise an exception if no results are found or if there is an error in the results
-        """
-        params = {
-            'claim_id':self.id
-        }
-        
-        #Make the API call
-        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
-        
-        #Check API call for errors
-        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
-            raise Exception()
-        
-        #return the result portion of the results
-        return res['result']['items'][0]
-    
-    def request_data_with_name(self):
-        """
-        Method to get API request data for claim_list using the self.name property as the name for lookup.
-        This Method will raise an exception if no results are found or if there is an error in the results
-        """
-        params = {
-            'name':self.name
-        }
-        
-        #Make API call
-        res = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "claim_list", "params": params}).json()
-        
-        #Check for Errors
-        if self.platform.check_request_for_error(res) or res['result']['total_items'] == 0:
-            raise Exception()
-        
-        #return the result portion of the results
-        return res['result']['items'][0]
-    
-    def request_get_data(self):
-        """Method to run the get API call.  It uses uri (permanent_url) and returns the results of the call.  This will cause blobs to be downloaded if they are not."""
-        file_name = os.path.basename(self.file)
-        get_params = {
-            "uri":self.permanent_url,
-            "download_directory":self.settings.folder_location,
-            "file_name":file_name
-        }
-        
-        self.logger.info(f"Sending get call to API to download {file_name} blobs")
-        
-        return requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "get", "params": get_params}).json()
-    
     def update_from_request(self, request):
         """Method to update the local object from a provided request result (Only works with some API calls claim_list works for one)"""
+        if 'result' in request:
+            if 'items' in request['result']:
+                request = request['result']['items'][0]
+        
         #Set all the object properties
         self.bid = request['amount']
         self.id = request['claim_id']
@@ -134,32 +83,21 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             self.tags = request['value']['tags']
         if 'description' in request['value']:
             self.description = request['value']['description']
+        
+        print(f"title in request {request['value']['title']}")    
+        
+        return request
             
     def update_lbry(self):
         """Method to update Video details on LBRY using the local object properties.  This uses the stream_update API call."""
-        params = {
-            "claim_id":self.id,
-            "bid":self.bid,
-            "title":self.title,
-            "description":self.description,
-            "tags":self.tags,
-            "clear_tags":True,
-            "languages":self.languages,
-            "clear_languages":True,
-            "thumbnail_url":self.thumbnail_url,
-            "channel_id":self.platform.id
-        }
         #Make stream_update API call
-        result = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "stream_update", "params": params}).json()
-            
-        #Check for errors
-        if self.platform.check_request_for_error(result):
-            self.logger.error("No Update Made")
-            return
+        result = self.platform.api_stream_update(claim_id=self.id, bid=self.bid, title=self.title, description=self.description, 
+                                                 tags=self.tags, replace=True, languages=self.languages, thumbnail_url=self.thumbnail_url,
+                                                 channel_id=self.platform.id)
         
         #Return results of sucessfull API call
         self.logger.info("Update to LBRY successful")
-        return result['result']
+        return result
     
     def delete_web(self):
         """Method to remove Media from LBRY"""
@@ -168,53 +106,34 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
     def update_local(self, use_name : bool = False):
         """Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True"""
         if use_name:
-            self.update_from_request(self.request_data_with_name())
+            return self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
         else:
-            self.update_from_request(self.request_data())
+            return self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
             
     def update_web(self):
         """Method to update data on LBRY based on the local values of the object's properties"""
         self.logger.info(f"Attmepting to update LBRY claim {self.id}")
         return self.update_lbry()
     
-    def request_file_save_data(self):
-        """Method to run file_save api call and return results.  This should cause a file to be built from downloaded blobs.  The call uses claim_id to determine what video to run this call on"""
-        file_name = os.path.basename(self.file)
-        params = {
-            "claim_id":self.id,
-            "download_directory":self.settings.folder_location,
-            "file_name":file_name
-        }
-        
-        self.logger.info(f"Sending file_save call to API to get {file_name} from downloaded blobs")
-        
-        return requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "file_save", "params": params}).json()
-    
     def delete_from_lbry(self, do_not_download : bool = False):
         """Method to delete the Video object from LBRY."""
-        params = {
-            "claim_id":self.id
-        }
-        
         self.logger.info("Preparing to delete video from LBRY first running download()")
         
         if not do_not_download:
             self.logger.info("do_not_download flag not set.  Ensuring the video file is downloaded before removing from LBRY")
-            self.download()
+            if self.download() == 'get_error':
+                self.logger.error("Could Not Download.  Not Going to delete")
+                return 'download_error'
         
         self.logger.info("Running API call to delete blobs from the system")
         #Delete the blobs from system
-        file_delete_result = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "file_delete", "params": params}).json()
-        if self.platform.check_request_for_error(file_delete_result):
-            self.logger.error("Got error while running file_delete.  Exiting stream_abandon not run")
-            return None
+        file_delete_result = self.platform.api_file_delete(claim_id=self.id)
+        
         
         self.logger.info("Running API call to remove the stream from LBRY")
         #Remove the claim from LBRY
-        stream_abandon_result = requests.post(contentcreatormanager.platform.lbry.LBRY.API_URL, json={"method": "stream_abandon", "params": params}).json()
-        if self.platform.check_request_for_error(stream_abandon_result):
-            self.logger.error("Got error while running stream_abandon.  This means blobs were deleted but claim is still on LBRY. Exiting")
-            return None
+        stream_abandon_result = self.platform.api_stream_abandon(claim_id=self.id)
+        
         
         #Store filename for use in string later
         file_name = os.path.basename(self.file)

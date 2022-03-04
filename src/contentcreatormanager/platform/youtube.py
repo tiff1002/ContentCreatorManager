@@ -152,13 +152,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         
         self.logger.info("Attempting to build youtube service to return")
         
-        try:
-            service = googleapiclient.discovery.build(YouTube.API_SERVICE_NAME, YouTube.API_VERSION, credentials = cred)
-            self.logger.info(f"{YouTube.API_SERVICE_NAME} service created successfully")
-            return service
-        except Exception as e:
-            self.logger.error(f"something went wrong:\n{e}\nReturning None")
-            return None
+        service = googleapiclient.discovery.build(YouTube.API_SERVICE_NAME, YouTube.API_VERSION, credentials = cred)
+        self.logger.info(f"{YouTube.API_SERVICE_NAME} service created successfully")
+        return service
         
     def __get_channel(self):
         """Private Method to get channel/playlist id for user's uploads"""
@@ -169,7 +165,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             result = self.api_channels_list_mine(contentDetails=True)
         except HttpError as e:
             self.logger.error(f"Error:\n{e}")
-            return None
+            return result
         self.logger.info("Chanels.list API Call made without Exception")
         
         return result['items'][0]['contentDetails']['relatedPlaylists']['uploads']

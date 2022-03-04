@@ -10,51 +10,14 @@ import requests
 class RumbleVideo(contentcreatormanager.media.video.video.Video):
     '''
     classdocs
-    '''
-    UPLOAD_API_URL = "https://rumble.com/api/simple-upload.php"
-    
+    '''    
     NOT_FOR_SALE = 0 # This is like an unlisted video on youtube as I understand it
     
     RUMBLE_LICENSE = 6 # I Think this is what a standard Rumble upload is
-
-    def __upload_without_thumbnail(self):   
-        """Private Method to upload Video to Rumble without a thumbnail file"""
-        files = {
-            'access_token': (None, self.platform.access_token),
-            'title': (None, self.title),
-            'description': (None, self.description),
-            'license_type': (None, self.license_type),
-            'channel_id': (None, self.platform.id),
-            'video': (os.path.basename(self.file), open(self.file, 'rb'))
-        }
-        
-        response = requests.post(RumbleVideo.UPLOAD_API_URL, files=files)
-        
-        self.logger.info(f"Made Request to Rumble API to upload video got response:\n{response}")
-        
-        return response
-    
-    def __upload_with_thumbnail(self):
-        """Private Method to upload Video to Rumble with a thumbnail file"""
-        files = {
-            'access_token': (None, self.platform.access_token),
-            'title': (None, self.title),
-            'description': (None, self.description),
-            'license_type': (None, self.license_type),
-            'channel_id': (None, self.platform.id),
-            'thumb':(os.path.basename(self.thumbnail), open(self.thumbnail, 'rb')),
-            'video': (os.path.basename(self.file), open(self.file, 'rb'))
-        }
-        
-        response = requests.post(RumbleVideo.UPLOAD_API_URL, files=files)
-        
-        self.logger.info(f"Made Request to Rumble API to upload video got response:\n{response}")
-        
-        return response
     
     #Constructor
     def __init__(self, rumble_channel, guid : str = '', title : str = '', description : str = '', thumbnail_file_name : str = '',
-                 video_file_name : str = '', license_type : int = RUMBLE_LICENSE):
+                 video_file_name : str = '', license_type : int = RUMBLE_LICENSE, uploaded : bool = False):
         '''
         Constructor take a Rumble Platform Object as a required parameter.  guid will be the ID of the video and is set by the user.  
         If it is not set a unique random one will be generated.  file_name and thumbnail_file_name can be provided with or without the mp4 or jpg file extension.
@@ -69,23 +32,35 @@ class RumbleVideo(contentcreatormanager.media.video.video.Video):
         else:
             self.set_unique_id(guid)
             
+        self.guid = self.id
+        self.url = ''
+            
         self.license_type = license_type
+        self.uploaded = uploaded
         
         self.logger.info(f"Rumble Video Object initialized with ID {self.id}")
 
     def upload(self):
         """Method to upload a video to Rumble"""
-        #Check for the video file
         if not self.is_downloaded():
-            self.logger.error("Can not find video file no upload will be made")
-            return 
-        #Check for thumbnail file to determine if upload should be done with or without one
-        if not self.is_thumb_downloaded():
-            self.logger.warning("No Thumbnail Found uploading without one")
-            self.__upload_without_thumbnail()
-        else:
-            self.logger.info("Starting upload")
-            self.__upload_with_thumbnail()
+            self.logger.error("Can not find video file not uploading")
+            return
+        
+        result = self.platform.api_upload(access_token=self.platform.access_token, title=self.title, description=self.description, license_type=self.license_type, channel_id=self.platform.id, guid=self.guid, video_file=self.file, thumbnail_file=self.thumbnail)
+
+        if 'success' in result.json():
+            if result.json()['success']:
+                url = result.json()['url_monetized']
+                self.logger.info(f"Video Uploaded to: {url}")
+                self.uploaded = True
+                self.id = result.json()['video_id']
+                self.url = url
+                return result
+            
+        self.logger.info(f"Upload failed response: {result.json()}")
+        self.uploaded = False
+
+        return result
             
     def delete_web(self):
         """Method to delete video from Rumble"""

@@ -6,12 +6,15 @@ Created on Feb 24, 2022
 import contentcreatormanager.platform.platform
 import contentcreatormanager.media.post.reddit
 import praw
+import requests
 
 class Reddit(contentcreatormanager.platform.platform.Platform):
     '''
     classdocs
     '''
     CLIENT_SECRETS_FILE = 'reddit_client_secret.json'
+    
+    URL = 'https://www.reddit.com'
 
     def __init__(self, settings : contentcreatormanager.config.Settings):
         '''
@@ -40,14 +43,79 @@ class Reddit(contentcreatormanager.platform.platform.Platform):
         
         self.logger.info("Reddit Platform Object initialized")
         
-    def post(self, subr : str, title : str, body : str):
+    def post_text(self, subr : str, title : str, body : str):
         """Method to create and send a Reddit post to a subreddit and add it to media_objects"""
-        post = contentcreatormanager.media.post.reddit.RedditPost(reddit=self, title=title, body=body, subr=subr)
+        self.logger.info("Creating Reddit Post")
+        #create post
+        post = contentcreatormanager.media.post.reddit.RedditTextPost(reddit=self, title=title, body=body, subr=subr)
         
-        result = post.upload()
+        #upload post
+        post.upload()
         
-        if result is None or result == '' or result == [] or result == {}:
-            self.logger.error("Failed to upload post to reddit not setting posted but still adding to media_objects")
-        else:      
-            post.posted = True
+        post_url = post.get_post_url()
+        
+        self.logger.info(f"Checking {post_url} to see if post made it online")
+        #check if posted
+        try:
+            requests.get(post_url)
+            posted = True
+            self.logger.info("Post was successfully posted setting posted to true")
+        except requests.ConnectionError:
+            posted = False
+            self.logger.error("Post not found online setting posted to false")
+        
+        #set posted flag
+        post.posted = posted
+        
         self.add_media(post)
+        self.logger.info("Added post to media_objects")
+        
+        return post
+        
+    def api_submit_text(self, subreddit : str, title : str, selftext : str = '', flair_id : str = '', flair_text : str = '', send_replies : bool = True, nsfw : bool = False):
+        """
+        Method to make an API call to reddit to post text to a subreddit returns a praw submission object that url and id can be retrieved from as properties
+        Example Call: api_submit_text(subreddit='test', title='CCC Test Post', selftext='posted with this project: https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4')
+        Example Return ID (plain old return or use the id property): t6l0o2
+        Example Return URL (the url property): https://www.reddit.com/r/test/comments/t6l0o2/ccc_test_post/
+        """
+        self.logger.info("Making Reddit API call to post text to a subreddit")
+        
+        subreddit = self.praw.subreddit(subreddit)
+        
+        
+        if not (flair_id == '' or flair_id is None):
+            if not(flair_text == '' or flair_text is None):
+                result = subreddit.submit(title=title, selftext=selftext, flair_id=flair_id, flair_text=flair_text, send_replies=send_replies, nsfw=nsfw)  
+            else:
+                result = subreddit.submit(title=title, selftext=selftext, flair_id=flair_id, send_replies=send_replies, nsfw=nsfw)
+        elif not(flair_text == '' or flair_text is None):
+            result = subreddit.submit(title=title, selftext=selftext, flair_text=flair_text, send_replies=send_replies, nsfw=nsfw)                          
+        else:
+            result = subreddit.submit(title=title, selftext=selftext, send_replies=send_replies, nsfw=nsfw)       
+        
+        return result
+    
+    def api_submit_url(self, subreddit : str, title : str, url : str = '', flair_id : str = '', flair_text : str = '', send_replies : bool = True, nsfw : bool = False):
+        """
+        Method to make an API call to reddit to post a url to a subreddit a praw submission object that url and id can be retrieved from as properties
+        Example Call: api_submit_url(subreddit='test', title='CCC Test URL Post', url='https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4')
+        Example Return ID (plain old return or use the id property): t6l1ou
+        Example Return URL (the url property): https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4 (note this returns the URL the post links to but the link to the comments could be constructed https://www.reddit.com/r/test/comments/t6l1ou/ccc_test_url_post/)
+        """
+        self.logger.info("Making Reddit API call to post a URL to a subreddit")
+        
+        subreddit = self.praw.subreddit(subreddit)
+        
+        if not (flair_id == '' or flair_id is None):
+            if not(flair_text == '' or flair_text is None):
+                result = subreddit.submit(title=title, url=url, flair_id=flair_id, flair_text=flair_text, send_replies=send_replies, nsfw=nsfw)  
+            else:
+                result = subreddit.submit(title=title, url=url, flair_id=flair_id, send_replies=send_replies, nsfw=nsfw)
+        elif not(flair_text == '' or flair_text is None):       
+            result = subreddit.submit(title=title, url=url, flair_text=flair_text, send_replies=send_replies, nsfw=nsfw)      
+        else:
+            result = subreddit.submit(title=title, url=url, send_replies=send_replies, nsfw=nsfw) 
+        
+        return result
+    
