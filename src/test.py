@@ -5,7 +5,7 @@ Created on Feb 24, 2022
 '''
 import os.path
 import contentcreatormanager.config
-import contentcreatormanager.platform.lbry
+import contentcreatormanager.platform.reddit
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
 test_folder = os.path.join(os.getcwd(), "test")
@@ -13,15 +13,12 @@ test_folder = os.path.join(os.getcwd(), "test")
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 logger = settings.Base_logger
 
-logger.info("Starting LBRY Platform Test:")
-logger.info("Creating a LBRY Platform Object of main channel initializing videos")
-lbry_main = contentcreatormanager.platform.lbry.LBRY(settings=settings, init_videos=True, ID='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed')
+reddit = contentcreatormanager.platform.reddit.Reddit(settings=settings)
 
-for vid in lbry_main.media_objects:
-    print(vid.title)
-    
-logger.info("Creating LBRY Platform object for test channel")
+post = reddit.post_text("Test", "This be another Text post", "Made by CCM: https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
 
+print(post.get_post_url())
 
+post = reddit.post_text('test', "This be Another URL CCM Test", "https://odysee.com/@TechGirlTiff:5/ContentCreatorManager_Dev_Project_Update_00004:4")
 
-print(vid.title)
+print(post.get_post_url())
