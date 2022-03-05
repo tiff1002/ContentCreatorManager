@@ -37,6 +37,12 @@ class Video(contentcreatormanager.media.media.Media):
         self.title = title
         self.description = description
         
+    def is_downloaded(self):
+        """
+        Checks for downloaded file
+        """
+        return contentcreatormanager.media.media.Media.is_downloaded(self)
+    
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """
         Method to get a valid video filename either from title property or provided string.
