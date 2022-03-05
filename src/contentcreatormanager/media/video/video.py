@@ -74,10 +74,25 @@ class Video(contentcreatormanager.media.media.Media):
     
         return "".join(getVals)
         
+    def set_file_based_on_title(self):
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        file_name = self.title    
+        
+        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
+        
+        result = "".join(getVals)
+        
+        self.logger.info(f"returning and setting the following file name: {result}")
+        self.file = os.path.join(os.getcwd(), result)
+            
+        return result
+    
     def combine_audio_and_video_files(self, video_file, audio_file):
         """
         Method to combine given audio and video file using FFMPEG
         """
+        self.set_file_based_on_title()
+        self.logger.info(f"Using FFMPEG to download {self.file}")
         file_name = os.path.basename(self.file)
         
         audFile = None

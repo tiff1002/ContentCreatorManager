@@ -34,19 +34,6 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         
         if not new_media:
             self.update_local()
-        
-    def set_file_based_on_title(self):
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        file_name = self.title    
-        
-        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
-        
-        result = "".join(getVals)
-        
-        self.logger.info(f"returning and setting the following file name: {result}")
-        self.file = os.path.join(os.getcwd(), result)
-            
-        return result
     
     def get_valid_name(self, name : str):
         """
@@ -70,6 +57,19 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             return False
         self.uploaded = True
         return True
+    
+    def set_file_based_on_title(self):
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        file_name = self.title    
+        
+        getVals = list([val for val in f"{file_name}" if val in valid_chars])
+        
+        result = "".join(getVals)
+        
+        self.logger.info(f"returning and setting the following file name: {result}")
+        self.file = os.path.join(os.getcwd(), result)
+            
+        return result
         
     def update_from_request(self, request):
         """
