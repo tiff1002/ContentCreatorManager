@@ -3,12 +3,12 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.platform.platform
-import contentcreatormanager.media.video.lbry
-import contentcreatormanager.media.post.lbry
+import contentcreatormanager.platform.platform as plat
+import contentcreatormanager.media.video.lbry as lbry_vid
+import contentcreatormanager.media.post.lbry as lbry_post
 import requests
 
-class LBRY(contentcreatormanager.platform.platform.Platform):
+class LBRY(plat.Platform):
     """
     classdocs
     """
@@ -62,7 +62,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         num_claims_before = len(self.media_objects)
         
         for c in claims:
-            v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], lbry_channel=self, request=c)
+            v = lbry_vid.LBRYVideo(ID=c['claim_id'], lbry_channel=self, request=c)
             v.set_file_based_on_title()
             self.add_media(v)
         
@@ -109,7 +109,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             
         self.logger.info("LBRY Platform object initialized")
     
-    def add_video(self, vid : contentcreatormanager.media.video.lbry.LBRYVideo):
+    def add_video(self, vid : lbry_vid.LBRYVideo):
         """
         Method to add a LBRY Video Object to the media_objects list property
         """
@@ -124,7 +124,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             self.logger.error("Either update from web or upload to it not both :P")
             return None
         
-        vid = contentcreatormanager.media.video.lbry.LBRYVideo(settings=self.settings, lbry_channel=self, file_name=file_name)
+        vid = lbry_vid.LBRYVideo(settings=self.settings, lbry_channel=self, file_name=file_name)
         vid.name = name
         vid.tags = tags
         vid.title = title
@@ -141,7 +141,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         self.add_video(vid)
         
     def make_post(self, title : str, body : str, tags : list = [], languages : list = ['en'], bid : str = "0.001", thumbnail_url : str = ''):
-        post = contentcreatormanager.media.post.lbry.LBRYTextPost(lbry_channel=self, title=title, body=body, name=title, tags=tags, bid=bid, thumbnail_url=thumbnail_url, languages=languages)
+        post = lbry_post.LBRYTextPost(lbry_channel=self, title=title, body=body, name=title, tags=tags, bid=bid, thumbnail_url=thumbnail_url, languages=languages)
         
         post.upload()
         

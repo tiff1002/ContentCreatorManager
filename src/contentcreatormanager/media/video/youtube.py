@@ -3,13 +3,13 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.video.video
+import contentcreatormanager.media.video.video as media_vid
 import pytube
 import os.path
 import time
 import requests
 
-class YouTubeVideo(contentcreatormanager.media.video.video.Video):
+class YouTubeVideo(media_vid.Video):
     """
     classdocs
     """
@@ -180,7 +180,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 self.update_local()
         else:
             self.update_local()       
-        result = contentcreatormanager.media.video.video.Video.is_downloaded(self)
+        result = media_vid.Video.is_downloaded(self)
         return result
     
     def delete_web(self, do_not_download_before_delete : bool = False):

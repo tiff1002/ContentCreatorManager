@@ -3,9 +3,9 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.post.post
+import contentcreatormanager.media.post.post as media_post
 
-class Tweet(contentcreatormanager.media.post.post.Post):
+class Tweet(media_post.Post):
     """
     classdocs
     """

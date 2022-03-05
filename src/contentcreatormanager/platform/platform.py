@@ -3,9 +3,9 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.media
-import contentcreatormanager.media.video.video
-import contentcreatormanager.config
+import contentcreatormanager.config as ccm_config
+import contentcreatormanager.media.media as media
+import contentcreatormanager.media.video.video as media_vid
 import os
 import json
 
@@ -13,7 +13,7 @@ class Platform(object):
     """
     classdocs
     """
-    def __init__(self, settings : contentcreatormanager.config.Settings, ID : str):
+    def __init__(self, settings : ccm_config.Settings, ID : str):
         """
         Constructor takes a Settings object and an ID as string
         """
@@ -47,13 +47,13 @@ class Platform(object):
         
         return data
     
-    def add_video(self, video : contentcreatormanager.media.video.video.Video):
+    def add_video(self, video : media_vid.Video):
         """
         Method to add a video to Media Objects
         """
         self.add_media(video)
        
-    def add_media(self, media : contentcreatormanager.media.media.Media):
+    def add_media(self, media : media.Media):
         """
         Method to add a Media object to the media_objects list property
         """

@@ -3,11 +3,11 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.media
+import contentcreatormanager.media.media as media
 import os.path
 import ffmpeg
 
-class Video(contentcreatormanager.media.media.Media):
+class Video(media.Media):
     """
     classdocs
     """
@@ -41,7 +41,7 @@ class Video(contentcreatormanager.media.media.Media):
         """
         Checks for downloaded file
         """
-        return contentcreatormanager.media.media.Media.is_downloaded(self)
+        return media.Media.is_downloaded(self)
     
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """

@@ -3,11 +3,11 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.lbry
+import contentcreatormanager.media.lbry as lbry_media
 import os.path
 import time
 
-class LBRYTextPost(contentcreatormanager.media.lbry.LBRYMedia):
+class LBRYTextPost(lbry_media.LBRYMedia):
     """
     classdocs
     """

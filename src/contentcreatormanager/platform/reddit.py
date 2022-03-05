@@ -3,12 +3,12 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.platform.platform
-import contentcreatormanager.media.post.reddit
+import contentcreatormanager.config as ccm_config
+import contentcreatormanager.platform.platform as plat
+import contentcreatormanager.media.post.reddit as reddit_post
 import praw
-import requests
 
-class Reddit(contentcreatormanager.platform.platform.Platform):
+class Reddit(plat.Platform):
     """
     classdocs
     """
@@ -16,7 +16,7 @@ class Reddit(contentcreatormanager.platform.platform.Platform):
     
     URL = 'https://www.reddit.com'
 
-    def __init__(self, settings : contentcreatormanager.config.Settings):
+    def __init__(self, settings : ccm_config.Settings):
         """
         Constructor takes a Settings object.  No ID for Reddit Platform object.
         """
@@ -45,7 +45,7 @@ class Reddit(contentcreatormanager.platform.platform.Platform):
         """
         self.logger.info("Creating Reddit Post")
         
-        post = contentcreatormanager.media.post.reddit.RedditTextPost(reddit=self, title=title, body=body, subr=subr)
+        post = reddit_post.RedditTextPost(reddit=self, title=title, body=body, subr=subr)
         
         post.upload()
         

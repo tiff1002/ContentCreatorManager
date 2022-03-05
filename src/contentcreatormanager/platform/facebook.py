@@ -3,11 +3,11 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.platform.platform
-import contentcreatormanager.media.post.facebook
+import contentcreatormanager.platform.platform as plat
+import contentcreatormanager.media.post.facebook as fb_post
 import facebook
 
-class Facebook(contentcreatormanager.platform.platform.Platform):
+class Facebook(plat.Platform):
     """
     classdocs
     """
@@ -52,7 +52,7 @@ class Facebook(contentcreatormanager.platform.platform.Platform):
         """
         Method to create and send a Facebook post.
         """
-        post = contentcreatormanager.media.post.facebook.FacebookPost(self, msg)
+        post = fb_post.FacebookPost(self, msg)
         
         try:
             result = post.upload()

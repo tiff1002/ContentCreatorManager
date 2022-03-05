@@ -5,11 +5,11 @@ Created on Feb 24, 2022
 """
 import os.path
 import requests
-import contentcreatormanager.media.lbry
+import contentcreatormanager.media.lbry as lbry_plat
 import time
 import shutil
 
-class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
+class LBRYVideo(lbry_plat.LBRYMedia):
     """
     classdocs
     """  
