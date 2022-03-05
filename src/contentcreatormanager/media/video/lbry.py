@@ -58,6 +58,28 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         
         self.logger.info("LBRY Video Media Object initialized")
     
+    def set_file_based_on_title(self):
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        file_name = self.title    
+        
+        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
+        
+        result = "".join(getVals)
+        
+        self.logger.info(f"returning and setting the following file name: {result}")
+        self.file = os.path.join(os.getcwd(), result)
+            
+        return result
+    
+    def update_local(self, use_name : bool = False):
+        """
+        Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True
+        """
+        response = super(LBRYVideo, self).update_local(use_name=use_name)
+        self.set_file_based_on_title()
+        
+        return response
+    
     def download(self):
         """
         Method to download Video from LBRY to local machine.  This will call get to download blobs, file_save to make a file from the 
