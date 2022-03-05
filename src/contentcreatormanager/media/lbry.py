@@ -1,8 +1,8 @@
-'''
+"""
 Created on Feb 28, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.media.media
 import contentcreatormanager.platform.lbry
 import os.path
@@ -11,14 +11,14 @@ import time
 import hashlib
 
 class LBRYMedia(contentcreatormanager.media.media.Media):
-    '''
+    """
     classdocs
-    '''
+    """
     def __init__(self, lbry_channel, file_name : str = "", thumbnail_url : str = '', description : str = "", languages : list = ['en'], 
                  permanent_url : str = '', tags : list = [], bid : float = .001, title : str = '', name : str = "", ID : str=''):
-        '''
+        """
         Constructor
-        '''
+        """
         super(LBRYMedia, self).__init__(platform=lbry_channel, ID=ID)
         self.logger = self.settings.LBRY_logger
         
@@ -35,7 +35,9 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.name = self.get_valid_name(name)
         
     def get_valid_name(self, name : str):
-        """Method to get a valid LBRY stream name from provided input"""
+        """
+        Method to get a valid LBRY stream name from provided input
+        """
         valid_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-'
         getVals = list([val for val in name if val in valid_chars])
         return "".join(getVals)
@@ -48,21 +50,21 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         id_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
         name_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
         
-        
-        
         if id_result['result']['total_items'] == 0 and name_result['result']['total_items'] == 0:
             self.logger.info('Could Not Find Media on LBRY.  Returning False')
+            self.uploaded = False
             return False
-        
+        self.uploaded = True
         return True
         
     def update_from_request(self, request):
-        """Method to update the local object from a provided request result (Only works with some API calls claim_list works for one)"""
+        """
+        Method to update the local object from a provided request result (Only works with some API calls claim_list works for one)
+        """
         if 'result' in request:
             if 'items' in request['result']:
                 request = request['result']['items'][0]
         
-        #Set all the object properties
         self.bid = request['amount']
         self.id = request['claim_id']
         self.name = request['name']
@@ -73,7 +75,6 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.title = request['value']['title']
         self.file_hash = request['value']['source']['sd_hash']
         
-        #Set optional properties if they are found
         if 'address' in request:
             self.address = request['address']
         if 'thumbnail' in request['value']:
@@ -83,40 +84,46 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             self.tags = request['value']['tags']
         if 'description' in request['value']:
             self.description = request['value']['description']
-        
-        print(f"title in request {request['value']['title']}")    
-        
+ 
         return request
             
     def update_lbry(self):
-        """Method to update Video details on LBRY using the local object properties.  This uses the stream_update API call."""
-        #Make stream_update API call
+        """
+        Method to update Video details on LBRY using the local object properties.  This uses the stream_update API call.
+        """
         result = self.platform.api_stream_update(claim_id=self.id, bid=self.bid, title=self.title, description=self.description, 
                                                  tags=self.tags, replace=True, languages=self.languages, thumbnail_url=self.thumbnail_url,
                                                  channel_id=self.platform.id)
         
-        #Return results of sucessfull API call
         self.logger.info("Update to LBRY successful")
         return result
     
     def delete_web(self):
-        """Method to remove Media from LBRY"""
+        """
+        Method to remove Media from LBRY
+        """
         return self.delete_from_lbry()
     
     def update_local(self, use_name : bool = False):
-        """Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True"""
+        """
+        Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True
+        """
         if use_name:
             return self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
         else:
             return self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
             
     def update_web(self):
-        """Method to update data on LBRY based on the local values of the object's properties"""
+        """
+        Method to update data on LBRY based on the local values of the object's properties
+        """
         self.logger.info(f"Attmepting to update LBRY claim {self.id}")
         return self.update_lbry()
     
     def delete_from_lbry(self, do_not_download : bool = False):
-        """Method to delete the Video object from LBRY."""
+        """
+        Method to delete the Video object from LBRY.
+        """
         self.logger.info("Preparing to delete video from LBRY first running download()")
         
         if not do_not_download:
@@ -126,37 +133,35 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
                 return 'download_error'
         
         self.logger.info("Running API call to delete blobs from the system")
-        #Delete the blobs from system
         file_delete_result = self.platform.api_file_delete(claim_id=self.id)
         
+        if file_delete_result['result']:
+            self.logger.info("file_delete returned True.  Blobs deleted")
+        else:
+            self.logger.warning("file_delete returned False.  Blobs either not there to begin with or the removal failed")
         
         self.logger.info("Running API call to remove the stream from LBRY")
-        #Remove the claim from LBRY
         stream_abandon_result = self.platform.api_stream_abandon(claim_id=self.id)
         
-        
-        #Store filename for use in string later
         file_name = os.path.basename(self.file)
-        #Set finished variable to False indicating the deletion is not finished
-        finished = False
         
-        #Loop until finished is set to True
+        finished = False
         while not finished:
             self.logger.info(f"Video file {file_name} removed from LBRY.  Sleeping 1 min before checking for completion")
             time.sleep(60)
             
-            #Once this no longer registers as uploaded set finished to True
             if not self.is_uploaded():
                 finished = True
         
-        #finally return the data that was obtained from the final API call in the method
         return stream_abandon_result
     
     def check_file_hash(self):
-        """Method to calculate the file_hash of the video file and compare it to what is on LBRY blockchain.  Returns True if it matches."""
-        BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
+        """
+        Method to calculate the file_hash of the video file and compare it to what is on LBRY blockchain.  Returns True if it matches.
+        """
+        BUF_SIZE = 65536  # lets read stuff in 64kb chunks (arbitrary)!
         
-        sha384 = hashlib.sha384()
+        sha384 = hashlib.sha384() #this is the hash type lbry uses for file hash
         
         with open(self.file, 'rb') as f:
             while True:

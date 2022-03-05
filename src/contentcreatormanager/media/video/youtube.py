@@ -1,28 +1,27 @@
-'''
+"""
 Created on Feb 24, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.media.video.video
 import pytube
 import os.path
-import random
 import time
-import contentcreatormanager.platform.youtube
-from googleapiclient.errors import HttpError
-from googleapiclient.http import MediaFileUpload
+
 
 class YouTubeVideo(contentcreatormanager.media.video.video.Video):
-    '''
+    """
     classdocs
-    '''
+    """
     
     BASE_URL = "https://www.youtube.com/watch?v="
     
     MAX_RETRIES = 25
     
     def __pytube_download_video(self):
-        """Private Method to download the video portion of this YouTube Video Object"""
+        """
+        Private Method to download the video portion of this YouTube Video Object
+        """
         self.logger.info(f"Attempting to download video portion of {self.title}")
         video_file = None
         finished = False
@@ -49,8 +48,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         
     def __pytube_download_audio(self):
-        """Private Method to download the audio portion of the YouTube Video Object"""
+        """
+        Private Method to download the audio portion of the YouTube Video Object
+        """
         self.logger.info(f"Attempting to download audio portion of {self.title}")
+        
         #pytube has weird transient failures that you just keep trying and things work so this loop does that to a point for the audio
         finished = False
         tries = 0
@@ -72,13 +74,13 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         return audio_file
     
     def __pytube_download(self, overwrite : bool = False):
-        """Private Method to download a video from YouTube using pytube.  Optional parameter overwrite is a bool that defaults to False.  If set to true an existing file will be overwritten."""
-        #set variables for file name and path
+        """
+        Private Method to download a video from YouTube using pytube.  Optional parameter overwrite is a bool that defaults to False.  If set to true an existing file will be overwritten.
+        """
         file_name = os.path.basename(self.file)
         file_path = self.file
         self.logger.info(f"Downloading {file_name}")
         
-        #check for the file so redownload can be avoided unless overwrite is set to true
         if os.path.isfile(file_path):
             self.logger.info(f"File {file_name} already exists.")
             if overwrite:
@@ -94,88 +96,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.combine_audio_and_video_files(video_file, audio_file)
     
     def __get_pytube(self, use_oauth=True):
-        """Private method that returns the pytube.YouTube object for this YouTubeVideo"""
+        """
+        Private method that returns the pytube.YouTube object for this YouTubeVideo
+        """
         url = f"{YouTubeVideo.BASE_URL}{self.id}"
         return pytube.YouTube(url, use_oauth=use_oauth)
-    
-    def __initialize_upload(self):
-        """Private Method to initialize a resumable upload of the Video to Youtube using the videos.insert API call.  This is a modified version of the example found at https://developers.google.com/youtube/v3/guides/uploading_a_video"""
-        self.logger.info(f"Preparing to upload video to youtube with title: {self.title} ad other stored details")
-        body=dict(
-            snippet=dict(
-                title=self.title,
-                description=self.description,
-                tags=self.tags,
-                categoryId=self.category_id,
-                defaultLanguage=self.default_language
-            ),
-            status=dict(
-                embeddable=self.embeddable,
-                license=self.license,
-                privacyStatus=self.privacy_status,
-                publicStatsViewable=self.public_stats_viewable,
-                selfDeclaredMadeForKids=self.self_declared_made_for_kids
-            )
-        )
-        self.logger.info("Starting the upload")
-        # Call the API's videos.insert method to create and upload the video.
-        insert_request = self.channel.service.videos().insert(
-            part=','.join(body.keys()),
-            body=body,
-            # The chunksize parameter specifies the size of each chunk of data, in
-            # bytes, that will be uploaded at a time. Set a higher value for
-            # reliable connections as fewer chunks lead to faster uploads. Set a lower
-            # value for better recovery on less reliable connections.
-            #
-            # Setting 'chunksize' equal to -1 in the code below means that the entire
-            # file will be uploaded in a single HTTP request. (If the upload fails,
-            # it will still be retried where it left off.) This is usually a best
-            # practice, but if you're using Python older than 2.6 or if you're
-            # running on App Engine, you should set the chunksize to something like
-            # 1024 * 1024 (1 megabyte).
-            media_body=MediaFileUpload(self.file, chunksize=-1, resumable=True)
-        )
-        self.logger.info("returning resumable_upload private method to create a resumable upload")
-        return self.__resumable_upload(insert_request)
-    
-    def __resumable_upload(self, request):
-        """Private Method to finish the 'resumable' upload that is initialized in the __initialize_upload method.  Slightly modified version of the example found here https://developers.google.com/youtube/v3/guides/uploading_a_video"""
-        response = None
-        error = None
-        retry = 0
-        vidID = None
-        while response is None:
-            try:
-                self.logger.info('Uploading file...') 
-                response = request.next_chunk()
-                if(response is not None):
-                    self.logger.info(f"Checking Response for id:\n{response}")
-                    if('id' in response[1]):
-                        self.logger.info(f"Video id \"{response[1]['id']}\" was successfully uploaded.")
-                        vidID = response[1]['id']
-                    else:
-                        self.logger.warning(f"The upload failed with an unexpected response: {response}")
-                        return
-            except HttpError as e:
-                if e.resp.status in contentcreatormanager.platform.youtube.YouTube.RETRIABLE_STATUS_CODES:
-                    error = f"A retriable HTTP error {e.resp.status} occurred:\n{e.content}"
-                else:
-                    raise e
-            except contentcreatormanager.platform.youtube.YouTube.RETRIABLE_EXCEPTIONS as e:
-                error = f"A retriable error occurred: {e}"
-
-            if error is not None:
-                print(error)
-                retry += 1
-                if retry > YouTubeVideo.MAX_RETRIES:
-                    exit('No longer attempting to retry.')
-
-                max_sleep = 2 ** retry
-                sleep_seconds = random.random() * max_sleep
-                self.logger.info(f"Sleeping {sleep_seconds} seconds and then retrying...")
-                time.sleep(sleep_seconds)
-        self.logger.info(f"setting ID to {vidID}")
-        self.id = vidID
     
     def __init__(self, channel, ID : str = None, favorite_count : str ='0', comment_count : str ='0', dislike_count : str ='0', like_count : str ='0',
                  view_count : str ='0', self_declared_made_for_kids : bool =False, made_for_kids : bool =False, public_stats_viewable : bool =True,
@@ -183,11 +108,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                  has_custom_thumbnail : bool =False, content_rating : dict ={}, licensed_content : bool =False, 
                  default_audio_language : str ='en-US', published_at=None, channel_id=None, title=None, description=None, file_name : str = '', update_from_web : bool = False,
                  thumbnails : dict ={}, channel_title=None, tags : list =[], category_id : int =22, live_broadcast_content=None, new_video : bool =False):
-        '''
+        """
         Constructor takes a YouTube Platform object as its only parameter without a default value.  All properties can be set on creation of the Object.  
         If the object is a new video not yet on YouTube set the new_video flag to True, and if you want the object to be updated based on a web lookup
         with the ID set the update_local flag to True.
-        '''
+        """
         super(YouTubeVideo, self).__init__(platform=channel,ID=ID,file_name=file_name)
         self.logger = self.settings.YouTube_logger
         
@@ -222,11 +147,9 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         
-        #if the new_video flag is set we do not set the pytube object since we cant
         if new_video:
             self.logger.info("new_video flag set.  Not attempting to initialize pytube_obj variable")
             self.pytube_obj = None
-        #if it is not new it should be uploaded and we can make the pytube object
         else:
             self.logger.info("new_video flag not set.  Attempting to initialize pytube_obj property")
             self.pytube_obj = self.__get_pytube()
@@ -272,12 +195,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         return result
 
     def update_web(self, force_update : bool = False):
-        """Method to update Video details on YouTube based on the local object's properties.  This makes a videos.update call.  
+        """
+        Method to update Video details on YouTube based on the local object's properties.  This makes a videos.update call.  
         This method checks to see if an update is needed by making a videos.list call and comparing the local and web properties 
         before sending the update call.  This is because a videos.list API call is one quota unit where as the update is 50.  
-        Set force_update to ignore this check."""
-        
-        #prepare snippet and status dicts to use in update call
+        Set force_update to ignore this check.
+        """
         update_snippet = {}
         update_snippet['categoryId']=self.category_id
         update_snippet['defaultLanguage']=self.default_language
@@ -291,7 +214,6 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         update_status['publicStatsViewable']=self.public_stats_viewable
         update_status['selfDeclaredMadeForKids']=self.self_declared_made_for_kids
         
-        #if force_update is set do not bother making the videos.list call and comparing local and web
         if not force_update:
             current_web_status = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)
         
@@ -316,11 +238,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
                 id=self.id
             )
         )
-        #return the results of the API call
         return request.execute()
     
     def update_local(self):
-        """Method to update the local properties based on the web properties"""
+        """
+        Method to update the local properties based on the web properties
+        """
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
         video = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)
@@ -374,9 +297,12 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.downloaded = self.is_downloaded()
         
         self.logger.info("Update from web complete")
+        return video
         
     def upload(self):
-        """Method to upload Video to YouTube"""
+        """
+        Method to upload Video to YouTube
+        """
         file = self.file
         privStatus = self.privacy_status
         self.privacy_status = 'private'
@@ -389,7 +315,6 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             self.logger.error("Can not find file no upload made")
             return
         
-        #Attempt to upload to the web
         try:
             self.logger.info(f"Attempting to upload {file}")
             self.__initialize_upload()
@@ -397,15 +322,13 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             self.logger.error(f"Error during upload:\n{e}")
             return
         
-        #set pytube_obj and update local object from the web to grab any new details
         self.pytube_obj = self.__get_pytube()
         self.update_local()
-        
-        #If private is desired status leave things as is otherwise set the correct status and update
         
         if self.privacy_status == privStatus:
             self.logger.info("Video Upload Complete")
             return
+        
         self.logger.info(f"Setting privacy status to {privStatus} and running an update")
         self.privacy_status = privStatus
         self.update_web()
@@ -413,7 +336,9 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.logger.info("Video Upload Complete")
     
     def download(self, overwrite=False):
-        """Method to download the video from YouTube.  Set overwrite to True if you want an existing file overwritten"""
+        """
+        Method to download the video from YouTube.  Set overwrite to True if you want an existing file overwritten
+        """
         self.__pytube_download(overwrite=overwrite)
         
     def is_uploaded(self):
@@ -422,12 +347,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         Returns True if the video is found on YouTube.  Check is done with API so that private users videos 
         will be found and checked appropriately.
         """
-        #Make video.list api call with id just requesting contentDetails to determine if the Object is uploaded
         result = self.platform.api_videos_list(contentDetails=True, ids=self.id)
         
-        
         if result['pageInfo']['totalResults'] == 0:
+            self.uploaded = False
             return False
-        
-        return True
-        
+        else:
+            self.uploaded = True
+            return True

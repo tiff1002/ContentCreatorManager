@@ -1,4 +1,5 @@
 src/test
+src/sync_test
 src/ContentCreatorManager.log
 src/ContentCreatorManager.log*
 src/facebook_client_secret.json

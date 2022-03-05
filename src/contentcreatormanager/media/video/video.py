@@ -1,49 +1,46 @@
-'''
+"""
 Created on Feb 24, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.media.media
 import os.path
 import ffmpeg
 
 class Video(contentcreatormanager.media.media.Media):
-    '''
+    """
     classdocs
-    '''
+    """
     MAX_RETRIES = 25
 
     def __init__(self, platform, ID : str = '', file_name : str = '', title : str = "", description : str = "", thumbnail_file_name : str = ''):
-        '''
+        """
         Constructor takes Platform object and ID, file_name, title, description, and thumbnail_file_name string.  The Strings are all optional but ID or file_name must be provided
-        '''
-        #Checks for ID and file_name and if both are blank raise exception
+        """
         if ID == '' and file_name == '':
             platform.settings.Video_logger.error("You must set either the file_name or ID to create a Video Object")
             raise Exception()
         
-        #Call constructor for super class to set platform, settings, and ID
         super(Video, self).__init__(platform=platform, ID=ID)
         
         self.logger = self.settings.Video_logger
         self.logger.info("Initializing Media Object as a Video object")
         
-        #setting file and thumbnail based on provided name strings
         self.file = os.path.join(os.getcwd(), file_name)
         self.thumbnail = os.path.join(os.getcwd(), self.get_valid_thumbnail_file_name(thumbnail_file_name))
         
         file_does_not_exist = not os.path.isfile(self.file)
         
-        #Send out a warning if the file the file_name points to does not exist and there is no ID
         if file_does_not_exist and ID == '':
             self.logger.error(f"no file found for file_name {file_name} and no ID set")
         
-        #Set title and description
         self.title = title
         self.description = description
         
     def get_valid_video_file_name(self, desired_file_name : str = ''):
-        """Method to get a valid video filename either from title property or provided string."""
+        """
+        Method to get a valid video filename either from title property or provided string.
+        """
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         file_name = desired_file_name
         if desired_file_name[-4:] == '.mp4':
@@ -61,7 +58,9 @@ class Video(contentcreatormanager.media.media.Media):
         return result
     
     def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
-        """Method to get a valid thumbnail filename either from title property or provided string."""
+        """
+        Method to get a valid thumbnail filename either from title property or provided string.
+        """
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         
         if desired_file_name == '':    
@@ -76,17 +75,16 @@ class Video(contentcreatormanager.media.media.Media):
         return "".join(getVals)
         
     def combine_audio_and_video_files(self, video_file, audio_file):
-        """Method to combine given audio and video file using FFMPEG"""
-        #Get filename from self.file filepath
+        """
+        Method to combine given audio and video file using FFMPEG
+        """
         file_name = os.path.basename(self.file)
         
-        #init some variables
         audFile = None
         vidFile = None
         source_audio = None
         source_video = None
         
-        #preps things to ffmpeg the audio and video together
         finished = False
         tries = 0
         while not finished and tries < Video.MAX_RETRIES + 2:
@@ -110,7 +108,6 @@ class Video(contentcreatormanager.media.media.Media):
         finished = False
         tries = 0
         
-        #FFMPEG is used to combine the audio and video files
         while not finished and tries < self.MAX_RETRIES + 2:
             try:
                 self.logger.info("Attempting to merge audio and video")
@@ -127,7 +124,6 @@ class Video(contentcreatormanager.media.media.Media):
                 
         self.logger.info(f"Files merged as {file_name}")
         
-        #cleanup the audio and video files
         self.logger.info("Cleaning up source files....")
         self.logger.info(f"Removing {audFile}")
         os.remove(audFile)
@@ -135,13 +131,19 @@ class Video(contentcreatormanager.media.media.Media):
         os.remove(vidFile)
         
     def is_downloaded(self):
-        """Method to determine if the Video Object is downloaded"""
+        """
+        Method to determine if the Video Object is downloaded
+        """
         return os.path.isfile(self.file)
     
     def is_thumb_downloaded(self):
-        """Method to determine if the Video Object's thumbnail file is downloaded"""
+        """
+        Method to determine if the Video Object's thumbnail file is downloaded
+        """
         return os.path.isfile(self.thumbnail)
     
     def is_uploaded(self):
-        """Method to return True if the video is uploaded to its platform and False otherwise.  This is intended to be overridden by Classes that extend this one"""
+        """
+        Method to return True if the video is uploaded to its platform and False otherwise.  This is intended to be overridden by Classes that extend this one
+        """
         self.logger.warning("This is a skeleton method to be overridden and does nothing")

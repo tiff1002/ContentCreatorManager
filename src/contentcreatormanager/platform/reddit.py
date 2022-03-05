@@ -1,33 +1,30 @@
-'''
+"""
 Created on Feb 24, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.platform.platform
 import contentcreatormanager.media.post.reddit
 import praw
 import requests
 
 class Reddit(contentcreatormanager.platform.platform.Platform):
-    '''
+    """
     classdocs
-    '''
+    """
     CLIENT_SECRETS_FILE = 'reddit_client_secret.json'
     
     URL = 'https://www.reddit.com'
 
     def __init__(self, settings : contentcreatormanager.config.Settings):
-        '''
+        """
         Constructor takes a Settings object.  No ID for Reddit Platform object.
-        '''
-        #Calls constructor of super class to set the settings and blank ID as that property is not needed for Twitter Object
+        """
         super(Reddit, self).__init__(settings=settings, ID='')
         
-        #Set the right logger for the object
         self.logger = self.settings.Reddit_logger
         self.logger.info("Initializing Platform Object as Reddit Platform object")
         
-        #load in creds
         data = self.read_json(Reddit.CLIENT_SECRETS_FILE)
         
         self.client_id = data['client_id']
@@ -36,7 +33,6 @@ class Reddit(contentcreatormanager.platform.platform.Platform):
         self.redirect_uri = data['redirect_uri']
         self.refresh_token = data['refresh_token']
         
-        #set up praw
         self.praw = praw.Reddit(client_id=data['client_id'],client_secret=data['client_secret'],
                                 user_agent=data['user_agent'],redirect_uri=data['redirect_uri'],
                                 refresh_token=data['refresh_token'])
@@ -44,28 +40,19 @@ class Reddit(contentcreatormanager.platform.platform.Platform):
         self.logger.info("Reddit Platform Object initialized")
         
     def post_text(self, subr : str, title : str, body : str):
-        """Method to create and send a Reddit post to a subreddit and add it to media_objects"""
+        """
+        Method to create and send a Reddit post to a subreddit and add it to media_objects
+        """
         self.logger.info("Creating Reddit Post")
-        #create post
+        
         post = contentcreatormanager.media.post.reddit.RedditTextPost(reddit=self, title=title, body=body, subr=subr)
         
-        #upload post
         post.upload()
         
-        post_url = post.get_post_url()
-        
-        self.logger.info(f"Checking {post_url} to see if post made it online")
-        #check if posted
-        try:
-            requests.get(post_url)
-            posted = True
-            self.logger.info("Post was successfully posted setting posted to true")
-        except requests.ConnectionError:
-            posted = False
-            self.logger.error("Post not found online setting posted to false")
-        
-        #set posted flag
-        post.posted = posted
+        if post.is_uploaded():
+            self.logger.info("Post found online")
+        else:
+            self.logger.error("Could not find post online")
         
         self.add_media(post)
         self.logger.info("Added post to media_objects")
