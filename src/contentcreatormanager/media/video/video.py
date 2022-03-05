@@ -129,12 +129,6 @@ class Video(contentcreatormanager.media.media.Media):
         os.remove(audFile)
         self.logger.info(f"Removing {vidFile}")
         os.remove(vidFile)
-        
-    def is_downloaded(self):
-        """
-        Method to determine if the Video Object is downloaded
-        """
-        return os.path.isfile(self.file)
     
     def is_thumb_downloaded(self):
         """

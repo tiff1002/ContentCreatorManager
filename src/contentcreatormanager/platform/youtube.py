@@ -15,6 +15,7 @@ import math
 import random
 import time
 import googleapiclient.discovery
+import google.auth.exceptions
 import googleapiclient.http
 from googleapiclient.errors import HttpError
 from google.auth.transport.requests import Request as GoogleAuthRequest
@@ -141,7 +142,14 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         if not cred or not cred.valid:
             if cred and cred.expired and cred.refresh_token:
                 self.logger.info("Google creds expired...Refreshing")
-                cred.refresh(GoogleAuthRequest())
+                try:
+                    cred.refresh(GoogleAuthRequest())
+                except google.auth.exceptions.RefreshError:
+                    self.logger.warning("Got Refresh Error on YouTube Creds removing the pickle file and trying again.")
+                    os.chdir(self.settings.original_dir)
+                    os.remove(os.path.join(os.getcwd(), self.__creds_pickle_file_name()))
+                    os.chdir(self.settings.folder_location)
+                    return self.__create_service()
                 self.logger.info("Saving Refreshed creds to pickle file")
             else:
                 self.logger.info("Creating Google Credentials...")

@@ -7,7 +7,7 @@ import contentcreatormanager.media.video.video
 import pytube
 import os.path
 import time
-
+import requests
 
 class YouTubeVideo(contentcreatormanager.media.video.video.Video):
     """
@@ -95,18 +95,25 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         self.combine_audio_and_video_files(video_file, audio_file)
     
+    def __url(self):
+        """
+        Private Method to get YouTube URL
+        """
+        url = f"{YouTubeVideo.BASE_URL}{self.id}"
+        return url
+    
     def __get_pytube(self, use_oauth=True):
         """
         Private method that returns the pytube.YouTube object for this YouTubeVideo
         """
-        url = f"{YouTubeVideo.BASE_URL}{self.id}"
+        url = self.__url()
         return pytube.YouTube(url, use_oauth=use_oauth)
     
     def __init__(self, channel, ID : str = None, favorite_count : str ='0', comment_count : str ='0', dislike_count : str ='0', like_count : str ='0',
                  view_count : str ='0', self_declared_made_for_kids : bool =False, made_for_kids : bool =False, public_stats_viewable : bool =True,
                  embeddable : bool =True, lic : str ='youtube', privacy_status : str ="public", upload_status : str ='notUploaded',
                  has_custom_thumbnail : bool =False, content_rating : dict ={}, licensed_content : bool =False, 
-                 default_audio_language : str ='en-US', published_at=None, channel_id=None, title=None, description=None, file_name : str = '', update_from_web : bool = False,
+                 default_audio_language : str ='en-US', published_at=None, channel_id=None, title='', description=None, file_name : str = '', update_from_web : bool = False,
                  thumbnails : dict ={}, channel_title=None, tags : list =[], category_id : int =22, live_broadcast_content=None, new_video : bool =False):
         """
         Constructor takes a YouTube Platform object as its only parameter without a default value.  All properties can be set on creation of the Object.  
@@ -147,6 +154,9 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.comment_count = comment_count
         self.favorite_count = favorite_count
         
+        if file_name == '':
+            file_name = self.title
+        
         if new_video:
             self.logger.info("new_video flag set.  Not attempting to initialize pytube_obj variable")
             self.pytube_obj = None
@@ -156,11 +166,8 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             if update_from_web:
                 self.logger.info("update_video flag set.  Grabbing Video details from YouTube")
                 self.update_local()
+                self.logger.info("update ran")
                 
-        if file_name == '':
-            file_name = self.title
-            
-        self.file = os.path.join(os.getcwd(), self.get_valid_video_file_name(desired_file_name=file_name))
         
         self.logger.info("YouTube Video Object initialized")
         
@@ -187,7 +194,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             time.sleep(60)
             tries_left -= 1
         
-        if self.is_uploaded():
+        if self.uploaded:
             self.logger.error(f"Video still found on YouTube.  Something must have gone wrong with the API delete call.  Results of the call:\n{result}")
         else:
             self.logger.info("Delete successful")
@@ -201,6 +208,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         before sending the update call.  This is because a videos.list API call is one quota unit where as the update is 50.  
         Set force_update to ignore this check.
         """
+        if not self.uploaded:
+            if not self.is_uploaded():
+                self.logger.error("Video not uploaded.  Can not update its web details")
+                return
+        
         update_snippet = {}
         update_snippet['categoryId']=self.category_id
         update_snippet['defaultLanguage']=self.default_language
@@ -240,13 +252,19 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         )
         return request.execute()
     
-    def update_local(self):
+    def update_local(self, update_file_name : bool = True):
         """
         Method to update the local properties based on the web properties
         """
+        if not self.uploaded:
+            self.logger.info("uploaded flag not set checking if uploaded")
+            if not self.is_uploaded():
+                self.logger.error("Can not update local details from YouTube Video is not uploaded")
+                return
+        
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
         
-        video = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)
+        video = self.platform.api_videos_list(ids=self.id, snippet=True, contentDetails=True, statistics=True, status=True)['items'][0]
         
         if video is None:
             self.logger.error(f"Trying to run update local but can not find video with id {self.id} on youtube")
@@ -296,6 +314,11 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.favorite_count = video['statistics']['favoriteCount']
         self.downloaded = self.is_downloaded()
         
+        if update_file_name:
+            print(self.title)
+            file_name = self.get_valid_video_file_name(desired_file_name=self.title)
+            self.file = os.path.join(os.getcwd(), file_name)
+        
         self.logger.info("Update from web complete")
         return video
         
@@ -307,7 +330,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         privStatus = self.privacy_status
         self.privacy_status = 'private'
         
-        if self.is_uploaded():
+        if self.uploaded:
             self.logger.warning("Vid already uploaded not running upload again")
             return
         
@@ -339,6 +362,10 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         """
         Method to download the video from YouTube.  Set overwrite to True if you want an existing file overwritten
         """
+        if not self.uploaded:
+            if not self.is_uploaded():
+                self.logger.error("Video not uploaded. Can not download it")
+                return
         self.__pytube_download(overwrite=overwrite)
         
     def is_uploaded(self):
@@ -347,6 +374,15 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         Returns True if the video is found on YouTube.  Check is done with API so that private users videos 
         will be found and checked appropriately.
         """
+        #First Try and check without API
+        url = self.__url()
+
+        response = requests.get(url)
+        if response.status_code == 200:
+            if not "Video unavailable" in response.text:
+                self.uploaded = True
+                return True
+        
         result = self.platform.api_videos_list(contentDetails=True, ids=self.id)
         
         if result['pageInfo']['totalResults'] == 0:
