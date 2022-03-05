@@ -12,3 +12,4 @@ src/youtube_client_secret.json
 *.pyc
 *.mp4
 *.jpg
+*.pickle
