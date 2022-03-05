@@ -4,6 +4,7 @@ Created on Feb 24, 2022
 @author: tiff
 """
 import shortuuid
+import os.path
 
 class Media(object):
     """
@@ -22,6 +23,7 @@ class Media(object):
         self.logger.info(f"Initializing Media Object with id {ID}")
         self.id = ID
         self.uploaded = False
+        self.file = None
         
         if self.id == '' or self.id is None:
             self.set_unique_id()
@@ -29,6 +31,12 @@ class Media(object):
         self.title = ''
         self.tags = []
         self.description = ''
+        
+    def is_downloaded(self):
+        """
+        Method to determine if the Video Object is downloaded
+        """
+        return os.path.isfile(self.file)
         
     def getInputFilename(self, stream):
         """

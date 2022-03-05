@@ -163,14 +163,13 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             if update_from_web:
                 self.logger.info("update_video flag set.  Grabbing Video details from YouTube")
                 self.update_local()
+            if not self.is_uploaded():
+                self.logger.warning("This YouTube Video Object is not uploaded")
                 
         if file_name == '':
             file_name = self.title
             
         self.file = os.path.join(os.getcwd(), self.get_valid_video_file_name(desired_file_name=file_name))
-        
-        if not self.is_uploaded():
-            self.logger.warning("This YouTube Video Object is not uploaded")
         
         self.logger.info("YouTube Video Object initialized")
         
@@ -197,7 +196,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
             time.sleep(60)
             tries_left -= 1
         
-        if self.is_uploaded():
+        if self.uploaded:
             self.logger.error(f"Video still found on YouTube.  Something must have gone wrong with the API delete call.  Results of the call:\n{result}")
         else:
             self.logger.info("Delete successful")
@@ -211,9 +210,10 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         before sending the update call.  This is because a videos.list API call is one quota unit where as the update is 50.  
         Set force_update to ignore this check.
         """
-        if not self.is_uploaded():
-            self.logger.error("Video not uploaded.  Can not update its web details")
-            return
+        if not self.uploaded:
+            if not self.is_uploaded():
+                self.logger.error("Video not uploaded.  Can not update its web details")
+                return
         
         update_snippet = {}
         update_snippet['categoryId']=self.category_id
@@ -258,8 +258,9 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         """
         Method to update the local properties based on the web properties
         """
-        if not self.is_uploaded():
-            self.logger.error("Can not update local details from YouTube Video is not uploaded")
+        if not self.uploaded:
+            if not self.is_uploaded():
+                self.logger.error("Can not update local details from YouTube Video is not uploaded")
             return
         
         self.logger.info(f"Updating Video Object with id {self.id} from the web")
@@ -325,7 +326,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         privStatus = self.privacy_status
         self.privacy_status = 'private'
         
-        if self.is_uploaded():
+        if self.uploaded:
             self.logger.warning("Vid already uploaded not running upload again")
             return
         
@@ -357,9 +358,10 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         """
         Method to download the video from YouTube.  Set overwrite to True if you want an existing file overwritten
         """
-        if not self.is_uploaded():
-            self.logger.error("Video not uploaded. Can not download it")
-            return
+        if not self.uploaded:
+            if not self.is_uploaded():
+                self.logger.error("Video not uploaded. Can not download it")
+                return
         self.__pytube_download(overwrite=overwrite)
         
     def is_uploaded(self):
