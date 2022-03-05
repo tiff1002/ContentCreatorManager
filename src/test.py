@@ -5,26 +5,16 @@ Created on Feb 24, 2022
 '''
 import os.path
 import contentcreatormanager.config
-import contentcreatormanager.platform.rumble
-import contentcreatormanager.media.video.rumble
+import contentcreatormanager.platform.lbry
+import contentcreatormanager.media.video.lbry
 
 logging_config_file = os.path.join(os.getcwd(), "logging.ini")
-test_folder = os.path.join(os.getcwd(), "test")
+test_folder = os.path.join(os.getcwd(), "sync_test")
 
 settings = contentcreatormanager.config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 logger = settings.Base_logger
 
-rumble = contentcreatormanager.platform.rumble.Rumble(settings=settings)
+lbry = contentcreatormanager.platform.lbry.LBRY(settings=settings, ID='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed')
 
-vid = contentcreatormanager.media.video.rumble.RumbleVideo(rumble_channel=rumble, title='Test Title', description='Test Description',video_file_name='upload_test.mp4', license_type=0)
-
-print(vid.id)
-print(vid.guid)
-
-rumble.add_media(vid)
-
-rumble.upload_all_media()
-
-print(vid.id)
-print(vid.guid)
-print(vid.url)
+vid = contentcreatormanager.media.video.lbry.LBRYVideo(lbry_channel=lbry, ID='83c4aeffed289b5c4d01018088c7e1c6f34396d2')
+vid.download()

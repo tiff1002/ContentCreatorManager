@@ -28,14 +28,14 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
 
     def __init__(self, lbry_channel, ID : str = '', tags : list = [], title : str = '',file_hash : str = '', file_name : str = '', name : str = '', 
                  thumbnail_url : str = '', bid : float = .02, address : str = '', description : str = '', permanent_url : str = '', 
-                 languages : list = ['en'], request = None):
+                 languages : list = ['en'], request = None, new_video : bool =False ):
         """
         Constructor takes LBRY Platform object as required parameter.  LBRY Video Object can be constructed with the results of an API call to claim_list just set the request parameter.
         All details can be manually set on creation.  bid defaults very low, language defaults to en
         """
         super(LBRYVideo, self).__init__(lbry_channel=lbry_channel, file_name=file_name, thumbnail_url=thumbnail_url, 
                                         description=description, languages=languages, permanent_url=permanent_url, 
-                                        tags=tags, bid=bid, title=title, name=name, ID=ID)
+                                        tags=tags, bid=bid, title=title, name=name, ID=ID, new_media=new_video)
         self.logger = self.settings.LBRY_logger
         self.id = ID
         self.logger.info("Initializing Video Object as a LBRY Video Object")

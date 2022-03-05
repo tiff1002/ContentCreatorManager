@@ -13,7 +13,7 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
     classdocs
     """
     def __init__(self, lbry_channel, file_name : str = "", thumbnail_url : str = '', description : str = "", languages : list = ['en'], 
-                 permanent_url : str = '', tags : list = [], bid : float = .001, title : str = '', name : str = "", ID : str=''):
+                 permanent_url : str = '', tags : list = [], bid : float = .001, title : str = '', name : str = "", ID : str='', new_media : bool = False):
         """
         Constructor
         """
@@ -31,6 +31,9 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.bid = bid
         self.title = title
         self.name = self.get_valid_name(name)
+        
+        if not new_media:
+            self.update_local()
         
     def set_file_based_on_title(self):
         valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -86,6 +89,7 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.title = request['value']['title']
         self.file_hash = request['value']['source']['sd_hash']
         
+        
         if 'address' in request:
             self.address = request['address']
         if 'thumbnail' in request['value']:
@@ -107,7 +111,7 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             
         result = self.platform.api_stream_update(claim_id=self.id, bid=self.bid, title=self.title, description=self.description, 
                                                  tags=self.tags, replace=True, languages=self.languages, thumbnail_url=self.thumbnail_url,
-                                                 channel_id=self.platform.id)
+                                                 channel_id=self.platform.id, file_path=self.file)
         
         self.logger.info("Update to LBRY successful")
         return result
@@ -160,9 +164,13 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             return 
         
         if use_name:
-            return self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
+            response = self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
         else:
-            return self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
+            response = self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
+        
+        self.set_file_based_on_title()
+        
+        return response
             
     def update_web(self):
         """

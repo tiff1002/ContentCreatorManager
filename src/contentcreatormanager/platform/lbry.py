@@ -63,7 +63,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
         
         for c in claims:
             v = contentcreatormanager.media.video.lbry.LBRYVideo(ID=c['claim_id'], lbry_channel=self, request=c)
-            
+            v.set_file_based_on_title()
             self.add_media(v)
         
         num_vids_added = len(self.media_objects) - num_claims_before
@@ -371,7 +371,7 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
     
     def api_stream_update(self, claim_id : str, bid : float, title : str, description : str, tags : list, 
                           languages : list, channel_id : str, clear_languages : bool = True, 
-                          clear_tags : bool = True, replace : bool = True, thumbnail_url : str = ''):
+                          clear_tags : bool = True, replace : bool = True, thumbnail_url : str = '', file_path : str = ''):
         """
         Method to make a stream_update call to the LBRY API
         Example Call: api_stream_update(claim_id='9df6f11c4581dc4deb48246582c638e4c7576af2', bid=0.002, title='New Title', description='new description', tags=['newtag'], languages=['en'], channel_id='8be45e4ba05bd6961619489f6408a0dc62f4e650')
@@ -390,6 +390,9 @@ class LBRY(contentcreatormanager.platform.platform.Platform):
             clear_languages=clear_languages,
             thumbnail_url = thumbnail_url
         )
+        
+        if not (file_path == '' or file_path is None):
+            parameters['file_path'] = file_path
         
         result = requests.post(LBRY.API_URL, json={"method": "stream_update", "params": parameters}).json()
         
