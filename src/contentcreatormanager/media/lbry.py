@@ -4,9 +4,7 @@ Created on Feb 28, 2022
 @author: tiff
 """
 import contentcreatormanager.media.media
-import contentcreatormanager.platform.lbry
 import os.path
-import requests
 import time
 import hashlib
 
@@ -34,6 +32,19 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.title = title
         self.name = self.get_valid_name(name)
         
+    def set_file_based_on_title(self):
+        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        file_name = self.title    
+        
+        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
+        
+        result = "".join(getVals)
+        
+        self.logger.info(f"returning and setting the following file name: {result}")
+        self.file = os.path.join(os.getcwd(), result)
+            
+        return result
+    
     def get_valid_name(self, name : str):
         """
         Method to get a valid LBRY stream name from provided input
@@ -89,8 +100,11 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
             
     def update_lbry(self):
         """
-        Method to update Video details on LBRY using the local object properties.  This uses the stream_update API call.
+        Method to update Media details on LBRY using the local object properties.  This uses the stream_update API call.
         """
+        if not self.is_uploaded():
+            self.logger.error("Can not update as Media if it is not on LBRY")
+            
         result = self.platform.api_stream_update(claim_id=self.id, bid=self.bid, title=self.title, description=self.description, 
                                                  tags=self.tags, replace=True, languages=self.languages, thumbnail_url=self.thumbnail_url,
                                                  channel_id=self.platform.id)
@@ -98,33 +112,15 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
         self.logger.info("Update to LBRY successful")
         return result
     
-    def delete_web(self):
+    def delete_web(self, do_not_download : bool = False):
         """
         Method to remove Media from LBRY
         """
-        return self.delete_from_lbry()
-    
-    def update_local(self, use_name : bool = False):
-        """
-        Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True
-        """
-        if use_name:
-            return self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
-        else:
-            return self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
+        if not self.is_uploaded():
+            self.logger.error("Can not delete media from LBRY if it is not on LBRY")
+            return
             
-    def update_web(self):
-        """
-        Method to update data on LBRY based on the local values of the object's properties
-        """
-        self.logger.info(f"Attmepting to update LBRY claim {self.id}")
-        return self.update_lbry()
-    
-    def delete_from_lbry(self, do_not_download : bool = False):
-        """
-        Method to delete the Video object from LBRY.
-        """
-        self.logger.info("Preparing to delete video from LBRY first running download()")
+        self.logger.info("Preparing to delete Media from LBRY first running download()")
         
         if not do_not_download:
             self.logger.info("do_not_download flag not set.  Ensuring the video file is downloaded before removing from LBRY")
@@ -154,6 +150,32 @@ class LBRYMedia(contentcreatormanager.media.media.Media):
                 finished = True
         
         return stream_abandon_result
+    
+    def update_local(self, use_name : bool = False):
+        """
+        Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True
+        """
+        if not self.is_uploaded():
+            self.logger.error("Video not found can not update local from LBRY")
+            return 
+        
+        if use_name:
+            return self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
+        else:
+            return self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
+            
+    def update_web(self):
+        """
+        Method to update data on LBRY based on the local values of the object's properties
+        """
+        if not self.is_uploaded():
+            self.logger.error("Video not on LBRY can not update it")
+            return 
+        
+        self.logger.info(f"Attmepting to update LBRY claim {self.id}")
+        return self.update_lbry()
+    
+    
     
     def check_file_hash(self):
         """

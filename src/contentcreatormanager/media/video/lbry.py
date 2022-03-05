@@ -27,7 +27,7 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         return result['result']
 
     def __init__(self, lbry_channel, ID : str = '', tags : list = [], title : str = '',file_hash : str = '', file_name : str = '', name : str = '', 
-                 thumbnail_url : str = '', bid : float = .001, address : str = '', description : str = '', permanent_url : str = '', 
+                 thumbnail_url : str = '', bid : float = .02, address : str = '', description : str = '', permanent_url : str = '', 
                  languages : list = ['en'], request = None):
         """
         Constructor takes LBRY Platform object as required parameter.  LBRY Video Object can be constructed with the results of an API call to claim_list just set the request parameter.
@@ -52,6 +52,10 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
                 self.update_local(use_name=True)
             except IndexError:
                 self.logger.error("Could not update with name not found on LBRY")
+        
+        if not self.is_uploaded():
+            self.logger.warning("This video is not uploaded to LBRY")        
+        
         self.logger.info("LBRY Video Media Object initialized")
     
     def download(self):
@@ -59,6 +63,10 @@ class LBRYVideo(contentcreatormanager.media.lbry.LBRYMedia):
         Method to download Video from LBRY to local machine.  This will call get to download blobs, file_save to make a file from the 
         blobs and then if the file is in the wrong location (due to LBRY API weirdness) this Method will put it in the right place
         """
+        if not self.is_uploaded():
+            self.logger.error("Video not on LBRY can not download it")
+            return
+        
         get_result = self.platform.api_get(uri=self.permanent_url, download_directory=self.settings.folder_location, file_name=os.path.basename(self.file))
         
         try:
