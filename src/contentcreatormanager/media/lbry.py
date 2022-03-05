@@ -3,12 +3,12 @@ Created on Feb 28, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.media
+import contentcreatormanager.media.media as media
 import os.path
 import time
 import hashlib
 
-class LBRYMedia(contentcreatormanager.media.media.Media):
+class LBRYMedia(media.Media):
     """
     classdocs
     """

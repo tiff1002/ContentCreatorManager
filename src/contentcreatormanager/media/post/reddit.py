@@ -3,11 +3,11 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.post.post
-import contentcreatormanager.platform.reddit 
+import contentcreatormanager.media.post.post as media_post
+import contentcreatormanager.platform.reddit as reddit_plat
 import requests
 
-class RedditTextPost(contentcreatormanager.media.post.post.Post):
+class RedditTextPost(media_post.Post):
     """
     classdocs
     """
@@ -72,7 +72,7 @@ class RedditTextPost(contentcreatormanager.media.post.post.Post):
         """
         Method to get the URL of the post
         """       
-        if contentcreatormanager.platform.reddit.Reddit.URL in self.url:
+        if reddit_plat.Reddit.URL in self.url:
             return self.url
         else:        
-            return f"{contentcreatormanager.platform.reddit.Reddit.URL}{self.permalink}"
+            return f"{reddit_plat.Reddit.URL}{self.permalink}"

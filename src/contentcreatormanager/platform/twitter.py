@@ -3,17 +3,18 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.platform.platform
-import contentcreatormanager.media.post.twitter
+import contentcreatormanager.config as ccm_config
+import contentcreatormanager.platform.platform as plat
+import contentcreatormanager.media.post.twitter as twitter_post
 import tweepy
 
-class Twitter(contentcreatormanager.platform.platform.Platform):
+class Twitter(plat.Platform):
     """
     classdocs
     """
     CLIENT_SECRETS_FILE = 'twitter_client_secret.json'
 
-    def __init__(self, settings : contentcreatormanager.config.Settings):
+    def __init__(self, settings : ccm_config.Settings):
         """
         Constructor takes a Settings object.  No ID for Twitter Platform
         """
@@ -46,7 +47,7 @@ class Twitter(contentcreatormanager.platform.platform.Platform):
         """
         Method to create and send a Tweet.
         """
-        tweet = contentcreatormanager.media.post.twitter.Tweet(twitter=self, post=post)
+        tweet = twitter_post.Tweet(twitter=self, post=post)
         
         result = tweet.upload()
         

@@ -3,13 +3,14 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.platform.platform
-import contentcreatormanager.media.video.rumble
+import contentcreatormanager.config as ccm_config
+import contentcreatormanager.platform.platform as plat
+import contentcreatormanager.media.video.rumble as rumble_vid
 import os
 import json
 import requests
 
-class Rumble(contentcreatormanager.platform.platform.Platform):
+class Rumble(plat.Platform):
     """
     classdocs
     """
@@ -17,7 +18,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
     
     UPLOAD_API_URL = "https://rumble.com/api/simple-upload.php"
 
-    def __init__(self, settings : contentcreatormanager.config.Settings, init_videos : bool = False):
+    def __init__(self, settings : ccm_config.Settings, init_videos : bool = False):
         """
         Constructor takes a Settings object.  ID set in credentials file.  Set flag init_videos to True to initialize all videos already on the Rumble Channel (not implemented yet)
         """
@@ -42,7 +43,7 @@ class Rumble(contentcreatormanager.platform.platform.Platform):
         
         self.logger.info("Rumble Platform Object initialized")
           
-    def add_video(self, vid : contentcreatormanager.media.video.rumble.RumbleVideo):
+    def add_video(self, vid : rumble_vid.RumbleVideo):
         """
         Method to add a Rumble video to media_objects list property
         """

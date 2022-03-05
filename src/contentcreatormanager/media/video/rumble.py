@@ -3,9 +3,9 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.video.video
+import contentcreatormanager.media.video.video as media_vid
 
-class RumbleVideo(contentcreatormanager.media.video.video.Video):
+class RumbleVideo(media_vid.Video):
     """
     classdocs
     """

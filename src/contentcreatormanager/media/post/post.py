@@ -3,14 +3,14 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.media.media
-import contentcreatormanager.platform.platform
+import contentcreatormanager.media.media as media
+import contentcreatormanager.platform.platform as plat
 
-class Post(contentcreatormanager.media.media.Media):
+class Post(media.Media):
     """
     classdocs
     """
-    def __init__(self, platform : contentcreatormanager.platform.platform.Platform, body : str, title : str, posted : bool = False):
+    def __init__(self, platform : plat.Platform, body : str, title : str, posted : bool = False):
         """
         Constructor for generic post to set the settings, body of the post and title.  It will also initialize posted to False
         """
