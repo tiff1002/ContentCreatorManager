@@ -171,6 +171,18 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         
         self.logger.info("YouTube Video Object initialized")
         
+    def is_downloaded(self):
+        """
+        Checks for downloaded file
+        """
+        if not self.uploaded:
+            if self.is_uploaded():
+                self.update_local()
+        else:
+            self.update_local()       
+        result = contentcreatormanager.media.video.video.Video.is_downloaded(self)
+        return result
+    
     def delete_web(self, do_not_download_before_delete : bool = False):
         """
         Method to make the videos.delete API call to youtube and return the results.  If the video is not downloaded and you do 
@@ -312,7 +324,7 @@ class YouTubeVideo(contentcreatormanager.media.video.video.Video):
         self.dislike_count = video['statistics']['dislikeCount']
         self.comment_count = video['statistics']['commentCount']
         self.favorite_count = video['statistics']['favoriteCount']
-        self.downloaded = self.is_downloaded()
+
         
         if update_file_name:
             print(self.title)
