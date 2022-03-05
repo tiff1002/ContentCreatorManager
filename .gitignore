@@ -9,3 +9,6 @@ src/rumble_client_secret.json
 src/token_youtube_v3.pickle
 src/twitter_client_secret.json
 src/youtube_client_secret.json
+*.pyc
+*.mp4
+*.jpg
