@@ -1,22 +1,21 @@
-'''
+"""
 Created on Feb 24, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.media.post.post
 import contentcreatormanager.platform.reddit 
 import requests
 
 class RedditTextPost(contentcreatormanager.media.post.post.Post):
-    '''
+    """
     classdocs
-    '''
-
+    """
 
     def __init__(self, reddit, title : str, body : str, subr : str):
-        '''
+        """
         Constructor takes a Reddit Platform Object as well as title and body strings for the post
-        '''
+        """
         super(RedditTextPost, self).__init__(platform=reddit, body=body, title=title)
         self.logger = self.settings.Reddit_logger
         
@@ -28,12 +27,12 @@ class RedditTextPost(contentcreatormanager.media.post.post.Post):
         
         self.logger.info("Reddit Post initialized")
         
-        
     def upload(self):   
-        """Method to send this Post to it subreddit""" 
+        """
+        Method to send this Post to it subreddit
+        """ 
         self.logger.info(f"Attempting to make a post to subreddit {self.subr} with title {self.title}")
         
-        #See if body is just a valid url if so make a url post if not make a text post
         self.logger.info("Checking to see if post is a valid URL")
         try:
             requests.get(self.body)
@@ -43,7 +42,6 @@ class RedditTextPost(contentcreatormanager.media.post.post.Post):
         except requests.exceptions.InvalidSchema:
             url = False
         
-        #make the api call to make the post    
         if url:
             self.logger.info(f"Post is a URL post: {self.body}")
             result = self.platform.api_submit_url(subreddit=self.subr, title=self.title, url=self.body)
@@ -52,15 +50,28 @@ class RedditTextPost(contentcreatormanager.media.post.post.Post):
             result = self.platform.api_submit_text(subreddit=self.subr, title=self.title, selftext=self.body)
         
         self.logger.info(f"Set Post id to {result.id} permalink to {result.permalink} and url to {result.url}")
-        #set id and permalink of the post
         self.id = result.id
         self.permalink = result.permalink
         self.url = result.url
         
         return result
     
+    def is_uploaded(self):
+        """
+        Method to check if the Post is uploaded and set flag for it
+        """
+        response = requests.get(self.get_post_url)
+        if response.status_code == 200:
+            self.uploaded = True
+            return True
+        else:
+            self.uploaded = False
+            return False 
+    
     def get_post_url(self):
-        """Method to get the URL of the post (keep in mind if the post is a url post it will return the comments section URL)"""       
+        """
+        Method to get the URL of the post
+        """       
         if contentcreatormanager.platform.reddit.Reddit.URL in self.url:
             return self.url
         else:        

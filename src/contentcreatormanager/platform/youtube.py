@@ -1,8 +1,8 @@
-'''
+"""
 Created on Feb 24, 2022
 
 @author: tiff
-'''
+"""
 import contentcreatormanager.platform.platform
 import contentcreatormanager.media.video.youtube
 import httplib2
@@ -20,26 +20,22 @@ from googleapiclient.errors import HttpError
 from google.auth.transport.requests import Request as GoogleAuthRequest
 
 class YouTube(contentcreatormanager.platform.platform.Platform):
-    '''
+    """
     classdocs
-    '''
+    """
     CLIENT_SECRETS_FILE = 'youtube_client_secret.json'
     
     RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnected, http.client.IncompleteRead, http.client.ImproperConnectionState, http.client.CannotSendRequest, http.client.CannotSendHeader, http.client.ResponseNotReady, http.client.BadStatusLine)
-    # Always retry when an apiclient.errors.HttpError with one of these status
-    # codes is raised.
+     
     RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
     
-    #scopes needed for youtube API to work
     SCOPES = ['https://www.googleapis.com/auth/youtube.upload','https://www.googleapis.com/auth/youtube','https://www.googleapis.com/auth/youtube.force-ssl']
-    #API info
+    
     API_SERVICE_NAME = 'youtube'
     API_VERSION = 'v3'
 
-    #list of valid privacy statuses
     VALID_PRIVACY_STATUSES = ('public', 'private', 'unlisted')
     
-    # Maximum number of times to retry before giving up.
     MAX_RETRIES = 25
     
     def __get_parts(self, contentDetails : bool, snippet : bool, statistics : bool, status : bool, 
@@ -102,7 +98,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         return parts
     
     def __load__creds(self):
-        """Private Method to load in credentials from pickle file returning none if no file is present"""
+        """
+        Private Method to load in credentials from pickle file returning none if no file is present
+        """
         pickle_file = os.path.join(os.getcwd(),self.__creds_pickle_file_name())
         
         if not os.path.isfile(pickle_file):
@@ -114,11 +112,15 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             return pickle.load(token)
     
     def __creds_pickle_file_name(self):
-        """Private Method to return the file name of the pickle file used for creds"""
+        """
+        Private Method to return the file name of the pickle file used for creds
+        """
         return f'token_{YouTube.API_SERVICE_NAME}_{YouTube.API_VERSION}.pickle'
     
     def __save_creds(self, cred : google.oauth2.credentials.Credentials):
-        """Private Method to save auth creds to a pickle file"""
+        """
+        Private Method to save auth creds to a pickle file
+        """
         pickle_file = self.__creds_pickle_file_name()
 
         self.logger.info(f"Saving Credentials for Google to pickle file: {pickle_file}")
@@ -126,7 +128,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             pickle.dump(cred, token)
     
     def __create_service(self):
-        """Private Method to create the youtube service will use pickle file creds if availble and they work otherwise will generate new ones with client secrets file"""
+        """
+        Private Method to create the youtube service will use pickle file creds if availble and they work otherwise will generate new ones with client secrets file
+        """
         self.logger.info("Changing to original dir to load creds")
         os.chdir(self.settings.original_dir)
         
@@ -157,10 +161,11 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         return service
         
     def __get_channel(self):
-        """Private Method to get channel/playlist id for user's uploads"""
+        """
+        Private Method to get channel/playlist id for user's uploads
+        """
         result = None
         self.logger.info("Making channels.list API call to get Id for the Channel of the authenticated user")
-        #uses channels.list with mine set to true to get authed users channel
         try:
             result = self.api_channels_list_mine(contentDetails=True)
         except HttpError as e:
@@ -171,7 +176,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         return result['items'][0]['contentDetails']['relatedPlaylists']['uploads']
     
     def __set_videos(self):
-        """Private Method to add all videos on the channel to the media_objects list property"""
+        """
+        Private Method to add all videos on the channel to the media_objects list property
+        """
         vid_data = self.__get_all_video_data()
         for vid in vid_data:
             self.add_video_with_request(vid)
@@ -183,12 +190,10 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         as providing the length each csv will need to be to make 
         video list calls to grab all channel data)
         """
-        #initialize some variables the method will use
         result = None
         num_pages = 1
         
         self.logger.info("Making intial PlaylistItems.list API call to get first 50 results and the first next_page_token")
-        #Grab the first page of data for user's videos and store the results        
         try:
             result = self.api_playlistitems_list(contentDetails=True, maxResults=50, playlistId=self.id)
         except HttpError as e:
@@ -199,20 +204,16 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         self.logger.info("Adding first page of data to pages")
         pages = [result['items']]
         
-        #initializing the csv_length variable that will be returned it will be set to the number of items in the result and if there is more than one page of data this will get overwritten
         csv_length = result['pageInfo']['totalResults']
         
-        #initializing the next_page_token to None if there is one it will be set
         next_page_token = None
         
-        #if the next page token is in the results there are multiple pages of data so set variables based on the length of the results
         if 'nextPageToken' in result:
             self.logger.info("Setting next page token as there are multiple pages of data")
             next_page_token = result['nextPageToken']
             num_pages = math.ceil(result['pageInfo']['totalResults']/result['pageInfo']['resultsPerPage'])
             csv_length = math.ceil(result['pageInfo']['totalResults'] / num_pages);
         
-        #Loop through to get other pages of data
         while next_page_token is not None:
             self.logger.info("Making a playlistitems.list call in loop to get remaining data")
             try:
@@ -225,18 +226,14 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             self.logger.info("Adding page of data to pages")
             pages.append(result['items'])
             
-            #Setting to None if this is not overwritten the loop will end
             next_page_token = None
             
-            #If there is another page set the token
             if 'nextPageToken' in result:
                 self.logger.info("There is another page of data setting the token")
                 next_page_token = result['nextPageToken']
                 
-        #pull ids from the results to return
         video_ids = self.__get_items_from_pages(pages, True)
                 
-        #puts three return variables into a dict
         return_data = {
             "video_ids":video_ids,
             "num_pages":num_pages,
@@ -245,7 +242,9 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         return return_data
     
     def __get_items_from_pages(self, pages, just_ids : bool = False):
-        """Private Method to pull individual items from pages of data.  Use this to get API results that are accross multiple pages of data, just provide a list object containing all the pages of data"""
+        """
+        Private Method to pull individual items from pages of data.  Use this to get API results that are accross multiple pages of data, just provide a list object containing all the pages of data
+        """
         return_data = []
         for p in pages:
             for r in p:
@@ -256,83 +255,69 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         return return_data
           
     def __get_all_video_data(self):
-        """Private Method to return a list of requests for all vids on the channel"""
-        #get the channel video IDs and info about how many there are
+        """
+        Private Method to return a list of requests for all vids on the channel
+        """
         response = self.__get_playlist_video_ids()
         
-        #pull the parts of the dict out as individual variables
         video_ids = response['video_ids']
         num_pages = response['num_pages']
         csv_length = response['csv_length']
         
-        #initialize a list to hold the different csv strings that will be used to get the rest of the video data
         id_csvs = []
         
-        #loop once for each page of data
         for x in range(num_pages):
-            #intialize an empty list to hold the IDs that will make up a csv string of IDs
             ids = []
-            #loop once for each item that will be in single csv string
             for y in range(csv_length):
-                #use try catch to except the Index Error that will occur depending on the number of results
                 try:
-                    #use the x and the y and the length we want the csv strings to be to calculate the index of the ID we want to add to the ids list
                     ids.append(video_ids[(x*csv_length)+y])
                 except IndexError:
                     self.logger.info("Reached the end of the list of ids")
                     
-            #once the y loop finishes ids will be populated with a single csv string worth of ids so using join with ',' to make said csv string and add it to the list of csv strings
             id_csvs.append(",".join(ids))
                     
-        #grab full data using the list of csv strings
         pages = self.__get_video_data_from_csvs(id_csvs)
             
-        #pull the individual data from the pages of data
         self.logger.info("Looping through the page data to make a list of results to return")    
         results = self.__get_items_from_pages(pages)
         
-        #reverse the results so they go in the right order before returning them
         results.reverse()        
         return results
 
     def __get_video_data_from_csvs(self, csvs : list):
-        """Private Method to grab data from multiple csv strings provided in the form of a list"""
-        #initialize and empty list to store the page data in
+        """
+        Private Method to grab data from multiple csv strings provided in the form of a list
+        """
         pages = []
         
-        #loop once for each csv string and add to the pages list before returning the data
         for csv in csvs:
             pages.append(self.__get_video_data_from_csv(csv))
         return pages
     
     def __get_video_data_from_csv(self, csv : str):
-        """Private Method to grab video data from a single csv string using the videos.list api call"""
-        #initialize the result as None
+        """
+        Private Method to grab video data from a single csv string using the videos.list api call
+        """
         result = self.api_videos_list(ids=csv, contentDetails=True, snippet=True, statistics=True, status=True)
         
-        #return the results
         if 'items' in result:
             return result['items']
         
-        #if there was no items in results declare something went wrong and return whatever is there
         self.logger.error(f"Something went wrong and there is no items in the result to return so returning as is:\n{result}")
         return result
     
     def __init__(self, settings : contentcreatormanager.config.Settings, init_videos : bool = False, current_quota_usage : int = 0):
-        '''
+        """
         Constructor takes a Settings object.  No ID needs to be provided it is grabbed using an API call.  
         init_videos flag (default False) set to True will grab all video data and use it to make video 
         objects and add them to media_objects list property.
-        '''
+        """
         super(YouTube, self).__init__(settings=settings, ID='')
         self.logger = settings.YouTube_logger
         self.logger.info("Initializing Platform Object as a YouTube Platform")
         
-        #setting starting quota usage
         self.quota_usage = current_quota_usage
         
-        # Explicitly tell the underlying HTTP transport library not to retry, since
-        # we are handling retry logic ourselves.
         httplib2.RETRIES = 1
         self.logger.info("Set httplib2.RETRIES to 1 as retry logic is handled in this tool")
         
@@ -347,20 +332,23 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
             self.__set_videos()
             
     def add_video_with_id(self, ID):
-        """Method to allow adding a video manually using its id (this assumes it is already uploaded)"""
-        #creates the Video object only setting the channel and the ID and asking for it to update from the web
+        """
+        Method to allow adding a video manually using its id (this assumes it is already uploaded)
+        """
         v = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=self, ID=ID, update_from_web=True)
-        # Add the video to the media_objects list with the add_video method
         self.add_video(v)
         return v
         
     def add_video(self, vid : contentcreatormanager.media.video.youtube.YouTubeVideo):
-        """Method to add a YouTube video to media_objects"""
+        """
+        Method to add a YouTube video to media_objects
+        """
         self.add_media(vid)
             
     def add_video_with_request(self,request):
-        """Method that will add a video to the media_objects list.  First object data will be set using provided request (results from an API call)"""
-        #Checks some of the request results that are optional and initialize them to something to prevent exceptions
+        """
+        Method that will add a video to the media_objects list.  First object data will be set using provided request (results from an API call)
+        """
         tags = []
         if not ('tags' not in request['snippet']):
             tags = request['snippet']['tags']
@@ -374,7 +362,6 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         if not ('defaultAudioLanguage' not in request['snippet']):
             default_audio_language = request['snippet']['defaultAudioLanguage']
             
-        #use all the details to create the YouTube Video Object
         ytv = contentcreatormanager.media.video.youtube.YouTubeVideo(channel=self, ID=request['id'], favorite_count=request['statistics']['favoriteCount'],
                                                                      comment_count=request['statistics']['commentCount'], dislike_count=request['statistics']['dislikeCount'],
                                                                      like_count=request['statistics']['likeCount'], view_count=request['statistics']['viewCount'],
@@ -386,11 +373,12 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
                                                                      published_at=request['snippet']['publishedAt'], channel_id=request['snippet']['channelId'], title=request['snippet']['title'],
                                                                      description=description, thumbnails=request['snippet']['thumbnails'], channel_title=request['snippet']['channelTitle'],
                                                                      tags=tags, category_id=request['snippet']['categoryId'], live_broadcast_content=request['snippet']['liveBroadcastContent'])
-        #Adds the new video to media_objects with add_video method
         self.add_video(ytv)
         
     def upload_media(self, ID : str = ''):
-        """Method overridden so it will not be used by this type of object"""
+        """
+        Method overridden so it will not be used by this type of object
+        """
         self.logger.warning(f"Can not possibly know the ID of a video that is not uploaded so will not look for {ID} to upload")
         
     def api_videos_list(self, ids : str, contentDetails : bool = False, snippet : bool = False, statistics : bool = False, status : bool = False, 
@@ -503,7 +491,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
                 error = f"A retriable error occurred: {e}"
 
             if error is not None:
-                print(error)
+                self.logger.error(error)
                 retry += 1
                 if retry > YouTube.MAX_RETRIES:
                     self.logger.error('No longer attempting to retry.')
@@ -597,6 +585,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         Quota impact: A call to this method has a quota cost of approximately 50 units.
         """
         quota_cost = 50
+        self.logger.warning(f"thumbnails.set api call not implemented yet so quota cost of {quota_cost} not used")
         return
     
     def api_playlistitems_list(self, contentDetails : bool = False, snippet : bool = False, status : bool = False, ID : bool = False, ids : str = '', playlistId : str = '',
@@ -646,9 +635,6 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
                 request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, videoId=videoId)
             else:
                 request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId)
-            
-        
-        
         
         self.logger.info(f"API call being made")        
         
@@ -666,6 +652,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
+        self.logger.warning(f"playlistitems.insert api call not implemented yet so quota cost of {quota_cost} not used")
         return
     
     def api_playlistitems_update(self):
@@ -674,6 +661,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
+        self.logger.warning(f"playlistitems.update api call not implemented yet so quota cost of {quota_cost} not used")
         return
     
     def api_playlistitems_delete(self):
@@ -682,6 +670,7 @@ class YouTube(contentcreatormanager.platform.platform.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
+        self.logger.warning(f"playlistitems.delete api call not implemented yet so quota cost of {quota_cost} not used")
         return
     
     def api_channels_list_mine(self, auditDetails: bool = False, brandingSettings: bool = False, contentDetails : bool = False, 
