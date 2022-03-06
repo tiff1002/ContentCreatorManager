@@ -17,7 +17,6 @@ class Platform(object):
         """
         Constructor takes a Settings object and an ID as string
         """
-        #Sets up some base properties that should be useful to most Platforms that will extend this class
         self.settings = settings
         self.logger = settings.Base_logger
         self.media_objects = []
@@ -35,7 +34,8 @@ class Platform(object):
     
     def read_json(self, file):
         """
-        Method for reading in JSON files and returning a dict with the json data in it
+        Method for reading in JSON files and returning
+        a dict with the json data in it
         """
         os.chdir(self.settings.original_dir)
         
@@ -63,12 +63,14 @@ class Platform(object):
                 duplicate = True
         
         if duplicate:
-            self.logger.error("Trying to add a Media Object with an ID that a media object in media_objects already has not adding duplicate")
+            m="Trying to add a Media Object with a duplicate ID not adding"
+            self.logger.error(m)
             return
         
         self.media_objects.append(media)
         
-        self.logger.info(f"Media Object with id {media.id} added to media_objects")
+        m=f"Media Object with id {media.id} added to media_objects"
+        self.logger.info(m)
         
     def upload_all_media(self):
         """
@@ -80,7 +82,8 @@ class Platform(object):
                
     def upload_media(self, ID : str):
         """
-        Method to call upload() on the media object in media_objects with ID provided
+        Method to call upload() on the media object
+        in media_objects with ID provided
         """
         for media in self.media_objects:
             if media.id == ID:
@@ -89,7 +92,8 @@ class Platform(object):
                 
     def update_all_media_local(self):
         """
-        Method to call update_local() on all Media objects in the media_objects list property
+        Method to call update_local() on all Media objects
+        in the media_objects list property
         """
         self.logger.info("Running update local Method for all media objects")
         for media in self.media_objects:
@@ -105,7 +109,8 @@ class Platform(object):
             
     def update_media_local(self, ID : str):
         """
-        Method to call update_local() on the media object in media_objects with ID provided
+        Method to call update_local() on the media
+        object in media_objects with ID provided
         """
         for media in self.media_objects:
             if media.id == ID:
@@ -114,7 +119,8 @@ class Platform(object):
                        
     def update_media_web(self, ID : str):
         """
-        Method to call update_web() on the media object in media_objects with ID provided
+        Method to call update_web() on the media
+        object in media_objects with ID provided
         """
         for media in self.media_objects:
             if media.id == ID:
@@ -123,7 +129,8 @@ class Platform(object):
                        
     def download_media(self, ID : str):
         """
-        Method to call download() on the media object in media_objects with ID provided
+        Method to call download() on the media
+        object in media_objects with ID provided
         """
         for media in self.media_objects:
             if media.id == ID:
@@ -132,7 +139,8 @@ class Platform(object):
                 
     def download_all_media(self):
         """
-        Method to call download() on all Media objects in media_objects list property
+        Method to call download() on all
+        Media objects in media_objects list property
         """
         self.logger.info("Running Download Method for all media_objects")
         for media in self.media_objects:
@@ -140,7 +148,8 @@ class Platform(object):
             
     def delete_media_from_web(self, ID):
         """
-        Method to call delete_web() on a Media Object in media_objects with the given ID
+        Method to call delete_web() on a
+        Media Object in media_objects with the given ID
         """
         for media in self.media_objects:
             if media.id == ID:

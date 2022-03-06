@@ -775,53 +775,78 @@ class YouTube(plat.Platform):
         self.logger.warning(m)
         return
     
-    def api_playlistitems_list(self, contentDetails : bool = False, snippet : bool = False, status : bool = False, ID : bool = False, ids : str = '', playlistId : str = '',
-                               maxResults : int = 50, pageToken : str = '', videoId : str = ''):
+    def api_playlistitems_list(self, contentDetails : bool = False,
+                               snippet : bool = False, status : bool = False,
+                               ID : bool = False, ids : str = '',
+                               playlistId : str = '', maxResults : int = 50,
+                               pageToken : str = '', videoId : str = ''):
         """
         Method for making playlistitems.list api call
         Quota impact: A call to this method has a quota cost of 1 unit.
         If the playlist is not found it will throw googleapiclient.errors.HttpError
-        Example Call without pageToken: api_playlistitems_list(contentDetails=True, playlistId='UUidrHvFXBvyesh1hbOR2rTw', maxResults=3)
+        Example Call without pageToken: api_playlistitems_list(contentDetails=True,
+                                                               playlistId='UUidrHvFXBvyesh1hbOR2rTw',
+                                                               maxResults=3)
         Example Results without pageToken: {'kind': 'youtube#playlistItemListResponse', 'etag': 'tmoSEcMYkIzJ5mSfpKyhHz_6fxo', 'nextPageToken': 'EAAaBlBUOkNBTQ', 'items': [{'kind': 'youtube#playlistItem', 'etag': '3RVnrGFLI5QkgzRg7LbnUTtH62w', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3Lmo2MXJxaDJxNktn', 'contentDetails': {'videoId': 'j61rqh2q6Kg', 'videoPublishedAt': '2022-02-11T23:13:19Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'KbGLhEYOjfwxSQVdKE5Pf6Pp92Y', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmROdFI2aWVrSTQw', 'contentDetails': {'videoId': 'dNtR6iekI40', 'videoPublishedAt': '2021-10-02T18:00:08Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'QgGQdMYagwQGQm7i2hKZJ2X6tv4', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmhBTXBfQlFEZjAw', 'contentDetails': {'videoId': 'hAMp_BQDf00', 'videoPublishedAt': '2021-10-02T12:00:32Z'}}], 'pageInfo': {'totalResults': 158, 'resultsPerPage': 3}}
-        Example Call with pageToken: api_playlistitems_list(contentDetails=True, playlistId='UUidrHvFXBvyesh1hbOR2rTw', maxResults=3, pageToken='EAAaBlBUOkNBTQ')
+        Example Call with pageToken: api_playlistitems_list(contentDetails=True,
+                                                            playlistId='UUidrHvFXBvyesh1hbOR2rTw',
+                                                            maxResults=3,
+                                                            pageToken='EAAaBlBUOkNBTQ')
         Example Results with pageToken: {'kind': 'youtube#playlistItemListResponse', 'etag': '2ixEvQy_1aHNH3YpSIv_nplMJvs', 'nextPageToken': 'EAAaBlBUOkNBWQ', 'prevPageToken': 'EAEaBlBUOkNBTQ', 'items': [{'kind': 'youtube#playlistItem', 'etag': 'QgGQdMYagwQGQm7i2hKZJ2X6tv4', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LmhBTXBfQlFEZjAw', 'contentDetails': {'videoId': 'hAMp_BQDf00', 'videoPublishedAt': '2021-10-02T12:00:32Z'}}, {'kind': 'youtube#playlistItem', 'etag': 'R4AzQocoTVqgoUIHkVGWMx7OtAA', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LkhZTTZRT1dKT0Q4', 'contentDetails': {'videoId': 'HYM6QOWJOD8', 'videoPublishedAt': '2021-10-01T18:00:05Z'}}, {'kind': 'youtube#playlistItem', 'etag': '42I4J4EAopmbwZ3p9VtanWygqlM', 'id': 'VVVpZHJIdkZYQnZ5ZXNoMWhiT1IyclR3LkkyVTB2SUZzc2lz', 'contentDetails': {'videoId': 'I2U0vIFssis', 'videoPublishedAt': '2021-10-01T12:00:10Z'}}], 'pageInfo': {'totalResults': 158, 'resultsPerPage': 3}}
         """
         if (playlistId == '' and ids == '') or (playlistId != '' and ids != ''):
             self.logger.error("ids (comma-separated list of one or more unique playlist item IDs.) or playlistId (unique ID of the playlist for which you want to retrieve playlist items) must be set but both can not be")
             return
         
-        self.logger.info("Making YouTube API Call to playlistitems.list which costs 1 quota unit")
+        m="YouTube API Call to playlistitems.list cost of 1 quota unit"
+        self.logger.info(m)
         quota_cost = 1
         
-        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=False, status=status, 
-                        fileDetails=False, ID=ID, liveStreamingDetails=False, localizations=False,
-                        player=False, processingDetails=False, recordingDetails=False, suggestions=False,
-                        topicDetails=False, auditDetails=False, brandingSettings=False, contentOwnerDetails=False)
+        parts = self.__get_parts(contentDetails=contentDetails,snippet=snippet,
+                                 statistics=False, status=status,
+                                 fileDetails=False, ID=ID,
+                                 liveStreamingDetails=False,
+                                 localizations=False, player=False,
+                                 processingDetails=False,
+                                 recordingDetails=False, suggestions=False,
+                                 topicDetails=False, auditDetails=False,
+                                 brandingSettings=False,
+                                 contentOwnerDetails=False)
         
         if len(parts) == 0:
-            self.logger.error("At least one part required api call will not be made")
+            m="At least one part required api call will not be made"
+            self.logger.error(m)
             return None
         
         part = ','.join(parts)
         
+        pis=self.service.playlistItems()
         if playlistId == '':
             if videoId != '' and pageToken != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, videoId=videoId, pageToken=pageToken)
+                request = pis.list(part=part,maxResults=maxResults,id=ids,
+                                   videoId=videoId, pageToken=pageToken)
             elif pageToken != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, pageToken=pageToken)
+                request = pis.list(part=part,maxResults=maxResults,id=ids,
+                                   pageToken=pageToken)
             elif videoId != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids, videoId=videoId)
+                request = pis.list(part=part, maxResults=maxResults, id=ids,
+                                   videoId=videoId)
             else:
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, id=ids)
+                request = pis.list(part=part, maxResults=maxResults, id=ids)
         elif ids == '':
             if videoId != '' and pageToken != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, videoId=videoId, pageToken=pageToken)
+                request = pis.list(part=part, maxResults=maxResults,
+                                   playlistId=playlistId, videoId=videoId,
+                                   pageToken=pageToken)
             elif pageToken != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, pageToken=pageToken)
+                request = pis.list(part=part, maxResults=maxResults,
+                                   playlistId=playlistId, pageToken=pageToken)
             elif videoId != '':
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId, videoId=videoId)
+                request = pis.list(part=part, maxResults=maxResults,
+                                   playlistId=playlistId, videoId=videoId)
             else:
-                request = self.service.playlistItems().list(part=part, maxResults=maxResults, playlistId=playlistId)
+                request = pis.list(part=part, maxResults=maxResults,
+                                   playlistId=playlistId)
         
         self.logger.info(f"API call being made")        
         
@@ -829,7 +854,8 @@ class YouTube(plat.Platform):
         
         self.quota_usage += quota_cost
         
-        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        m=f"API call made.  Current Quota Usage: {self.quota_usage}"
+        self.logger.info(m)
         
         return result
     
@@ -839,7 +865,10 @@ class YouTube(plat.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
-        self.logger.warning(f"playlistitems.insert api call not implemented yet so quota cost of {quota_cost} not used")
+        m="playlistitems.insert api call not made."
+        self.logger.warning(m)
+        m=f"{quota_cost} quota units not used"
+        self.logger.warning(m)
         return
     
     def api_playlistitems_update(self):
@@ -848,7 +877,10 @@ class YouTube(plat.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
-        self.logger.warning(f"playlistitems.update api call not implemented yet so quota cost of {quota_cost} not used")
+        m="playlistitems.update api call not made."
+        self.logger.warning(m)
+        m=f"{quota_cost} quota units not used"
+        self.logger.warning(m)
         return
     
     def api_playlistitems_delete(self):
@@ -857,28 +889,44 @@ class YouTube(plat.Platform):
         Quota impact: A call to this method has a quota cost of 50 units.
         """
         quota_cost = 50
-        self.logger.warning(f"playlistitems.delete api call not implemented yet so quota cost of {quota_cost} not used")
+        m="playlistitems.delete api call not made."
+        self.logger.warning(m)
+        m=f"{quota_cost} quota units not used"
+        self.logger.warning(m)
         return
     
-    def api_channels_list_mine(self, auditDetails: bool = False, brandingSettings: bool = False, contentDetails : bool = False, 
-                               contentOwnerDetails : bool = False, ID : bool = False, localizations : bool = False, snippet : bool = False, 
-                               statistics : bool = False, status : bool = False, topicDetails : bool = False):
+    def api_channels_list_mine(self, auditDetails: bool = False,
+                               brandingSettings: bool = False,
+                               contentDetails : bool = False, 
+                               contentOwnerDetails : bool = False,
+                               ID : bool = False, localizations : bool = False,
+                               snippet:bool=False,statistics : bool = False,
+                               status:bool=False,topicDetails:bool=False):
         """
         Method for making channels.list api call
         Quota impact: A call to this method has a quota cost of 1 unit.
         Example Call: api_channels_list_mine(contentDetails=True)
         Example Result: {'kind': 'youtube#channelListResponse', 'etag': 'b4o7PvIgje6iZZ7iFDX25diGSSo', 'pageInfo': {'totalResults': 1, 'resultsPerPage': 5}, 'items': [{'kind': 'youtube#channel', 'etag': 'k87yoSbtKhfiY4D7eR6qtUEC7s8', 'id': 'UCidrHvFXBvyesh1hbOR2rTw', 'contentDetails': {'relatedPlaylists': {'likes': 'LL', 'uploads': 'UUidrHvFXBvyesh1hbOR2rTw'}}}]}
         """
-        self.logger.info("Making YouTube API Call to channels.list with mine set to True which costs 1 quota unit")
+        m="channels.list API call with mine set to True 1 quota unit cost"
+        self.logger.info(m)
         quota_cost = 1
         
-        parts = self.__get_parts(contentDetails=contentDetails, snippet=snippet, statistics=statistics, status=status, 
-                        fileDetails=False, ID=ID, liveStreamingDetails=False, localizations=localizations,
-                        player=False, processingDetails=False, recordingDetails=False, suggestions=False,
-                        topicDetails=topicDetails, auditDetails=auditDetails, brandingSettings=brandingSettings, contentOwnerDetails=contentOwnerDetails)
+        parts = self.__get_parts(contentDetails=contentDetails,snippet=snippet,
+                                 statistics=statistics,status=status,
+                                 fileDetails=False, ID=ID,
+                                 liveStreamingDetails=False,
+                                 localizations=localizations,
+                                 player=False, processingDetails=False,
+                                 recordingDetails=False, suggestions=False,
+                                 topicDetails=topicDetails,
+                                 auditDetails=auditDetails,
+                                 brandingSettings=brandingSettings,
+                                 contentOwnerDetails=contentOwnerDetails)
         
         if len(parts) == 0:
-            self.logger.error("At least one part required api call will not be made")
+            m="At least one part required api call will not be made"
+            self.logger.error(m)
             return None
         
         part = ','.join(parts)
@@ -891,6 +939,7 @@ class YouTube(plat.Platform):
         
         self.quota_usage += quota_cost
         
-        self.logger.info(f"API call made.  Current Quota Usage: {self.quota_usage}")
+        m=f"API call made.  Current Quota Usage: {self.quota_usage}"
+        self.logger.info(m)
         
         return result
