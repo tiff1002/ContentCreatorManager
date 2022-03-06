@@ -10,9 +10,11 @@ class Post(media.Media):
     """
     classdocs
     """
-    def __init__(self, platform : plat.Platform, body : str, title : str, posted : bool = False):
+    def __init__(self, platform : plat.Platform, body : str, title : str,
+                 posted : bool = False):
         """
-        Constructor for generic post to set the settings, body of the post and title.  It will also initialize posted to False
+        Constructor for generic post to set the settings, body of the 
+        post and title.  It will also initialize posted to False
         """
         super(Post, self).__init__(platform=platform, ID='')
         

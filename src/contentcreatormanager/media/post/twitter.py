@@ -17,7 +17,8 @@ class Tweet(media_post.Post):
             
     def __init__(self, twitter, post : str, sensitive : bool = False):
         """
-        Constructor takes a Twitter Platform object and a string to be the body of the Tweet
+        Constructor takes a Twitter Platform object and a string to be
+        the body of the Tweet
         """
         super(Tweet, self).__init__(platform=twitter,body=post,title='')
         
@@ -42,7 +43,8 @@ class Tweet(media_post.Post):
         """
         self.logger.info(f"Sending out tweet: {self.body}")
         
-        result = self.platform.api_update_status(status_text=self.body, possibly_sensitive=self.sensitive)
+        result = self.platform.api_update_status(status_text=self.body,
+                                                 possibly_sensitive=self.sensitive)
         
         self.logger.info(f"Setting Tweet ID to {result._json['id']}")
         self.id = result._json['id']

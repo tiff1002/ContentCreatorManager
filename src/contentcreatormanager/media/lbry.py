@@ -12,8 +12,11 @@ class LBRYMedia(media.Media):
     """
     classdocs
     """
-    def __init__(self, lbry_channel, file_name : str = "", thumbnail_url : str = '', description : str = "", languages : list = ['en'], 
-                 permanent_url : str = '', tags : list = [], bid : float = .001, title : str = '', name : str = "", ID : str='', new_media : bool = False):
+    def __init__(self, lbry_channel, file_name : str = "",
+                 thumbnail_url : str = '', description : str = "",
+                 languages : list = ['en'], permanent_url : str = '',
+                 tags : list = [], bid : float = .001, title : str = '',
+                 name : str = "", ID : str='', new_media : bool = False):
         """
         Constructor
         """
@@ -39,19 +42,26 @@ class LBRYMedia(media.Media):
         """
         Method to get a valid LBRY stream name from provided input
         """
-        valid_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-'
+        v='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-'
+        valid_chars = v
         getVals = list([val for val in name if val in valid_chars])
         return "".join(getVals)
     
     def is_uploaded(self):
         """
-        Method to determine if the LBRY Media Object is uploaded to the LBRY.  It tries to find the video both via name and claim_id.  
-        If neither returns a result the method returns False.  Otherwise it returns True
+        Method to determine if the LBRY Media Object is uploaded to the LBRY.
+        It tries to find the video both via name and claim_id.  
+        If neither returns a result the method returns False.
+        Otherwise it returns True
         """
-        id_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
-        name_result = self.platform.api_claim_list(claim_id=self.id, resolve=False)
+        id_result = self.platform.api_claim_list(claim_id=self.id,
+                                                 resolve=False)
+        name_result = self.platform.api_claim_list(claim_id=self.id,
+                                                   resolve=False)
         
-        if id_result['result']['total_items'] == 0 and name_result['result']['total_items'] == 0:
+        cond1 = id_result['result']['total_items'] == 0
+        cond2=name_result['result']['total_items'] == 0
+        if cond1 and cond2:
             self.logger.info('Could Not Find Media on LBRY.  Returning False')
             self.uploaded = False
             return False
@@ -59,21 +69,24 @@ class LBRYMedia(media.Media):
         return True
     
     def set_file_based_on_title(self):
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        valid_chars = v
         file_name = self.title    
         
         getVals = list([val for val in f"{file_name}" if val in valid_chars])
         
         result = "".join(getVals)
         
-        self.logger.info(f"returning and setting the following file name: {result}")
+        m=f"returning and setting the following file name: {result}"
+        self.logger.info(m)
         self.file = os.path.join(os.getcwd(), result)
             
         return result
         
     def update_from_request(self, request):
         """
-        Method to update the local object from a provided request result (Only works with some API calls claim_list works for one)
+        Method to update the local object from a provided request result
+        (Only works with some API calls claim_list works for one)
         """
         if 'result' in request:
             if 'items' in request['result']:
@@ -104,14 +117,20 @@ class LBRYMedia(media.Media):
             
     def update_lbry(self):
         """
-        Method to update Media details on LBRY using the local object properties.  This uses the stream_update API call.
+        Method to update Media details on LBRY using the local object
+        properties.  This uses the stream_update API call.
         """
         if not self.is_uploaded():
             self.logger.error("Can not update as Media if it is not on LBRY")
             
-        result = self.platform.api_stream_update(claim_id=self.id, bid=self.bid, title=self.title, description=self.description, 
-                                                 tags=self.tags, replace=True, languages=self.languages, thumbnail_url=self.thumbnail_url,
-                                                 channel_id=self.platform.id, file_path=self.file)
+        result = self.platform.api_stream_update(claim_id=self.id,bid=self.bid,
+                                                 title=self.title,
+                                                 description=self.description, 
+                                                 tags=self.tags, replace=True,
+                                                 languages=self.languages,
+                                                 thumbnail_url=self.thumbnail_url,
+                                                 channel_id=self.platform.id,
+                                                 file_path=self.file)
         
         self.logger.info("Update to LBRY successful")
         return result
@@ -121,13 +140,16 @@ class LBRYMedia(media.Media):
         Method to remove Media from LBRY
         """
         if not self.is_uploaded():
-            self.logger.error("Can not delete media from LBRY if it is not on LBRY")
+            m="Can not delete media from LBRY if it is not on LBRY"
+            self.logger.error(m)
             return
             
-        self.logger.info("Preparing to delete Media from LBRY first running download()")
+        m="Preparing to delete Media from LBRY first running download()"
+        self.logger.info(m)
         
         if not do_not_download:
-            self.logger.info("do_not_download flag not set.  Ensuring the video file is downloaded before removing from LBRY")
+            m="do_not_download not set.  downloading before removing from LBRY"
+            self.logger.info(m)
             if self.download() == 'get_error':
                 self.logger.error("Could Not Download.  Not Going to delete")
                 return 'download_error'
@@ -138,16 +160,21 @@ class LBRYMedia(media.Media):
         if file_delete_result['result']:
             self.logger.info("file_delete returned True.  Blobs deleted")
         else:
-            self.logger.warning("file_delete returned False.  Blobs either not there to begin with or the removal failed")
+            m="file_delete returned False."
+            self.logger.warning(m)
         
-        self.logger.info("Running API call to remove the stream from LBRY")
-        stream_abandon_result = self.platform.api_stream_abandon(claim_id=self.id)
+        m="Running API call to remove the stream from LBRY"
+        self.logger.info(m)
+        stream_abandon_result=self.platform.api_stream_abandon(claim_id=self.id)
         
         file_name = os.path.basename(self.file)
         
         finished = False
         while not finished:
-            self.logger.info(f"Video file {file_name} removed from LBRY.  Sleeping 1 min before checking for completion")
+            m=f"Video file {file_name} removed from LBRY."
+            self.logger.info(m)
+            m="Sleeping 1 min before checking for completion"
+            self.logger.info(m)
             time.sleep(60)
             
             if not self.is_uploaded():
@@ -157,16 +184,21 @@ class LBRYMedia(media.Media):
     
     def update_local(self, use_name : bool = False):
         """
-        Method to update the local object properties from LBRY.  It will do the LBRY lookup with claim_id unless the use_name flag is set to True
+        Method to update the local object properties from LBRY.
+        It will do the LBRY lookup with claim_id unless the use_name
+        flag is set to True
         """
         if not self.is_uploaded():
-            self.logger.error("Video not found can not update local from LBRY")
+            m="Video not found can not update local from LBRY"
+            self.logger.error(m)
             return 
         
         if use_name:
-            response = self.update_from_request(self.platform.api_claim_list(name=[self.name], resolve=True))
+            response = self.update_from_request(self.platform.api_claim_list(name=[self.name],
+                                                                             resolve=True))
         else:
-            response = self.update_from_request(self.platform.api_claim_list(claim_id=[self.id], resolve=True))
+            response = self.update_from_request(self.platform.api_claim_list(claim_id=[self.id],
+                                                                             resolve=True))
         
         self.set_file_based_on_title()
         
@@ -174,7 +206,8 @@ class LBRYMedia(media.Media):
             
     def update_web(self):
         """
-        Method to update data on LBRY based on the local values of the object's properties
+        Method to update data on LBRY based on the local
+        values of the object's properties
         """
         if not self.is_uploaded():
             self.logger.error("Video not on LBRY can not update it")
@@ -187,11 +220,12 @@ class LBRYMedia(media.Media):
     
     def check_file_hash(self):
         """
-        Method to calculate the file_hash of the video file and compare it to what is on LBRY blockchain.  Returns True if it matches.
+        Method to calculate the file_hash of the video file and compare
+        it to what is on LBRY blockchain.  Returns True if it matches.
         """
-        BUF_SIZE = 65536  # lets read stuff in 64kb chunks (arbitrary)!
+        BUF_SIZE = 65536  #lets read stuff in 64kb chunks (arbitrary)!
         
-        sha384 = hashlib.sha384() #this is the hash type lbry uses for file hash
+        sha384 = hashlib.sha384()#this is the hash type lbry uses for file hash
         
         with open(self.file, 'rb') as f:
             while True:
@@ -204,5 +238,6 @@ class LBRYMedia(media.Media):
             self.logger.info("Hash matches file.  Returning True")
             return True
         
-        self.logger.error("File hash and sd_hash do not match.  Returning False")
+        m="File hash and sd_hash do not match.  Returning False"
+        self.logger.error(m)
         return False  

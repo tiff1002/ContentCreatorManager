@@ -14,9 +14,11 @@ class RedditTextPost(media_post.Post):
 
     def __init__(self, reddit, title : str, body : str, subr : str):
         """
-        Constructor takes a Reddit Platform Object as well as title and body strings for the post
+        Constructor takes a Reddit Platform Object as well as title
+        and body strings for the post
         """
-        super(RedditTextPost, self).__init__(platform=reddit, body=body, title=title)
+        super(RedditTextPost, self).__init__(platform=reddit, body=body,
+                                             title=title)
         self.logger = self.settings.Reddit_logger
         
         self.logger.info("Initializing Post Object as a Reddit Post")
@@ -31,7 +33,8 @@ class RedditTextPost(media_post.Post):
         """
         Method to send this Post to it subreddit
         """ 
-        self.logger.info(f"Attempting to make a post to subreddit {self.subr} with title {self.title}")
+        m=f"Attempting to make a post to {self.subr} with title {self.title}"
+        self.logger.info(m)
         
         self.logger.info("Checking to see if post is a valid URL")
         try:
@@ -44,12 +47,16 @@ class RedditTextPost(media_post.Post):
         
         if url:
             self.logger.info(f"Post is a URL post: {self.body}")
-            result = self.platform.api_submit_url(subreddit=self.subr, title=self.title, url=self.body)
+            result = self.platform.api_submit_url(subreddit=self.subr,
+                                                  title=self.title,
+                                                  url=self.body)
         else:
             self.logger.info(f"Post is a Text post: {self.body}")
-            result = self.platform.api_submit_text(subreddit=self.subr, title=self.title, selftext=self.body)
-        
-        self.logger.info(f"Set Post id to {result.id} permalink to {result.permalink} and url to {result.url}")
+            result = self.platform.api_submit_text(subreddit=self.subr,
+                                                   title=self.title,
+                                                   selftext=self.body)
+        m=f"id: {result.id} permalink: {result.permalink} url: {result.url}"
+        self.logger.info(m)
         self.id = result.id
         self.permalink = result.permalink
         self.url = result.url
