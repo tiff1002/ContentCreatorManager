@@ -20,14 +20,14 @@ class YouTubeVideo(media_vid.Video):
     
     def __aud_dl(self):
         py = self.pytube_obj.streams.filter(only_audio=True)
-        py.order_by('abr').desc().first().download(filename_prefix="audio_")
+        return py.order_by('abr').desc().first().download(filename_prefix="audio_")
     
     def __vid_dl(self):
         """
         private method to run pytube vid download
         """
         py = self.pytube_obj.streams.order_by('resolution')
-        py.desc().first().download(filename_prefix="video_")
+        return py.desc().first().download(filename_prefix="video_")
     
     def __pytube_download_video(self):
         """
@@ -59,7 +59,6 @@ class YouTubeVideo(media_vid.Video):
         
     
         self.logger.info(f"Downloaded video for {self.title}")
-        
         return video_file
         
         
@@ -91,7 +90,6 @@ class YouTubeVideo(media_vid.Video):
                 finished = False
         
         self.logger.info(f"Downloaded audio for {self.title}")
-        
         return audio_file
     
     def __pytube_download(self, overwrite : bool = False):
