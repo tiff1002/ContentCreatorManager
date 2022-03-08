@@ -46,6 +46,10 @@ class YouTubeVideo(media_vid.Video):
             try:
                 video_file = self.__vid_dl()
                 finished = True
+            except KeyError as e:
+                if e.args[0] == 'content-length':
+                    self.logger.error("pytube content-length bug skipping")
+                    return 'content-length-error'
             except Exception as e:
                 if tries > YouTubeVideo.MAX_RETRIES:
                     m="Too many failed download attempts raising new exception"
@@ -112,6 +116,11 @@ class YouTubeVideo(media_vid.Video):
                 return
         
         video_file = self.__pytube_download_video()
+        
+        if video_file == 'content-length-error':
+            self.logger.error("Can not download this video")
+            return 'content-length-error'
+        
         audio_file = self.__pytube_download_audio()
         
         self.combine_audio_and_video_files(video_file, audio_file)
@@ -234,7 +243,10 @@ class YouTubeVideo(media_vid.Video):
         if not self.is_downloaded() and not do_not_download_before_delete:
             m="File for video not found.  Downloading before removal"
             self.logger.warning(m)
-            self.download()
+            result = self.download()
+            if result == 'content-length-error':
+                self.logger.error("Download failed with pytube issue not removing")
+                return 'content-length-error'
         
         self.logger.info("Making videos.delete api call")
         request = self.channel.service.videos().delete(
@@ -442,7 +454,9 @@ class YouTubeVideo(media_vid.Video):
             if not self.is_uploaded():
                 self.logger.error("Video not uploaded. Can not download it")
                 return
-        self.__pytube_download(overwrite=overwrite)
+        result = self.__pytube_download(overwrite=overwrite)
+        
+        return result
         
     def is_uploaded(self):
         """

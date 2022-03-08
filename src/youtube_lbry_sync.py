@@ -15,7 +15,7 @@ test_folder = os.path.join(os.getcwd(), "sync_test")
 
 settings = ccm_config.Settings(logging_config_file=logging_config_file, folder_location=test_folder)
 
-youtube = yt_plat.YouTube(settings=settings, init_videos=True, current_quota_usage=0)
+youtube = yt_plat.YouTube(settings=settings, init_videos=True)
 lbry = lbry_plat.LBRY(settings=settings, ID='5e79dc0b3a00f643a0a964c87538ae2d66ddbbed', init_videos=True)
 
 youtube_not_lbry = []
