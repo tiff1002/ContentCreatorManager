@@ -106,9 +106,12 @@ class LBRY(plat.Platform):
         self.normalized_name = result['result']['items'][0]['normalized_name']
         self.permanent_url = result['result']['items'][0]['permanent_url']
         self.description = result['result']['items'][0]['value']['description']
-        self.email = result['result']['items'][0]['value']['email']
+        
         self.title = result['result']['items'][0]['value']['title']
         
+        
+        if 'email' in result['result']['items'][0]['value']:
+            self.email = result['result']['items'][0]['value']['email']
         if 'languages' in result['result']['items'][0]['value']:
             self.languages = result['result']['items'][0]['value']['languages']
         else:
