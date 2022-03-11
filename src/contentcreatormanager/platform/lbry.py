@@ -9,6 +9,37 @@ import contentcreatormanager.media.video.lbry as lbry_vid
 import contentcreatormanager.media.post.lbry as lbry_post
 import requests
 
+def claim_list(claim_type : list = [], claim_id : list = [],
+                       channel_id: list = [], name : list = [],
+                       account_id : str = '', order_by : str = '',
+                       page : int = 0, resolve : bool = True,
+                       page_size: int = 20):
+    parameters = dict(
+        claim_type=claim_type,
+        claim_id=claim_id,
+        channel_id=channel_id,
+        name=name,
+        page_size=page_size,
+        resolve=resolve,
+    )
+        
+    if not (account_id == '' or account_id is None):
+        parameters['account_id']=account_id
+        
+    if not (page == 0 or page is None):
+        parameters['page']=page
+        
+    if not (order_by == '' or order_by is None):
+        parameters['order_by']=order_by
+        
+        
+    result = requests.post(LBRY.API_URL,
+                           json={"method": "claim_list",
+                                 "params": parameters}).json()
+        
+    
+    return result
+
 class LBRY(plat.Platform):
     """
     classdocs
@@ -105,11 +136,11 @@ class LBRY(plat.Platform):
         self.name = result['result']['items'][0]['name']
         self.normalized_name = result['result']['items'][0]['normalized_name']
         self.permanent_url = result['result']['items'][0]['permanent_url']
-        self.description = result['result']['items'][0]['value']['description']
         
-        self.title = result['result']['items'][0]['value']['title']
-        
-        
+        if 'title' in result['result']['items'][0]['value']:
+            self.title = result['result']['items'][0]['value']['title']
+        if 'description' in result['result']['items'][0]['value']:
+            self.description = result['result']['items'][0]['value']['description']
         if 'email' in result['result']['items'][0]['value']:
             self.email = result['result']['items'][0]['value']['email']
         if 'languages' in result['result']['items'][0]['value']:

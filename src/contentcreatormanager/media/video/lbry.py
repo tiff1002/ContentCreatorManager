@@ -31,6 +31,10 @@ class LBRYVideo(lbry_plat.LBRYMedia):
                                                  lic=self.license,
                                                  license_url=self.license_url)
         
+        if 'error' in result:
+            self.logger.error(f"The create call returned an error:\n{result['error']['data']['traceback'][3]}")
+            return result
+        
         self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
         self.id = result['result']['outputs'][0]['claim_id']
         
@@ -166,9 +170,9 @@ class LBRYVideo(lbry_plat.LBRYMedia):
         self.logger.info(f"Attempting to upload {file_name}")
         result = self.__upload_new_video()
         
-        if result is None:
+        if result is None or 'error' in result:
             m="No Upload made not updating any properties of LBRY Video Object"
-            self.logger.error(m)
+            self.logger.error(f'{m}\n{result}')
         else:
             finished = False
             while not finished:
