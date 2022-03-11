@@ -16,7 +16,8 @@ class LBRYMedia(media.Media):
                  thumbnail_url : str = '', description : str = "",
                  languages : list = ['en'], permanent_url : str = '',
                  tags : list = [], bid : float = .001, title : str = '',
-                 name : str = "", ID : str='', new_media : bool = False):
+                 name : str = "", ID : str='', new_media : bool = False,
+                 lic : str = '', license_url : str = ''):
         """
         Constructor
         """
@@ -34,6 +35,8 @@ class LBRYMedia(media.Media):
         self.bid = bid
         self.title = title
         self.name = self.get_valid_name(name)
+        self.license = lic
+        self.license_url = license_url
         
         if not new_media:
             self.update_local()
@@ -97,12 +100,13 @@ class LBRYMedia(media.Media):
         self.name = request['name']
         self.normalized_name = request['normalized_name']
         self.permanent_url = request['permanent_url']
-        self.languages = request['value']['languages']
+        self.languages = ['en']
         self.file = os.path.join(os.getcwd(), request['value']['source']['name'])
         self.title = request['value']['title']
         self.file_hash = request['value']['source']['sd_hash']
         
-        
+        if 'languages' in request['value']:
+            self.languages = request['value']['languages']
         if 'address' in request:
             self.address = request['address']
         if 'thumbnail' in request['value']:
@@ -130,7 +134,9 @@ class LBRYMedia(media.Media):
                                                  languages=self.languages,
                                                  thumbnail_url=self.thumbnail_url,
                                                  channel_id=self.platform.id,
-                                                 file_path=self.file)
+                                                 file_path=self.file,
+                                                 lic=self.license,
+                                                 license_url=self.license_url)
         
         self.logger.info("Update to LBRY successful")
         return result
@@ -194,11 +200,15 @@ class LBRYMedia(media.Media):
             return 
         
         if use_name:
-            response = self.update_from_request(self.platform.api_claim_list(name=[self.name],
-                                                                             resolve=True))
+            request = self.platform.api_claim_list(name=[self.name],resolve=True,claim_type=['stream'])
         else:
-            response = self.update_from_request(self.platform.api_claim_list(claim_id=[self.id],
-                                                                             resolve=True))
+            request = self.platform.api_claim_list(claim_id=[self.id],resolve=True,claim_type=['stream'])
+        
+        if request['result']['total_items'] > 0:
+            response = self.update_from_request(request)
+        else:
+            self.logger.warning("Not on LBRY can not update from there")
+            response = request
         
         self.set_file_based_on_title()
         

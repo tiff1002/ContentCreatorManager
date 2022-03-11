@@ -27,7 +27,9 @@ class LBRYVideo(lbry_plat.LBRYMedia):
                                                  channel_id=self.platform.id,
                                                  languages=self.languages,
                                                  tags=self.tags,
-                                                 thumbnail_url=self.thumbnail_url)
+                                                 thumbnail_url=self.thumbnail_url,
+                                                 lic=self.license,
+                                                 license_url=self.license_url)
         
         self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
         self.id = result['result']['outputs'][0]['claim_id']
@@ -39,7 +41,8 @@ class LBRYVideo(lbry_plat.LBRYMedia):
                  title : str = '',file_hash : str = '', file_name : str = '',
                  name : str = '', thumbnail_url : str = '', bid : float = .02,
                  address : str = '', description : str = '', permanent_url : str = '', 
-                 languages : list = ['en'], request = None, new_video : bool =False ):
+                 languages : list = ['en'], request = None, new_video : bool =False,
+                 lic : str = '', license_url : str = ''):
         """
         Constructor takes LBRY Platform object as required parameter.
         LBRY Video Object can be constructed with the results of an 
@@ -54,9 +57,11 @@ class LBRYVideo(lbry_plat.LBRYMedia):
                                         languages=languages,
                                         permanent_url=permanent_url, 
                                         tags=tags, bid=bid, title=title,
-                                        name=name, ID=ID, new_media=new_video)
+                                        name=name, ID=ID, new_media=new_video,
+                                        lic=lic,license_url=license_url)
         self.logger = self.settings.LBRY_logger
-        self.id = ID
+        if ID != '':
+            self.id = ID
         self.logger.info("Initializing Video Object as a LBRY Video Object")
         
         self.address = address
@@ -64,16 +69,14 @@ class LBRYVideo(lbry_plat.LBRYMedia):
         
         if request is not None:
             self.update_from_request(request)
-        elif self.id != '':
-            self.update_local()
-        elif self.name != '':
-            try:
-                self.update_local(use_name=True)
-            except IndexError:
-                self.logger.error("Could not update with name not found on LBRY")
-        
-        if not self.is_uploaded():
-            self.logger.warning("This video is not uploaded to LBRY")        
+        elif not new_video:
+            if ID != '':
+                self.update_local()
+            elif self.name != '':
+                try:
+                    self.update_local(use_name=True)
+                except IndexError:
+                    self.logger.error("Could not update with name not found on LBRY")
         
         self.logger.info("LBRY Video Media Object initialized")
     

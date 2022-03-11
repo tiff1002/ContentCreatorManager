@@ -446,7 +446,8 @@ class LBRY(plat.Platform):
     def api_stream_create(self, name : str, bid : float, file_path : str,
                           title : str, description: str, channel_id : str,
                           languages : list = [], tags : list = [],
-                          thumbnail_url : str = ''):
+                          thumbnail_url : str = '', lic : str = '',
+                          license_url : str = ''):
         """
         Method to make a stream_create call to the LBRY API
         Example Call: api_stream_create(name='newapimethodstestupload',
@@ -466,7 +467,9 @@ class LBRY(plat.Platform):
             tags=tags,
             languages=languages,
             channel_id=channel_id,
-            thumbnail_url=thumbnail_url
+            thumbnail_url=thumbnail_url,
+            license=lic,
+            license_url=license_url
         )
         
         result = requests.post(LBRY.API_URL,
@@ -482,7 +485,8 @@ class LBRY(plat.Platform):
                           description : str, tags : list, languages : list,
                           channel_id : str, clear_languages : bool = True, 
                           clear_tags : bool = True, replace : bool = True,
-                          thumbnail_url : str = '', file_path : str = ''):
+                          thumbnail_url : str = '', file_path : str = '',
+                          lic : str = '', license_url : str = ''):
         """
         Method to make a stream_update call to the LBRY API
         Example Call: api_stream_update(claim_id='9df6f11c4581dc4deb48246582c638e4c7576af2',
@@ -503,7 +507,9 @@ class LBRY(plat.Platform):
             replace=replace,
             clear_tags=clear_tags,
             clear_languages=clear_languages,
-            thumbnail_url = thumbnail_url
+            thumbnail_url = thumbnail_url,
+            license=lic,
+            license_url=license_url
         )
         
         if not (file_path == '' or file_path is None):
