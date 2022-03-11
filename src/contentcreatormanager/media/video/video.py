@@ -13,12 +13,17 @@ class Video(media.Media):
     """
     MAX_RETRIES = 25
 
-    def __init__(self, platform, ID : str = '', file_name : str = '', title : str = "", description : str = "", thumbnail_file_name : str = ''):
+    def __init__(self, platform, ID : str = '', file_name : str = '',
+                 title : str = "", description : str = "",
+                 thumbnail_file_name : str = ''):
         """
-        Constructor takes Platform object and ID, file_name, title, description, and thumbnail_file_name string.  The Strings are all optional but ID or file_name must be provided
+        Constructor takes Platform object and ID, file_name, title,
+        description, and thumbnail_file_name string.  The Strings
+        are all optional but ID or file_name must be provided
         """
         if ID == '' and file_name == '':
-            platform.settings.Video_logger.error("You must set either the file_name or ID to create a Video Object")
+            m="You must set either the file_name or ID to create a Video"
+            platform.settings.Video_logger.error(m)
             raise Exception()
         
         super(Video, self).__init__(platform=platform, ID=ID)
@@ -27,12 +32,14 @@ class Video(media.Media):
         self.logger.info("Initializing Media Object as a Video object")
         
         self.file = os.path.join(os.getcwd(), file_name)
-        self.thumbnail = os.path.join(os.getcwd(), self.get_valid_thumbnail_file_name(thumbnail_file_name))
+        self.thumbnail = os.path.join(os.getcwd(),
+                                      self.get_valid_thumbnail_file_name(thumbnail_file_name))
         
         file_does_not_exist = not os.path.isfile(self.file)
         
         if file_does_not_exist and ID == '':
-            self.logger.error(f"no file found for file_name {file_name} and no ID set")
+            m=f"no file found for file_name {file_name} and no ID set"
+            self.logger.error(m)
         
         self.title = title
         self.description = description
@@ -45,9 +52,11 @@ class Video(media.Media):
     
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """
-        Method to get a valid video filename either from title property or provided string.
+        Method to get a valid video filename either from title property
+        or provided string.
         """
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        valid_chars = v
         file_name = desired_file_name
         if desired_file_name[-4:] == '.mp4':
             self.logger.info("file name given already has .mp4 in it")
@@ -65,9 +74,11 @@ class Video(media.Media):
     
     def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
         """
-        Method to get a valid thumbnail filename either from title property or provided string.
+        Method to get a valid thumbnail filename either from title property or
+        provided string.
         """
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        valid_chars = v
         
         if desired_file_name == '':    
             getVals = list([val for val in f"{self.title}.jpg" if val in valid_chars])
@@ -81,14 +92,16 @@ class Video(media.Media):
         return "".join(getVals)
         
     def set_file_based_on_title(self):
-        valid_chars = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        valid_chars = v
         file_name = self.title    
         
         getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
         
         result = "".join(getVals)
         
-        self.logger.info(f"returning and setting the following file name: {result}")
+        m=f"returning and setting the following file name: {result}"
+        self.logger.info(m)
         self.file = os.path.join(os.getcwd(), result)
             
         return result
@@ -110,7 +123,8 @@ class Video(media.Media):
         tries = 0
         while not finished and tries < Video.MAX_RETRIES + 2:
             try:
-                self.logger.info("Attempting to prep source audio and video to merge")
+                m="Attempting to prep source audio and video to merge"
+                self.logger.info(m)
                 source_audio = ffmpeg.input(audio_file)
                 source_video = ffmpeg.input(video_file)
                 audFile = self.getInputFilename(source_audio)
@@ -118,29 +132,36 @@ class Video(media.Media):
                 finished = True
             except Exception as e:
                 if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed attempts to prep audio and video for merging.  Raising new exception")
+                    m="Too many failed attempts.  Raising new exception"
+                    self.logger.error(m)
                     raise Exception()
                 self.logger.error(f"got error:\n{e}\nGoing to try again")
                 tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
+                m=f"{tries} tries of a possible {Video.MAX_RETRIES}"
+                self.logger.info(m)
                 finished = False
         
-        self.logger.info(f"Attempting to merge {vidFile} and {audFile} together as {file_name}")
+        m=f"Attempting to merge {vidFile} and {audFile} as {file_name}"
+        self.logger.info(m)
         finished = False
         tries = 0
         
         while not finished and tries < self.MAX_RETRIES + 2:
             try:
                 self.logger.info("Attempting to merge audio and video")
-                ffmpeg.concat(source_video, source_audio, v=1, a=1).output(self.file).run()
+                ffmpeg.concat(source_video, 
+                              source_audio, 
+                              v=1, a=1).output(self.file).run()
                 finished = True
             except Exception as e:
                 if tries > self.MAX_RETRIES:
-                    self.logger.error("Too many failed download attempts raising new exception")
+                    m="Too many failed download attempts raising new exception"
+                    self.logger.error(m)
                     raise Exception()
                 self.logger.error(f"got error:\n{e}\nGoing to try again")
                 tries += 1
-                self.logger.info(f"Attempted {tries} time(s) of a possible {Video.MAX_RETRIES}")
+                m=f"{tries} tries of a possible {Video.MAX_RETRIES}"
+                self.logger.info(m)
                 finished = False
                 
         self.logger.info(f"Files merged as {file_name}")
@@ -159,6 +180,9 @@ class Video(media.Media):
     
     def is_uploaded(self):
         """
-        Method to return True if the video is uploaded to its platform and False otherwise.  This is intended to be overridden by Classes that extend this one
+        Method to return True if the video is uploaded to its platform and
+        False otherwise.  This is intended to be overridden by Classes that
+        extend this one
         """
-        self.logger.warning("This is a skeleton method to be overridden and does nothing")
+        m="This is a skeleton method to be overridden and does nothing"
+        self.logger.warning(m)

@@ -50,7 +50,9 @@ class Media(object):
     
     def set_unique_id(self, ID=None):
         """
-        Method to set id property to a unique string.  The ID string can be provided, but if it is not a random one is generated
+        Method to set id property to a unique string. 
+        The ID string can be provided, but if it is
+        not a random one is generated
         """
         if ID is None:
             self.id = shortuuid.uuid()
@@ -67,36 +69,48 @@ class Media(object):
         
     def upload(self):
         """
-        Method intended to be overridden to upload the Media Object to the Platform it is tied to
+        Method intended to be overridden to upload the
+        Media Object to the Platform it is tied to
         """
-        self.logger.error("Media.upload() is a skeleton method intended to be overridden by Classes that Extend this one")
+        m="Media.upload() is a skeleton method should be overridden"
+        self.logger.error(m)
     
     def update_web(self):
         """
-        Method intended to be overridden to update the Media Object's details on the Platform it is tied to
+        Method intended to be overridden to update the
+        Media Object's details on the Platform it is tied to
         """
-        self.logger.error("Media.update_web()This is a skeleton method intended to be overridden by Classes that Extend this one") 
-    
+        m="Media.update_web() is a skeleton method should be overridden"
+        self.logger.error(m)
+        
     def update_local(self):
         """
-        Method intended to be overridden to update the Media Object's local details based on the details on the Platform it is tied to
+        Method intended to be overridden to update the Media Object's
+        local details based on the details on the Platform it is tied to
         """
-        self.logger.error("Media.update_local() is a skeleton method intended to be overridden by Classes that Extend this one") 
-    
+        m="Media.update_local() is a skeleton method should be overridden"
+        self.logger.error(m)
+        
     def delete_web(self):
         """
-        Method intended to be overridden to remove the Media Object from the Platform it is tied to
+        Method intended to be overridden to remove the
+        Media Object from the Platform it is tied to
         """
-        self.logger.error("Media.delete_web() is a skeleton method intended to be overridden by Classes that Extend this one")
-    
+        m="Media.delete_web() is a skeleton method should be overridden"
+        self.logger.error(m)
+        
     def download(self):
         """
-        Method intended to be overridden to download the Media Object from the Platform it is tied to
+        Method intended to be overridden to download the
+        Media Object from the Platform it is tied to
         """
-        self.logger.error("Media.download() is a skeleton method intended to be overridden by Classes that Extend this one")
+        m="Media.download() is a skeleton method should be overridden"
+        self.logger.error(m)
         
     def is_uploaded(self):
         """
-        Method intended to be overridden to check if the Media Object is uploaded to the Platform it is tied to
+        Method intended to be overridden to check if the
+        Media Object is uploaded to the Platform it is tied to
         """
-        self.logger.error("Media.is_uploaded() is a skeleton method intended to be overridden by Classes that Extend this one")
+        m="Media.is_uploaded() is a skeleton method should be overridden"
+        self.logger.error(m)

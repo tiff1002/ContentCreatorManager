@@ -9,17 +9,29 @@ class RumbleVideo(media_vid.Video):
     """
     classdocs
     """
-    NOT_FOR_SALE = 0 # This is like an unlisted video on YouTube as I understand it
+    # This is like an unlisted video on YouTube as I understand it
+    NOT_FOR_SALE = 0
     
-    RUMBLE_LICENSE = 6 # I Think this is what a standard Rumble upload is similar to a standard YouTube upload on YouTube (youtube license)
+    # I Think this is what a standard Rumble upload is similar to a standard 
+    # YouTube upload on YouTube (youtube license)
+    RUMBLE_LICENSE = 6 
     
-    def __init__(self, rumble_channel, guid : str = '', title : str = '', description : str = '', thumbnail_file_name : str = '',
-                 video_file_name : str = '', license_type : int = RUMBLE_LICENSE, uploaded : bool = False):
+    def __init__(self, rumble_channel, guid : str = '', title : str = '',
+                 description : str = '', thumbnail_file_name : str = '',
+                 video_file_name : str = '',
+                 license_type : int = RUMBLE_LICENSE, 
+                 uploaded : bool = False):
         """
-        Constructor take a Rumble Platform Object as a required parameter.  guid will be the ID of the video and is set by the user.  
-        If it is not set a unique random one will be generated.  file_name and thumbnail_file_name can be provided with or without the mp4 or jpg file extension.
+        Constructor take a Rumble Platform Object as a required parameter.  
+        guid will be the ID of the video and is set by the user.  
+        If it is not set a unique random one will be generated.  file_name
+        and thumbnail_file_name can be provided with or without the mp4 or jpg
+        file extension.
         """
-        super(RumbleVideo, self).__init__(platform=rumble_channel, ID='', title=title, description=description,file_name=video_file_name, thumbnail_file_name=thumbnail_file_name)
+        super(RumbleVideo, self).__init__(platform=rumble_channel, ID='',
+                                          title=title, description=description,
+                                          file_name=video_file_name, 
+                                          thumbnail_file_name=thumbnail_file_name)
         self.logger = self.settings.Rumble_logger
         self.logger.info("Initializing Video Object as Rumble Video Object")
         
@@ -28,7 +40,8 @@ class RumbleVideo(media_vid.Video):
         else:
             self.set_unique_id(guid)
             
-        #The method sets id to a unique random so setting guid with it (rumble id will be set on upload)
+        # The method sets id to a unique random so setting guid with it 
+        # (rumble id will be set on upload)
         self.guid = self.id
         self.url = ''
             
@@ -45,7 +58,11 @@ class RumbleVideo(media_vid.Video):
             self.logger.error("Can not find video file not uploading")
             return
         
-        result = self.platform.api_upload(access_token=self.platform.access_token, title=self.title, description=self.description, license_type=self.license_type, channel_id=self.platform.id, guid=self.guid, video_file=self.file, thumbnail_file=self.thumbnail)
+        result = self.platform.api_upload(access_token=self.platform.access_token,
+                                          title=self.title, description=self.description,
+                                          license_type=self.license_type,
+                                          channel_id=self.platform.id, guid=self.guid,
+                                          video_file=self.file, thumbnail_file=self.thumbnail)
 
         if 'success' in result.json():
             if result.json()['success']:
