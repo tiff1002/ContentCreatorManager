@@ -1,63 +1,75 @@
 # ContentCreatorManager
-Tool for small content creators to manage thier content on multiple platforms
 
-This tool is still heavily under development and does not even have a UI yet.  Its just a work in progress
+## What Is This?
 
-# Currently capable of:
-Posting to:
+This aims to be a tool for small content creators to manage and promote their content on as many platforms as possible.  This tool should make it so that once set up a content creator has to do the same amount of or less work than managing one platform and still get their content everywhere and announced everywhere.
 
--Facebook
+While the goals for this thing are big, it is still heavily under development.  Its just a work in progress.  There is a fair amount of work on the code base and what it is capable of can be seen below.  In addition to that some scripts have been written using this code base to accomplish various tasks.  The logic used in these scripts will slowly get added into the code base and eventually a UI for the actual tool this is all working towards will be made..
 
--Twitter
+### Scripts:
 
--Reddit
+- Bulk **LBRY** upload script (tested working on my Windows machine and almost working on another person's Arch Linux machine)
 
--YouTube
+- **YouTube < = > LBRY** sync script (still working out final bugs with this one)
 
--LBRY
+### Code Base Current Functionality:
 
--Rumble
+#### Posting To:
 
-Updating existing content on:
+- Facebook
 
--YouTube
+- Twitter
 
--LBRY
+- Reddit
 
-Downloading content from:
+- YouTube
 
--YouTube
+- LBRY
 
--LBRY
+- Rumble
 
-# Upcoming:
+#### Updating Content On:
 
--Local Backup
+- YouTube
 
--Methods to compare various things (lists of videos from different platforms, or list of videos on a platform versus locally on the machine/in apps memory for example)
+- LBRY
 
--Basic Command Line UI
+#### Downloading Content From:
 
-# Down The Line:
+- YouTube
 
--Backup to cloud service (Google Drive for example)
+- LBRY
 
--More Platforms for Posting and Promoting Content
+## Upcoming (hopefully):
 
--Platform Independant GUI
+- Local Backup
 
--Templates for content upload details and promotional posts
+- Methods to compare various things (lists of videos from different platforms, or list of videos on a platform versus locally on the machine/in apps memory for example)
 
--Automation for Promotion
+- Basic Command Line UI
 
--Upload/Post Scheduling
+## Down The Line:
 
-Wanna Help with Testing or Coding Please Reach out:
+- Backup to cloud service (Google Drive for example)
 
-Discord: Techie_Tiff#5008
+- More Platforms for Posting and Promoting Content
 
-Email: tiff@tiff.tech
+- Platform Independent GUI
 
-Odysee: https://odysee.com/@TechGirlTiff:5
+- Templates for content upload details and promotional posts
 
-YouTube: http://www.youtube.com/channel/UCidrHvFXBvyesh1hbOR2rTw
+- Automation for Promotion
+
+- Upload/Post Scheduling
+
+## Do You Want To Help? (with Testing or Coding or thoughts):
+
+ - **Discord:** Techie_Tiff#5008
+
+ - **Email:** tiff@tiff.tech
+
+### My Content Channels:
+
+ - **Odysee:** https://odysee.com/@TechGirlTiff:5
+
+ - **YouTube:** http://www.youtube.com/channel/UCidrHvFXBvyesh1hbOR2rTw
