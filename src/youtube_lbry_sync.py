@@ -90,7 +90,7 @@ for v in youtube_to_dl:
 count = 0
 
 for v in youtube_not_lbry:
-    lvid = lbry_vid.LBRYVideo(lbry_channel=lbry, tags=v.tags, title=v.title, file_name=os.path.basename(v.file), description=v.description)
+    lvid = lbry_vid.LBRYVideo(lbry_channel=lbry, tags=v.tags, title=v.title, file_name=os.path.basename(v.file), description=v.description, new_video=True)
     lbry.add_media(lvid)
     if count < 2:
         input(f"About to upload {lvid.file} hit Enter to upload")
