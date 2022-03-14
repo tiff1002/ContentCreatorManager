@@ -43,7 +43,7 @@ class LBRYVideo(lbry_plat.LBRYMedia):
 
     def __init__(self, lbry_channel, ID : str = '', tags : list = [],
                  title : str = '',file_hash : str = '', file_name : str = '',
-                 name : str = '', thumbnail_url : str = '', bid : float = .02,
+                 name : str = '', thumbnail_url : str = '', bid : float = .0001,
                  address : str = '', description : str = '', permanent_url : str = '', 
                  languages : list = ['en'], request = None, new_video : bool =False,
                  lic : str = '', license_url : str = ''):

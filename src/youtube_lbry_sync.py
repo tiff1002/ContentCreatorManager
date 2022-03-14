@@ -36,6 +36,11 @@ channel_claim_id = choices[choice]['claim_id']
 
 lbry = lbry_plat.LBRY(settings=settings, ID=channel_claim_id, init_videos=True)
 
+default_bid = input("Please enter your default bid for uploading to LBRY (Just hit enter for minimum):")
+
+if '' != default_bid:
+    default_bid = float(default_bid)
+
 youtube = yt_plat.YouTube(settings=settings, init_videos=True)
 
 youtube_not_lbry = []
@@ -90,7 +95,9 @@ for v in youtube_to_dl:
 count = 0
 
 for v in youtube_not_lbry:
-    lvid = lbry_vid.LBRYVideo(lbry_channel=lbry, tags=v.tags, title=v.title, file_name=os.path.basename(v.file), description=v.description, new_video=True)
+    lvid = lbry_vid.LBRYVideo(lbry_channel=lbry, name=v.title, tags=v.tags, title=v.title, file_name=os.path.basename(v.file), description=v.description, new_video=True)
+    if '' != default_bid:
+        lvid.bid = default_bid
     lbry.add_media(lvid)
     if count < 2:
         input(f"About to upload {lvid.file} hit Enter to upload")
