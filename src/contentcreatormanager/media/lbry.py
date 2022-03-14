@@ -48,7 +48,9 @@ class LBRYMedia(media.Media):
         v='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-'
         valid_chars = v
         getVals = list([val for val in name if val in valid_chars])
-        return "".join(getVals)
+        result = "".join(getVals)
+        self.logger.info(f"Returning stream name: {result}")
+        return result
     
     def is_uploaded(self):
         """
