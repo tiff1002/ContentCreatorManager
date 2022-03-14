@@ -15,7 +15,7 @@ class LBRYMedia(media.Media):
     def __init__(self, lbry_channel, file_name : str = "",
                  thumbnail_url : str = '', description : str = "",
                  languages : list = ['en'], permanent_url : str = '',
-                 tags : list = [], bid : float = .001, title : str = '',
+                 tags : list = [], bid : float = .0001, title : str = '',
                  name : str = "", ID : str='', new_media : bool = False,
                  lic : str = '', license_url : str = ''):
         """
