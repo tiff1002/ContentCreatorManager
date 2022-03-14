@@ -10,7 +10,62 @@ While the goals for this thing are big, it is still heavily under development.  
 
 - Bulk **LBRY** upload script (tested working on my Windows machine and almost working on another person's Arch Linux machine)
 
-- **YouTube < = > LBRY** sync script (still working out final bugs with this one)
+- **YouTube < = > LBRY** sync script (Tested on my Windows machine and one other Linux machine at this point)
+
+- **LBRY** Thumbnail set script (This script finds videos with matching titles on your YouTube and LBRY Channel and then tells LBRY where the YouTube thumbnail is, but does not upload a thumbnail to LBRY itself)
+
+#### Bulk LBRY Upload Script:
+
+##### Requirements:
+
+ - You will need Python 3 installed
+ - You will need to be running the LBRY Desktop App.  
+ - You will need to install the shortuuid python lib.
+ 
+##### How To:
+
+ - Run the script lbry_bulk_upload.py
+ - It will ask you to input the path to the folder that all your videos are in
+ - It will then list all your LBRY Channels and require you to pick one
+ - You will be prompted for some default info to go with the videos
+ - It should prompt you once at the end to confirm before upload begins
+ 
+#### YouTube < = > LBRY Sync Script:
+
+##### Requirements:
+
+ - You will need Python 3 installed
+ - You will need to be running the LBRY Desktop App.  
+ - You can try running the testimports.py file (once able to run this without error you should have all Python libraries you need installed)
+ - You will need to set up credentials for YouTube Data API v3 and save your secrets file as youtube_client_secret.json in the same directory that the youtube_lbry_sync.py file lives in
+ 
+##### How To:
+
+ - Run the script youtube_lbry_sync.py
+ - It will ask you to input the path to the folder that all your videos will be downloaded to.
+ - It will then list all your LBRY Channels and require you to pick one
+ - You will be prompted for a default bid for LBRY uploads
+ - It should prompt you on the first couple of uploads that way you can ensure it is working before you let it finish the job
+
+#### LBRY Thumbnail Sync Script:
+
+##### Requirements:
+
+ - You will need Python 3 installed
+ - You will need to be running the LBRY Desktop App.  
+ - You can try running the testimports.py file (once able to run this without error you should have all Python libraries you need installed)
+ - You will need to set up credentials for YouTube Data API v3 and save your secrets file as youtube_client_secret.json in the same directory that the youtube_lbry_sync.py file lives in
+ 
+##### How To:
+
+ - Run the script lbry_set_thumbs_from_youtube.py
+ - It will list all your LBRY Channels and require you to pick one
+ - It will then do its thing and point LBRY Videos to the YouTube Thumbnails
+
+## I NEED HELP WITH ONE or MORE of THESE SCRIPTS:
+
+- Hit me up on discord Techie_Tiff#5008
+- Shoot me an email tiff@tiff.tech
 
 ### Code Base Current Functionality:
 

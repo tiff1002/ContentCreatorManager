@@ -218,6 +218,12 @@ class YouTubeVideo(media_vid.Video):
         
         self.logger.info("YouTube Video Object initialized")
         
+    def get_thumb_url(self):
+        """
+        Returns the url of the video's thumbnail
+        """
+        return f"https://img.youtube.com/vi/{self.id}/default.jpg"
+    
     def is_downloaded(self):
         """
         Checks for downloaded file

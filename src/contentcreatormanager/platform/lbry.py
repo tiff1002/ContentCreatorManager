@@ -518,7 +518,7 @@ class LBRY(plat.Platform):
     def api_stream_update(self, claim_id : str, bid : float, title : str,
                           description : str, tags : list, languages : list,
                           channel_id : str, clear_languages : bool = True, 
-                          clear_tags : bool = True, replace : bool = True,
+                          clear_tags : bool = True, replace : bool = False,
                           thumbnail_url : str = '', file_path : str = '',
                           lic : str = '', license_url : str = ''):
         """
