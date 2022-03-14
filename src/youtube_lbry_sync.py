@@ -99,6 +99,7 @@ for v in youtube_not_lbry:
     lvid = lbry_vid.LBRYVideo(lbry_channel=lbry, name=v.title, tags=v.tags, title=v.title, file_name=os.path.basename(v.file), description=v.description, new_video=True)
     if '' != default_bid:
         lvid.bid = default_bid
+    lvid.thumbnail_url = v.get_thumb_url()
     lbry.add_media(lvid)
     if count < 2:
         input(f"About to upload {lvid.file} hit Enter to upload")
