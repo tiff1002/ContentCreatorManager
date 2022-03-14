@@ -43,6 +43,9 @@ lbry_not_youtube = []
 youtube_to_dl = []
 lbry_to_dl = []
 
+priv = input("Should private videos be synced(Y/N)?")
+unlist = input("Should unlisted videos be synced(Y/N)?")
+
 for yvid in youtube.media_objects:
     in_lbry = False
     for lvid in lbry.media_objects:
@@ -52,7 +55,11 @@ for yvid in youtube.media_objects:
             in_lbry = True
     if not in_lbry:
         #settings.Base_logger.info(f"Adding {yvid.title} since it is not on LBRY")
-        if yvid.privacy_status != 'private':
+        if yvid.privacy_status == 'private' and ('y' in priv or 'Y' in priv):
+            youtube_not_lbry.append(yvid)
+        elif yvid.privacy_status == 'unlisted' and ('y' in unlist or 'Y' in unlist):
+            youtube_not_lbry.append(yvid)
+        elif yvid.privacy_status == 'public':
             youtube_not_lbry.append(yvid)
         
 for lvid in lbry.media_objects:
