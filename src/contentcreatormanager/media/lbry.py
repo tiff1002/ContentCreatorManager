@@ -132,7 +132,7 @@ class LBRYMedia(media.Media):
         result = self.platform.api_stream_update(claim_id=self.id,bid=self.bid,
                                                  title=self.title,
                                                  description=self.description, 
-                                                 tags=self.tags, replace=True,
+                                                 tags=self.tags,
                                                  languages=self.languages,
                                                  thumbnail_url=self.thumbnail_url,
                                                  channel_id=self.platform.id,

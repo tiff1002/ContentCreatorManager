@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Created on Mar 14, 2022
 
@@ -10,9 +11,8 @@ import os.path
 import contentcreatormanager.platform.youtube as yt_plat
 import contentcreatormanager.media.video.youtube as yt_vid
 
-folder = input("Enter Folder Location:")
 
-settings = config.Settings(logging_config_file='logging.ini', folder_location=folder)
+settings = config.Settings(logging_config_file='logging.ini', folder_location=os.getcwd())
 
 
 
@@ -47,5 +47,6 @@ for yvid in youtube.media_objects:
             
 for vids in on_both:
     vids['lbry'].thumbnail_url = vids['yt'].get_thumb_url()
+    vids['lbry'].logger.info(f"Setting Thumbnail url for {vids['lbry'].title} to {vids['lbry'].thumbnail_url}")
     
 lbry.update_all_media_web()
