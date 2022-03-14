@@ -222,7 +222,7 @@ class YouTubeVideo(media_vid.Video):
         """
         Returns the url of the video's thumbnail
         """
-        return f"https://img.youtube.com/vi/{self.id}/default.jpg"
+        return f"https://img.youtube.com/vi/{self.id}/hqdefault.jpg"
     
     def is_downloaded(self):
         """
