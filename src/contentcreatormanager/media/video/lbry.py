@@ -102,8 +102,29 @@ class LBRYVideo(lbry_media.LBRYMedia):
         """
         Method to make a thumbnail file
         """
+        if not os.path.join(self.file):
+            self.logger.warning("No Video file found downloading to make thumbnail")
+            self.download()
+            
         return lbry_media.LBRYMedia.make_thumb(self)
         
+    
+    def upload_thumbnail(self):
+        """
+        Method to upload thumbnail to LBRY and set object thumbnail_url
+        """
+        thumb_file = os.path.join(os.getcwd(),
+                                  self.get_valid_thumbnail_file_name())
+        
+        if not os.path.isfile(thumb_file):
+            self.logger.warning("No Thumbnail file found generating one")
+            self.make_thumb()
+        
+        result = self.platform.api_upload_thumb(file=thumb_file)
+        
+        self.thumbnail_url = result['data']['serveUrl']
+        self.logger.info(f"set thumb url to {self.thumbnail_url}")
+        self.update_web()
     
     def update_local(self, use_name : bool = False):
         """

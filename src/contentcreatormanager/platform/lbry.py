@@ -8,6 +8,7 @@ import contentcreatormanager.platform.platform as plat
 import contentcreatormanager.media.video.lbry as lbry_vid
 import contentcreatormanager.media.post.lbry as lbry_post
 import requests
+import shortuuid
 
 def claim_list(claim_type : list = [], claim_id : list = [],
                        channel_id: list = [], name : list = [],
@@ -47,6 +48,8 @@ class LBRY(plat.Platform):
     API_URL = "http://localhost:5279"
     
     PAGE_RESULT_LENGTH = 20
+    
+    LBRY_THUMB_API_URL = 'https://spee.ch/api/claim/publish'
 
     def __get_channel(self):
         """
@@ -595,3 +598,18 @@ class LBRY(plat.Platform):
         self.logger.info(m)
         
         return result
+    
+    def api_upload_thumb(self, file : str):
+        """
+        Use API to upload a thumbnail to LBRY using spee.ch
+        """
+        name = shortuuid.ShortUUID().random(length=24)
+        
+        files = {
+            'name': (None, name),
+            'file': (file, open(file, 'rb'))
+        }
+        
+        response = requests.post(LBRY.LBRY_THUMB_API_URL, files=files)
+        
+        return response.json()
