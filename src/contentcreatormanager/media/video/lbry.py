@@ -107,9 +107,8 @@ class LBRYVideo(lbry_media.LBRYMedia):
             self.download()
             
         return lbry_media.LBRYMedia.make_thumb(self)
-        
     
-    def upload_thumbnail(self):
+    def upload_thumbnail(self, update_video : bool = True):
         """
         Method to upload thumbnail to LBRY and set object thumbnail_url
         """
@@ -124,7 +123,8 @@ class LBRYVideo(lbry_media.LBRYMedia):
         
         self.thumbnail_url = result['data']['serveUrl']
         self.logger.info(f"set thumb url to {self.thumbnail_url}")
-        self.update_web()
+        if update_video:
+            return self.update_web()
     
     def update_local(self, use_name : bool = False):
         """

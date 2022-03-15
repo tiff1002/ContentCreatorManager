@@ -98,4 +98,6 @@ if not ('n' in should_upload or 'N' in should_upload):
         
 if upload:
     print("Starting upload")
+    for v in lbry.media_objects:
+        v.upload_thumbnail(update_video=False)
     lbry.upload_all_media()
