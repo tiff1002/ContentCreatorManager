@@ -14,6 +14,8 @@ While the goals for this thing are big, it is still heavily under development.  
 
 - **LBRY** Thumbnail set script (This script finds videos with matching titles on your YouTube and LBRY Channel and then tells LBRY where the YouTube thumbnail is, but does not upload a thumbnail to LBRY itself)
 
+- **LBRY** Thumbnail generation and upload script (This will go through every video on a channel and download the video cut a thumbnail out of it, Upload, and set that thumbnail)
+
 #### Bulk LBRY Upload Script:
 
 ##### Requirements:
@@ -29,6 +31,23 @@ While the goals for this thing are big, it is still heavily under development.  
  - It will then list all your LBRY Channels and require you to pick one
  - You will be prompted for some default info to go with the videos
  - It should prompt you once at the end to confirm before upload begins
+ 
+#### LBRY Thumbnail Generation Script:
+
+##### Requirements:
+
+ - You will need Python 3 installed
+ - You will need to be running the LBRY Desktop App.  
+ - You will need to install the shortuuid python lib.
+ - You will need ffmpeg binary installed
+ - You will need python-ffmpeg installed
+ 
+##### How To:
+
+ - Run the script lbry_thumbnail_generate_and_upload.py
+ - It will ask you to input the path to the folder that all your videos are in (or that they will be downloaded to keep in mind if you want to use existing videos the filenames need to match what they would be if the tool downloaded them a script to help rename videos probably coming)
+ - It will then list all your LBRY Channels and require you to pick one
+ - The script will then get to work
  
 #### YouTube < = > LBRY Sync Script:
 

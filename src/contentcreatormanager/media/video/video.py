@@ -43,12 +43,18 @@ class Video(media.Media):
         
         self.title = title
         self.description = description
-        
+    
     def is_downloaded(self):
         """
         Checks for downloaded file
         """
         return media.Media.is_downloaded(self)
+    
+    def make_thumb(self):
+        """
+        Method to create a Thumbnail File from video file
+        """
+        return media.Media.make_thumb(self)
     
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """
@@ -69,40 +75,6 @@ class Video(media.Media):
         result = "".join(getVals)
         
         self.logger.info(f"returning the following file name: {result}")
-            
-        return result
-    
-    def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
-        """
-        Method to get a valid thumbnail filename either from title property or
-        provided string.
-        """
-        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        valid_chars = v
-        
-        if desired_file_name == '':    
-            getVals = list([val for val in f"{self.title}.jpg" if val in valid_chars])
-        else:
-            if desired_file_name[-4:] == '.jpg':
-                file_name = desired_file_name[:-4]   
-            else:
-                file_name = desired_file_name 
-            getVals = list([val for val in f"{file_name}.jpg" if val in valid_chars])
-    
-        return "".join(getVals)
-        
-    def set_file_based_on_title(self):
-        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        valid_chars = v
-        file_name = self.title    
-        
-        getVals = list([val for val in f"{file_name}.mp4" if val in valid_chars])
-        
-        result = "".join(getVals)
-        
-        m=f"returning and setting the following file name: {result}"
-        self.logger.info(m)
-        self.file = os.path.join(os.getcwd(), result)
             
         return result
     
