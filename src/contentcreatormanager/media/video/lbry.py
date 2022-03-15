@@ -5,11 +5,12 @@ Created on Feb 24, 2022
 """
 import os.path
 import requests
-import contentcreatormanager.media.lbry as lbry_plat
+import contentcreatormanager.media.lbry as lbry_media
 import time
 import shutil
+import ffmpeg
 
-class LBRYVideo(lbry_plat.LBRYMedia):
+class LBRYVideo(lbry_media.LBRYMedia):
     """
     classdocs
     """  
@@ -96,6 +97,13 @@ class LBRYVideo(lbry_plat.LBRYMedia):
         self.file = os.path.join(os.getcwd(), result)
             
         return result
+    
+    def make_thumb(self):
+        """
+        Method to make a thumbnail file
+        """
+        return lbry_media.LBRYMedia.make_thumb(self)
+        
     
     def update_local(self, use_name : bool = False):
         """

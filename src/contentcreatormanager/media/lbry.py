@@ -7,6 +7,7 @@ import contentcreatormanager.media.media as media
 import os.path
 import time
 import hashlib
+import ffmpeg
 
 class LBRYMedia(media.Media):
     """
@@ -120,7 +121,7 @@ class LBRYMedia(media.Media):
             self.description = request['value']['description']
  
         return request
-            
+    
     def update_lbry(self):
         """
         Method to update Media details on LBRY using the local object

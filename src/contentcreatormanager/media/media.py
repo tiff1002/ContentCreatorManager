@@ -5,6 +5,7 @@ Created on Feb 24, 2022
 """
 import shortuuid
 import os.path
+import ffmpeg
 
 class Media(object):
     """
@@ -31,7 +32,39 @@ class Media(object):
         self.title = ''
         self.tags = []
         self.description = ''
+    
+    def make_thumb(self):
+        """
+        Method to make a thumbnail file
+        """
+        self.logger.info("Attempting to Generate Thumbnail file from video")
+        step_one = ffmpeg.input(self.file)
+        step_two = step_one.filter('scale')
+        step_three = step_two.output(self.get_valid_thumbnail_file_name(),
+                                     vframes=1)
+        step_four = step_three.overwrite_output()
+        result = step_four.run(capture_stdout=False,capture_stderr=False)
+        return result
+    
+    def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
+        """
+        Method to get a valid thumbnail filename either from title property or
+        provided string.
+        """
+        v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        valid_chars = v
         
+        if desired_file_name == '':    
+            getVals = list([val for val in f"{self.title}.jpg" if val in valid_chars])
+        else:
+            if desired_file_name[-4:] == '.jpg':
+                file_name = desired_file_name[:-4]   
+            else:
+                file_name = desired_file_name 
+            getVals = list([val for val in f"{file_name}.jpg" if val in valid_chars])
+    
+        return "".join(getVals)
+    
     def is_downloaded(self):
         """
         Method to determine if the Video Object is downloaded
