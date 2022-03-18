@@ -764,16 +764,26 @@ class YouTube(plat.Platform):
         
         return result
     
-    def api_thumbnails_set(self):
+    def api_thumbnails_set(self, videoId : str, thumb_file : str):
         """
         Method for making thumbnails.set api call
         Quota impact: A call to this method has a quota cost of
         approximately 50 units.
+        Example Call: api_thumbnails_set(videoId='j61rqh2q6Kg',
+                                        thumb_file=os.path.join(os.getcwd(),
+                                        'testthumb.jpg'))
+        Example Return: {'kind': 'youtube#thumbnailSetResponse', 'etag': 'd2teeNetPSWc39nWkskILtcPN58', 'items': [{'default': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/default.jpg', 'width': 120, 'height': 90}, 'medium': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/mqdefault.jpg', 'width': 320, 'height': 180}, 'high': {'url': 'https://i.ytimg.com/vi/j61rqh2q6Kg/hqdefault.jpg', 'width': 480, 'height': 360}}]}
         """
         quota_cost = 50
-        m=f"thumbnails.set api call not implemented yet so {quota_cost} quota units not used"
-        self.logger.warning(m)
-        return
+        self.logger.info("Making YouTube API Call to thumbnails.set which costs 50 quota units")
+        result = self.service.thumbnails().set(
+            videoId=videoId,
+            media_body=googleapiclient.http.MediaFileUpload(thumb_file)
+        ).execute()
+        self.quota_usage += quota_cost
+        m=f"API call made.  Current Quota Usage: {self.quota_usage}"
+        self.logger.info(m)
+        return result
     
     def api_playlistitems_list(self, contentDetails : bool = False,
                                snippet : bool = False, status : bool = False,
