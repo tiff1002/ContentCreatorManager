@@ -8,6 +8,7 @@ import pytube
 import os.path
 import time
 import requests
+import shutil
 
 class YouTubeVideo(media_vid.Video):
     """
@@ -223,6 +224,26 @@ class YouTubeVideo(media_vid.Video):
         Returns the url of the video's thumbnail
         """
         return f"https://img.youtube.com/vi/{self.id}/hqdefault.jpg"
+    
+    def download_thumb(self):
+        """
+        downloads the hqdefault thumbnail from YouTube
+        """
+        url = self.get_thumb_url()
+        filename = self.get_valid_thumbnail_file_name()
+        r = requests.get(url, stream = True)
+
+        if r.status_code == 200:
+            self.logger.info("Thumbnail image retrieved from YouTube")
+            r.raw.decode_content = True
+            with open(filename,'wb') as f:
+                shutil.copyfileobj(r.raw, f)
+        else:
+            self.logger.error("Did not get status 200 trying to grab thumbnail")
+            return r
+        
+        self.logger.info("Setting thumb file")
+        self.thumbnail = os.path.join(os.getcwd(), filename)
     
     def is_downloaded(self):
         """
