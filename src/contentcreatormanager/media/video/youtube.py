@@ -245,6 +245,22 @@ class YouTubeVideo(media_vid.Video):
         self.logger.info("Setting thumb file")
         self.thumbnail = os.path.join(os.getcwd(), filename)
     
+    def upload_thumb(self, make_thumb : bool = False):
+        """
+        Method to upload a thumbnail to youtube
+        """
+        if not os.path.isfile(self.thumbnail) and not make_thumb:
+            self.logger.error("Thumbnail File Not Found and make_thumb not set")
+        elif make_thumb:
+            if os.path.isfile(self.thumbnail):
+                self.logger.warning("Thumbnail file exists and asked to make new one deleting old one")
+                os.remove(self.thumbnail)
+            self.make_thumb()
+        elif os.path.isfile(self.thumbnail):
+            self.logger.info("Using existing thumbnail file")
+            
+        return self.platform.api_thumbnails_set(videoId=self.id, thumb_file=self.thumbnail)
+    
     def is_downloaded(self):
         """
         Checks for downloaded file
