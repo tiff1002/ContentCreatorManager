@@ -117,7 +117,10 @@ class YouTube(plat.Platform):
         Private Method to load in credentials from pickle
         file returning none if no file is present
         """
-        pickle_file = os.path.join(os.getcwd(),self.__creds_pickle_file_name())
+        secrets_dir = os.path.join(os.getcwd(),'secrets')
+        if not os.path.isdir(secrets_dir):
+            os.mkdir(secrets_dir)
+        pickle_file = os.path.join(secrets_dir,self.__creds_pickle_file_name())
         
         if not os.path.isfile(pickle_file):
             m="Pickle File for Google Creds does not exist...Returning None"
@@ -139,7 +142,8 @@ class YouTube(plat.Platform):
         """
         Private Method to save auth creds to a pickle file
         """
-        pickle_file = self.__creds_pickle_file_name()
+        secrets_dir = os.path.join(os.getcwd(),'secrets')
+        pickle_file = os.path.join(secrets_dir, self.__creds_pickle_file_name())
 
         m=f"Saving Credentials for Google to pickle file: {pickle_file}"
         self.logger.info(m)
@@ -152,12 +156,12 @@ class YouTube(plat.Platform):
         creds if availble and they work otherwise will generate new ones
         with client secrets file
         """
-        self.logger.info("Changing to original dir to load creds")
-        os.chdir(self.settings.original_dir)
-        
         m="Attempting to load youtube credentials from pickle file"
         self.logger.info(m)
         cred = self.__load__creds()
+        secrets_dir = os.path.join(os.getcwd(),'secrets')
+        client_secrets_file = os.path.join(secrets_dir, YouTube.CLIENT_SECRETS_FILE)
+        pickle_file = os.path.join(secrets_dir, self.__creds_pickle_file_name())
 
         if not cred or not cred.valid:
             if cred and cred.expired and cred.refresh_token:
@@ -167,24 +171,20 @@ class YouTube(plat.Platform):
                 except google.auth.exceptions.RefreshError:
                     m="Got Refresh Error trying again."
                     self.logger.warning(m)
-                    os.chdir(self.settings.original_dir)
-                    os.remove(os.path.join(os.getcwd(),
-                                           self.__creds_pickle_file_name()))
-                    os.chdir(self.settings.folder_location)
+                    os.remove(pickle_file)
                     return self.__create_service()
                 self.logger.info("Saving Refreshed creds to pickle file")
             else:
                 self.logger.info("Creating Google Credentials...")
                 iap=google_auth_oauthlib.flow.InstalledAppFlow
-                flow=iap.from_client_secrets_file(YouTube.CLIENT_SECRETS_FILE,
+                flow=iap.from_client_secrets_file(client_secrets_file,
                                                     YouTube.SCOPES)
-                cred = flow.run_console()
+                cred = flow.run_local_server(host='localhost',
+                                             port=8080,
+                                             success_message='The auth flow is complete; you may close this window.',
+                                             open_browser=True)
                 self.logger.info("Saving Created creds to pickle file")
             self.__save_creds(cred)
-        
-        self.logger.info("Changing back to proper folder")
-        
-        os.chdir(self.settings.folder_location)
         
         self.logger.info("Attempting to build youtube service to return")
         

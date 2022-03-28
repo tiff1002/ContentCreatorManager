@@ -14,6 +14,10 @@ class Settings(object):
         """
         Constructor
         """
+        self.folder_location = folder_location
+        self.original_dir = os.getcwd()
+        os.chdir(self.folder_location)
+        
         logging.config.fileConfig(logging_config_file)
         self.logger = logging.getLogger('SettingsLogger')
 
@@ -32,9 +36,3 @@ class Settings(object):
         self.Video_logger = logging.getLogger('VideoLogger')
         self.Post_logger = logging.getLogger('PostLogger')
         self.logger.info("Loggers initialized")
-        
-        self.logger.info(f"setting folder_location:{folder_location}")
-        self.logger.info("Changing to that folder")
-        self.folder_location = folder_location
-        self.original_dir = os.getcwd()
-        os.chdir(self.folder_location)

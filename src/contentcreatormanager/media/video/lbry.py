@@ -94,7 +94,9 @@ class LBRYVideo(lbry_media.LBRYMedia):
         result = "".join(getVals)
         
         self.logger.info(f"returning and setting the following file name: {result}")
-        self.file = os.path.join(os.getcwd(), result)
+        
+        vid_dir = os.path.join(os.getcwd(), 'videos')
+        self.file = os.path.join(vid_dir, result)
             
         return result
     

@@ -6,6 +6,7 @@ Created on Feb 24, 2022
 import shortuuid
 import os.path
 import ffmpeg
+from PIL import ImageChops
 
 class Media(object):
     """
@@ -32,6 +33,16 @@ class Media(object):
         self.title = ''
         self.tags = []
         self.description = ''
+        
+        self.thumbnail = os.path.join(os.getcwd(), self.get_valid_thumbnail_file_name())
+    
+    def compare_thumbs(self, other_obj):
+        """
+        Method to compare thumbnails for two objects
+        """
+        thumb1 = self.thumbnail
+        thumb2 = other_obj.thumbnail
+        return ImageChops.difference(thumb1, thumb2).getbbox() is None
     
     def make_thumb(self):
         """
