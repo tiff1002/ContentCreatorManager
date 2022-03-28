@@ -19,6 +19,17 @@ class YouTubeVideo(media_vid.Video):
     
     MAX_RETRIES = 25
     
+    def __initialize_upload(self):
+        return self.platform.api_videos_insert_req(file=self.file,
+                                            snippet_title=self.title, snippet_description=self.description,
+                                            snippet_tags=self.tags, snippet_categoryId=22, snippet_defaultLanguage=self.default_language,
+                                            status_embeddable=self.embeddable, status_license=self.license, status_privacyStatus=self.privacy_status,
+                                            status_publicStatsViewable=self.public_stats_viewable, status_selfDeclaredMadeForKids=self.self_declared_made_for_kids,
+                                            snippet=True,status=True)
+    
+    def __execute_upload(self, inited_upload):
+        return self.platform.api_videos_insert_exec(inited_upload)
+    
     def __aud_dl(self):
         py = self.pytube_obj.streams.filter(only_audio=True)
         return py.order_by('abr').desc().first().download(filename_prefix="audio_")
@@ -38,6 +49,7 @@ class YouTubeVideo(media_vid.Video):
         m=f"Attempting to download video portion of {self.title}"
         self.logger.info(m)
         video_file = None
+        vid_dir = os.path.join(os.getcwd(), 'videos')
         finished = False
         tries = 0
        
@@ -45,6 +57,7 @@ class YouTubeVideo(media_vid.Video):
         # and things work so this loop does that to a point for the video
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
             try:
+                os.chdir(vid_dir)
                 video_file = self.__vid_dl()
                 finished = True
             except KeyError as e:
@@ -61,6 +74,8 @@ class YouTubeVideo(media_vid.Video):
                 m=f"{tries} tries of a possible {YouTubeVideo.MAX_RETRIES}"
                 self.logger.info(m)
                 finished = False
+            finally:
+                os.chdir(self.settings.folder_location)
         
     
         self.logger.info(f"Downloaded video for {self.title}")
@@ -74,6 +89,7 @@ class YouTubeVideo(media_vid.Video):
         """
         m=f"Attempting to download audio portion of {self.title}"
         self.logger.info(m)
+        vid_dir = os.path.join(os.getcwd(), 'videos')
         
         # pytube has weird transient failures that you just keep trying 
         # and things work so this loop does that to a point for the audio
@@ -81,6 +97,7 @@ class YouTubeVideo(media_vid.Video):
         tries = 0
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
             try:
+                os.chdir(vid_dir)
                 audio_file = self.__aud_dl()
                 finished = True
             except Exception as e:
@@ -93,6 +110,8 @@ class YouTubeVideo(media_vid.Video):
                 m=f"{tries} tries of a possible {YouTubeVideo.MAX_RETRIES}"
                 self.logger.info(m)
                 finished = False
+            finally:
+                os.chdir(self.settings.folder_location)
         
         self.logger.info(f"Downloaded audio for {self.title}")
         return audio_file
@@ -201,6 +220,9 @@ class YouTubeVideo(media_vid.Video):
         
         if file_name == '':
             file_name = self.title
+            vid_dir = os.path.join(os.getcwd(), 'videos')
+            self.file = os.path.join(vid_dir,
+                                     self.get_valid_video_file_name(desired_file_name=file_name))
         
         if new_video:
             m="new_video not attempting to initialize pytube_obj variable"
@@ -209,7 +231,7 @@ class YouTubeVideo(media_vid.Video):
         else:
             m="not new_video.  Attempting to initialize pytube_obj property"
             self.logger.info(m)
-            self.pytube_obj = self.__get_pytube()
+            self.pytube_obj = self.__get_pytube(use_oauth=True)
             if update_from_web:
                 m="update_video flag set.  Grabbing Video details from YouTube"
                 self.logger.info(m)
@@ -244,6 +266,7 @@ class YouTubeVideo(media_vid.Video):
         
         self.logger.info("Setting thumb file")
         self.thumbnail = os.path.join(os.getcwd(), filename)
+        return self.thumbnail
     
     def upload_thumb(self, make_thumb : bool = False):
         """
@@ -261,15 +284,16 @@ class YouTubeVideo(media_vid.Video):
             
         return self.platform.api_thumbnails_set(videoId=self.id, thumb_file=self.thumbnail)
     
-    def is_downloaded(self):
+    def is_downloaded(self, file_check_only : bool = False):
         """
         Checks for downloaded file
         """
-        if not self.uploaded:
-            if self.is_uploaded():
-                self.update_local()
-        else:
-            self.update_local()       
+        if not file_check_only:
+            if not self.uploaded:
+                if self.is_uploaded():
+                    self.update_local()
+                else:
+                    self.update_local()       
         result = media_vid.Video.is_downloaded(self)
         return result
     
@@ -443,7 +467,6 @@ class YouTubeVideo(media_vid.Video):
 
         
         if update_file_name:
-            print(self.title)
             f=self.get_valid_video_file_name(desired_file_name=self.title)
             file_name = f
             self.file = os.path.join(os.getcwd(), file_name)
@@ -468,13 +491,18 @@ class YouTubeVideo(media_vid.Video):
             return
         
         try:
-            self.logger.info(f"Attempting to upload {file}")
-            self.__initialize_upload()
+            self.logger.info(f"Attempting to upload {file} as {self.privacy_status} to end up as {privStatus}")
+            self.id = self.__execute_upload(self.__initialize_upload())[1]['id'] 
         except Exception as e:
             self.logger.error(f"Error during upload:\n{e}")
             return
         
         self.pytube_obj = self.__get_pytube()
+        
+        while not self.is_uploaded():
+            self.logger.info("Waiting for video upload to complete")
+            time.sleep(20)
+        
         self.update_local()
         
         if self.privacy_status == privStatus:
@@ -484,7 +512,7 @@ class YouTubeVideo(media_vid.Video):
         m=f"Setting privacy status to {privStatus} and running an update"
         self.logger.info(m)
         self.privacy_status = privStatus
-        self.update_web()
+        self.update_web(force_update=True)
         
         self.logger.info("Video Upload Complete")
     

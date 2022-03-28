@@ -31,7 +31,11 @@ class Video(media.Media):
         self.logger = self.settings.Video_logger
         self.logger.info("Initializing Media Object as a Video object")
         
-        self.file = os.path.join(os.getcwd(), file_name)
+        vid_dir = os.path.join(os.getcwd(), 'videos')
+        if file_name == '':
+            self.file = os.path.join(vid_dir, self.get_valid_video_file_name())
+        else:
+            self.file = os.path.join(vid_dir, file_name)
         self.thumbnail = os.path.join(os.getcwd(),
                                       self.get_valid_thumbnail_file_name(thumbnail_file_name))
         
@@ -82,7 +86,6 @@ class Video(media.Media):
         """
         Method to combine given audio and video file using FFMPEG
         """
-        self.set_file_based_on_title()
         self.logger.info(f"Using FFMPEG to download {self.file}")
         file_name = os.path.basename(self.file)
         

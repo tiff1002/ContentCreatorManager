@@ -8,6 +8,7 @@ import os.path
 import time
 import hashlib
 import ffmpeg
+import urllib.request
 
 class LBRYMedia(media.Media):
     """
@@ -26,8 +27,8 @@ class LBRYMedia(media.Media):
         self.logger = self.settings.LBRY_logger
         
         self.logger.info("Initializing Media Object as an LBRY Media Object")
-        
-        self.file = os.path.join(os.getcwd(), file_name)
+        vid_dir = os.path.join(os.getcwd(), 'videos')
+        self.file = os.path.join(vid_dir, file_name)
         self.thumbnail_url = thumbnail_url
         self.description = description
         self.languages = languages
@@ -85,6 +86,7 @@ class LBRYMedia(media.Media):
         
         m=f"returning and setting the following file name: {result}"
         self.logger.info(m)
+        
         self.file = os.path.join(os.getcwd(), result)
             
         return result
@@ -228,7 +230,11 @@ class LBRYMedia(media.Media):
         self.logger.info(f"Attmepting to update LBRY claim {self.id}")
         return self.update_lbry()
     
-    
+    def download_thumb(self):
+        thumbfile_name = self.get_valid_thumbnail_file_name(desired_file_name=self.title)
+        urllib.request.urlretrieve(self.thumbnail_url, thumbfile_name)
+        self.thumbnail = os.path.join(os.getcwd(), thumbfile_name)
+        return self.thumbnail
     
     def check_file_hash(self):
         """
