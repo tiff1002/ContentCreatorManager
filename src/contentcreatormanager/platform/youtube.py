@@ -452,6 +452,8 @@ class YouTube(plat.Platform):
                                   channel_title=request['snippet']['channelTitle'],
                                   tags=tags, category_id=request['snippet']['categoryId'],
                                   live_broadcast_content=request['snippet']['liveBroadcastContent'])
+        thumb_dir = os.path.join(self.settings.folder_location, 'thumbs')
+        ytv.thumbnail = os.path.join(thumb_dir, ytv.get_valid_thumbnail_file_name())
         self.add_video(ytv)
         
     def upload_media(self, ID : str = ''):

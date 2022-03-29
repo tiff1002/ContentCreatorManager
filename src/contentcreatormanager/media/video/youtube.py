@@ -457,7 +457,7 @@ class YouTubeVideo(media_vid.Video):
         self.license = video['status']['license']
         self.embeddable = video['status']['embeddable']
         self.public_stats_viewable = video['status']['publicStatsViewable']
-        self.made_for_kids = video['status']['madeForKids']
+        self.made_for_kids = self_declared_made_for_kids
         self.self_declared_made_for_kids = self_declared_made_for_kids
         self.view_count = video['statistics']['viewCount']
         self.like_count = video['statistics']['likeCount']

@@ -9,6 +9,7 @@ import contentcreatormanager.media.video.lbry as lbry_vid
 import contentcreatormanager.media.post.lbry as lbry_post
 import requests
 import shortuuid
+import os.path
 
 def claim_list(claim_type : list = [], claim_id : list = [],
                        channel_id: list = [], name : list = [],
@@ -111,6 +112,8 @@ class LBRY(plat.Platform):
             v = lbry_vid.LBRYVideo(ID=c['claim_id'], lbry_channel=self,
                                    request=c)
             v.set_file_based_on_title()
+            thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+            v.thumbnail = os.path.join(thumb_dir, v.get_valid_thumbnail_file_name())
             self.add_media(v)
         
         num_vids_added = len(self.media_objects) - num_claims_before
