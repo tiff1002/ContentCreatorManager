@@ -20,7 +20,7 @@ class Reddit(plat.Platform):
         """
         Constructor takes a Settings object.  No ID for Reddit Platform object.
         """
-        super(Reddit, self).__init__(settings=settings, ID='')
+        super().__init__(settings=settings, ID='')
         
         self.logger = self.settings.Reddit_logger
         m="Initializing Platform Object as Reddit Platform object"

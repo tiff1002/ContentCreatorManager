@@ -42,7 +42,7 @@ class YouTubeVideo(media_vid.Video):
         the new_video flag to True, and if you want the object to be updated
         based on a web lookup with the ID set the update_local flag to True.
         """
-        super(YouTubeVideo, self).__init__(platform=channel,
+        super().__init__(platform=channel,
                                            ID=ID,file_name=file_name)
         self.logger = self.settings.YouTube_logger
         

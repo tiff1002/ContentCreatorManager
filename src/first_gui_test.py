@@ -19,6 +19,201 @@ class CCMApp(tk.Tk):
     WIN_X = 10
     WIN_Y = 10
     
+    def __init__(self, folder_location: str=''):
+        super().__init__()
+        
+        self.settings = self.__setup_folder(folder_location=folder_location)
+        self.settings.Base_logger.info("Initializing CCM App")
+        self.secrets_dir = os.path.join(os.getcwd(), 'secrets')
+        self.yt_cred_file = os.path.join(self.secrets_dir, 'youtube_client_secret.json')
+        self.yt_plat = None
+        self.lbry_plat = None
+        self.lbry_channel_chooser = None
+        self.yt_vids_not_downloaded = []
+        self.lbry_vids_not_downloaded = []
+        self.yt_upload_list = []
+        self.lbry_upload_list = []
+        self.default_bid = 0.0001
+        
+        self.geometry(f"{CCMApp.WIDTH}x{CCMApp.HEIGHT}+{CCMApp.WIN_X}+{CCMApp.WIN_Y}")
+        
+        self.settings.Base_logger.info("Starting YT GUI Setup")
+        self.__yt_gui_setup()
+        self.settings.Base_logger.info("Starting LBRY GUI Setup")
+        self.__lbry_gui_setup()
+        self.settings.Base_logger.info("CCM App Initialized")
+    
+    def __yt_gui_setup(self):
+        """
+        Private Method to set up the YouTube Portion of the GUI
+        """
+        self.settings.Base_logger.info("Creating YouTube Channel Label")
+        self.yt_lbl_str = tk.StringVar()
+        self.yt_lbl_str.set("YouTube Channel")
+        self.yt_lbl = tk.Label(self, textvariable=self.yt_lbl_str)
+        self.yt_lbl.grid(column=0, row=0, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating YouTube Channel ListBox")
+        self.yt_lb = tk.Listbox(self, width=80)
+        self.yt_lb.grid(column=0, row=1, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating YouTube Channel ListBox SB")
+        self.yt_lb_sb = tk.Scrollbar(self)
+        self.yt_lb_sb.grid(column=0, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.yt_lb.config(yscrollcommand=self.yt_lb_sb.set)
+        self.yt_lb_sb.config(command=self.yt_lb.yview)
+        
+        self.settings.Base_logger.info("Creating YouTube Channel API Setup Button")
+        self.yt_api_setup_btn = tk.Button(self, text="Configure API Details")
+        self.yt_api_setup_btn.grid(column=0, row=4)
+        self.yt_api_setup_btn.bind('<Button-1>', func=self.__yt_api_setup)
+        
+        self.settings.Base_logger.info("Creating YouTube Channel Load Button")
+        self.yt_load_btn = tk.Button(self, text="Load in YouTube Data")
+        self.yt_load_btn.grid(column=1, row=4)
+        self.yt_load_btn.bind('<Button-1>', func=self.__yt_init_plat)
+        
+        self.settings.Base_logger.info("Creating YouTube Vids not downloaded label")
+        self.yt_not_downloaded_lbl_str = tk.StringVar()
+        self.yt_not_downloaded_lbl_str.set("Videos not Found Locally")
+        self.yt_not_downloaded_lbl = tk.Label(self, textvariable=self.yt_not_downloaded_lbl_str)
+        self.yt_not_downloaded_lbl.grid(column=0, row=5, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating YouTube Vids not downloaded ListBox")
+        self.yt_not_downloaded_lb = tk.Listbox(self, width=80)
+        self.yt_not_downloaded_lb.grid(column=0, row=6, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating YouTube Vids not downloaded ListBox SB")
+        self.yt_not_downloaded_lb_sb = tk.Scrollbar(self)
+        self.yt_not_downloaded_lb_sb.grid(column=0, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.yt_not_downloaded_lb.config(yscrollcommand=self.yt_not_downloaded_lb_sb.set)
+        self.yt_not_downloaded_lb_sb.config(command=self.yt_not_downloaded_lb.yview)
+        
+        self.settings.Base_logger.info("Creating YouTube Upload Label")
+        self.yt_upload_lbl_str = tk.StringVar()
+        self.yt_upload_lbl_str.set("YouTube Upload List")
+        self.yt_upload_lbl = tk.Label(self, textvariable=self.yt_upload_lbl_str)
+        self.yt_upload_lbl.grid(column=4, row=5, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating get vids from LBRY not on YouTube Button")
+        self.yt_get_lbry_not_on_yt_btn = tk.Button(self, text="Get Vids on LBRY Not YT")
+        self.yt_get_lbry_not_on_yt_btn.grid(column=4, row=9)
+        self.yt_get_lbry_not_on_yt_btn.bind('<Button-1>', func=self.__yt_get_lbry_not_on_yt)
+        
+        self.settings.Base_logger.info("Creating YT Upload ListBox")
+        self.yt_upload_lb = tk.Listbox(self, width=80)
+        self.yt_upload_lb.grid(column=4, row=6, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating YT Upload ListBox SB")
+        self.yt_upload_lb_sb = tk.Scrollbar(self)
+        self.yt_upload_lb_sb.grid(column=5, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.yt_upload_lb.config(yscrollcommand=self.yt_upload_lb_sb.set)
+        self.yt_upload_lb_sb.config(command=self.yt_upload_lb.yview)
+        
+        self.settings.Base_logger.info("Creating YT Download Button")
+        self.yt_download_btn = tk.Button(self, text="Download")
+        self.yt_download_btn.grid(column=0, row=9)
+        self.yt_download_btn.bind('<Button-1>', func=self.__yt_download_video)
+        
+        self.settings.Base_logger.info("Creating YT Select File Button")
+        self.yt_select_file_btn = tk.Button(self, text="Select Video File")
+        self.yt_select_file_btn.grid(column=1, row=9)
+        self.yt_select_file_btn.bind('<Button-1>', func=self.__yt_select_video_file)
+        
+        self.settings.Base_logger.info("Creating YT Remove from Sync Button")
+        self.yt_remove_from_sync_btn = tk.Button(self, text="Remove from Sync List")
+        self.yt_remove_from_sync_btn.grid(column=5, row=9)
+        self.yt_remove_from_sync_btn.bind('<Button-1>', func=self.__yt_remove_from_sync)
+        
+        self.settings.Base_logger.info("Creating YT Upload Button")
+        self.yt_upload_btn = tk.Button(self, text="Upload")
+        self.yt_upload_btn.grid(column=5, row=5)
+        self.yt_upload_btn.bind('<Button-1>', func=self.__yt_upload_vids)
+    
+    def __lbry_gui_setup(self):        
+        self.settings.Base_logger.info("Creating LBRY get vids on yt not on LBRY button")
+        self.lbry_get_yt_not_on_lbry_btn = tk.Button(self, text="Get Vids on YT not LBRY")
+        self.lbry_get_yt_not_on_lbry_btn.grid(column=4, row=4)
+        self.lbry_get_yt_not_on_lbry_btn.bind('<Button-1>', func=self.__lbry_get_yt_not_on_lbry)
+        
+        self.settings.Base_logger.info("Creating LBRY channel label")
+        self.lbry_lbl_str = tk.StringVar()
+        self.lbry_lbl_str.set("LBRY Channel")
+        self.lbry_lbl = tk.Label(self, textvariable=self.lbry_lbl_str)
+        self.lbry_lbl.grid(column=2, row=0, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY channel listbox")
+        self.lbry_lb = tk.Listbox(self, width=80)
+        self.lbry_lb.grid(column=2, row=1, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY channel listbox sb")
+        self.lbry_lb_sb = tk.Scrollbar(self)
+        self.lbry_lb_sb.grid(column=2, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.lbry_lb.config(yscrollcommand=self.lbry_lb_sb.set)
+        self.lbry_lb_sb.config(command=self.lbry_lb.yview)
+        
+        self.settings.Base_logger.info("Creating LBRY API setup button")
+        self.lbry_api_setup_btn = tk.Button(self, text="Confirm API is Running")
+        self.lbry_api_setup_btn.grid(column=2, row=4)
+        self.lbry_api_setup_btn.bind('<Button-1>', func=self.__lbry_api_setup)
+        
+        self.settings.Base_logger.info("Creating LBRY load channel button")
+        self.lbry_load_btn = tk.Button(self, text="Load in LBRY Channel Data")
+        self.lbry_load_btn.grid(column=3, row=4)
+        self.lbry_load_btn.bind('<Button-1>', func=self.__lbry_init_plat)
+        
+        self.settings.Base_logger.info("Creating LBRY not downloaded label")
+        self.lbry_not_downloaded_lbl_str = tk.StringVar()
+        self.lbry_not_downloaded_lbl_str.set("LBRY Videos not Downloaded")
+        self.lbry_not_downloaded_lbl = tk.Label(self, textvariable=self.lbry_not_downloaded_lbl_str)
+        self.lbry_not_downloaded_lbl.grid(column=2, row=5, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY not downloaded listbox")
+        self.lbry_not_downloaded_lb = tk.Listbox(self, width=80)
+        self.lbry_not_downloaded_lb.grid(column=2, row=6, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY not downloaded listbox sb")
+        self.lbry_not_downloaded_lb_sb = tk.Scrollbar(self)
+        self.lbry_not_downloaded_lb_sb.grid(column=2, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.lbry_not_downloaded_lb.config(yscrollcommand=self.lbry_not_downloaded_lb_sb.set)
+        self.lbry_not_downloaded_lb_sb.config(command=self.lbry_not_downloaded_lb.yview)
+        
+        self.settings.Base_logger.info("Creating LBRY upload label")
+        self.lbry_upload_lbl_str = tk.StringVar()
+        self.lbry_upload_lbl_str.set(f"LBRY Upload List ({self.default_bid}) lbc each")
+        self.lbry_upload_lbl = tk.Label(self, textvariable=self.lbry_upload_lbl_str)
+        self.lbry_upload_lbl.grid(column=4, row=0, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY upload listbox")
+        self.lbry_upload_lb = tk.Listbox(self, width=80)
+        self.lbry_upload_lb.grid(column=4, row=1, rowspan=3, columnspan=2)
+        
+        self.settings.Base_logger.info("Creating LBRY upload listbox sb")
+        self.lbry_upload_lb_sb = tk.Scrollbar(self)
+        self.lbry_upload_lb_sb.grid(column=4, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
+        self.lbry_upload_lb.config(yscrollcommand=self.lbry_upload_lb_sb.set)
+        self.lbry_upload_lb_sb.config(command=self.lbry_upload_lb.yview)
+        
+        self.settings.Base_logger.info("Creating LBRY download button")
+        self.lbry_download_btn = tk.Button(self, text="Download")
+        self.lbry_download_btn.grid(column=2, row=9)
+        self.lbry_download_btn.bind('<Button-1>', func=self.__lbry_download_video)
+        
+        self.settings.Base_logger.info("Creating LBRY select file button")
+        self.lbry_select_file_btn = tk.Button(self, text="Select Video File")
+        self.lbry_select_file_btn.grid(column=3, row=9)
+        self.lbry_select_file_btn.bind('<Button-1>', func=self.__lbry_select_video_file)
+        
+        self.settings.Base_logger.info("Creating LBRY remove from sync button")
+        self.lbry_remove_from_sync_btn = tk.Button(self, text="Remove from Sync List")
+        self.lbry_remove_from_sync_btn.grid(column=5, row=4)
+        self.lbry_remove_from_sync_btn.bind('<Button-1>', func=self.__lbry_remove_from_sync)
+        
+        self.settings.Base_logger.info("Creating LBRY Upload Button")
+        self.lbry_upload_btn = tk.Button(self, text="Upload")
+        self.lbry_upload_btn.grid(column=5, row=0)
+        self.lbry_upload_btn.bind('<Button-1>', func=self.__lbry_upload_vids)
+    
     def __yt_download_video(self, event):
         """
         Private Method for the YouTube Download button
@@ -406,204 +601,7 @@ class CCMApp(tk.Tk):
         logging_config_file = os.path.join(folder, 'logging.ini')
         if not os.path.isfile(logging_config_file):
             shutil.copy(os.path.join(os.getcwd(), 'logging.ini'), logging_config_file)
-        return config.Settings(folder_location=folder, logging_config_file=logging_config_file)
-    
-    def __yt_gui_setup(self):
-        """
-        Private Method to set up the YouTube Portion of the GUI
-        """
-        self.settings.Base_logger.info("Creating YouTube Channel Label")
-        self.yt_lbl_str = tk.StringVar()
-        self.yt_lbl_str.set("YouTube Channel")
-        self.yt_lbl = tk.Label(self, textvariable=self.yt_lbl_str)
-        self.yt_lbl.grid(column=0, row=0, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating YouTube Channel ListBox")
-        self.yt_lb = tk.Listbox(self, width=80)
-        self.yt_lb.grid(column=0, row=1, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating YouTube Channel ListBox SB")
-        self.yt_lb_sb = tk.Scrollbar(self)
-        self.yt_lb_sb.grid(column=0, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.yt_lb.config(yscrollcommand=self.yt_lb_sb.set)
-        self.yt_lb_sb.config(command=self.yt_lb.yview)
-        
-        self.settings.Base_logger.info("Creating YouTube Channel API Setup Button")
-        self.yt_api_setup_btn = tk.Button(self, text="Configure API Details")
-        self.yt_api_setup_btn.grid(column=0, row=4)
-        self.yt_api_setup_btn.bind('<Button-1>', func=self.__yt_api_setup)
-        
-        self.settings.Base_logger.info("Creating YouTube Channel Load Button")
-        self.yt_load_btn = tk.Button(self, text="Load in YouTube Data")
-        self.yt_load_btn.grid(column=1, row=4)
-        self.yt_load_btn.bind('<Button-1>', func=self.__yt_init_plat)
-        
-        self.settings.Base_logger.info("Creating YouTube Vids not downloaded label")
-        self.yt_not_downloaded_lbl_str = tk.StringVar()
-        self.yt_not_downloaded_lbl_str.set("Videos not Found Locally")
-        self.yt_not_downloaded_lbl = tk.Label(self, textvariable=self.yt_not_downloaded_lbl_str)
-        self.yt_not_downloaded_lbl.grid(column=0, row=5, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating YouTube Vids not downloaded ListBox")
-        self.yt_not_downloaded_lb = tk.Listbox(self, width=80)
-        self.yt_not_downloaded_lb.grid(column=0, row=6, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating YouTube Vids not downloaded ListBox SB")
-        self.yt_not_downloaded_lb_sb = tk.Scrollbar(self)
-        self.yt_not_downloaded_lb_sb.grid(column=0, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.yt_not_downloaded_lb.config(yscrollcommand=self.yt_not_downloaded_lb_sb.set)
-        self.yt_not_downloaded_lb_sb.config(command=self.yt_not_downloaded_lb.yview)
-        
-        self.settings.Base_logger.info("Creating YouTube Upload Label")
-        self.yt_upload_lbl_str = tk.StringVar()
-        self.yt_upload_lbl_str.set("YouTube Upload List")
-        self.yt_upload_lbl = tk.Label(self, textvariable=self.yt_upload_lbl_str)
-        self.yt_upload_lbl.grid(column=4, row=5, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating get vids from LBRY not on YouTube Button")
-        self.yt_get_lbry_not_on_yt_btn = tk.Button(self, text="Get Vids on LBRY Not YT")
-        self.yt_get_lbry_not_on_yt_btn.grid(column=4, row=9)
-        self.yt_get_lbry_not_on_yt_btn.bind('<Button-1>', func=self.__yt_get_lbry_not_on_yt)
-        
-        self.settings.Base_logger.info("Creating YT Upload ListBox")
-        self.yt_upload_lb = tk.Listbox(self, width=80)
-        self.yt_upload_lb.grid(column=4, row=6, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating YT Upload ListBox SB")
-        self.yt_upload_lb_sb = tk.Scrollbar(self)
-        self.yt_upload_lb_sb.grid(column=5, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.yt_upload_lb.config(yscrollcommand=self.yt_upload_lb_sb.set)
-        self.yt_upload_lb_sb.config(command=self.yt_upload_lb.yview)
-        
-        self.settings.Base_logger.info("Creating YT Download Button")
-        self.yt_download_btn = tk.Button(self, text="Download")
-        self.yt_download_btn.grid(column=0, row=9)
-        self.yt_download_btn.bind('<Button-1>', func=self.__yt_download_video)
-        
-        self.settings.Base_logger.info("Creating YT Select File Button")
-        self.yt_select_file_btn = tk.Button(self, text="Select Video File")
-        self.yt_select_file_btn.grid(column=1, row=9)
-        self.yt_select_file_btn.bind('<Button-1>', func=self.__yt_select_video_file)
-        
-        self.settings.Base_logger.info("Creating YT Remove from Sync Button")
-        self.yt_remove_from_sync_btn = tk.Button(self, text="Remove from Sync List")
-        self.yt_remove_from_sync_btn.grid(column=5, row=9)
-        self.yt_remove_from_sync_btn.bind('<Button-1>', func=self.__yt_remove_from_sync)
-        
-        self.settings.Base_logger.info("Creating YT Upload Button")
-        self.yt_upload_btn = tk.Button(self, text="Upload")
-        self.yt_upload_btn.grid(column=5, row=5)
-        self.yt_upload_btn.bind('<Button-1>', func=self.__yt_upload_vids)
-    
-    def __lbry_gui_setup(self):        
-        self.settings.Base_logger.info("Creating LBRY get vids on yt not on LBRY button")
-        self.lbry_get_yt_not_on_lbry_btn = tk.Button(self, text="Get Vids on YT not LBRY")
-        self.lbry_get_yt_not_on_lbry_btn.grid(column=4, row=4)
-        self.lbry_get_yt_not_on_lbry_btn.bind('<Button-1>', func=self.__lbry_get_yt_not_on_lbry)
-        
-        self.settings.Base_logger.info("Creating LBRY channel label")
-        self.lbry_lbl_str = tk.StringVar()
-        self.lbry_lbl_str.set("LBRY Channel")
-        self.lbry_lbl = tk.Label(self, textvariable=self.lbry_lbl_str)
-        self.lbry_lbl.grid(column=2, row=0, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY channel listbox")
-        self.lbry_lb = tk.Listbox(self, width=80)
-        self.lbry_lb.grid(column=2, row=1, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY channel listbox sb")
-        self.lbry_lb_sb = tk.Scrollbar(self)
-        self.lbry_lb_sb.grid(column=2, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.lbry_lb.config(yscrollcommand=self.lbry_lb_sb.set)
-        self.lbry_lb_sb.config(command=self.lbry_lb.yview)
-        
-        self.settings.Base_logger.info("Creating LBRY API setup button")
-        self.lbry_api_setup_btn = tk.Button(self, text="Confirm API is Running")
-        self.lbry_api_setup_btn.grid(column=2, row=4)
-        self.lbry_api_setup_btn.bind('<Button-1>', func=self.__lbry_api_setup)
-        
-        self.settings.Base_logger.info("Creating LBRY load channel button")
-        self.lbry_load_btn = tk.Button(self, text="Load in LBRY Channel Data")
-        self.lbry_load_btn.grid(column=3, row=4)
-        self.lbry_load_btn.bind('<Button-1>', func=self.__lbry_init_plat)
-        
-        self.settings.Base_logger.info("Creating LBRY not downloaded label")
-        self.lbry_not_downloaded_lbl_str = tk.StringVar()
-        self.lbry_not_downloaded_lbl_str.set("LBRY Videos not Downloaded")
-        self.lbry_not_downloaded_lbl = tk.Label(self, textvariable=self.lbry_not_downloaded_lbl_str)
-        self.lbry_not_downloaded_lbl.grid(column=2, row=5, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY not downloaded listbox")
-        self.lbry_not_downloaded_lb = tk.Listbox(self, width=80)
-        self.lbry_not_downloaded_lb.grid(column=2, row=6, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY not downloaded listbox sb")
-        self.lbry_not_downloaded_lb_sb = tk.Scrollbar(self)
-        self.lbry_not_downloaded_lb_sb.grid(column=2, row=6, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.lbry_not_downloaded_lb.config(yscrollcommand=self.lbry_not_downloaded_lb_sb.set)
-        self.lbry_not_downloaded_lb_sb.config(command=self.lbry_not_downloaded_lb.yview)
-        
-        self.settings.Base_logger.info("Creating LBRY upload label")
-        self.lbry_upload_lbl_str = tk.StringVar()
-        self.lbry_upload_lbl_str.set(f"LBRY Upload List ({self.default_bid}) lbc each")
-        self.lbry_upload_lbl = tk.Label(self, textvariable=self.lbry_upload_lbl_str)
-        self.lbry_upload_lbl.grid(column=4, row=0, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY upload listbox")
-        self.lbry_upload_lb = tk.Listbox(self, width=80)
-        self.lbry_upload_lb.grid(column=4, row=1, rowspan=3, columnspan=2)
-        
-        self.settings.Base_logger.info("Creating LBRY upload listbox sb")
-        self.lbry_upload_lb_sb = tk.Scrollbar(self)
-        self.lbry_upload_lb_sb.grid(column=4, row=1, rowspan=3, columnspan=2, sticky=tk.E+tk.N+tk.S)
-        self.lbry_upload_lb.config(yscrollcommand=self.lbry_upload_lb_sb.set)
-        self.lbry_upload_lb_sb.config(command=self.lbry_upload_lb.yview)
-        
-        self.settings.Base_logger.info("Creating LBRY download button")
-        self.lbry_download_btn = tk.Button(self, text="Download")
-        self.lbry_download_btn.grid(column=2, row=9)
-        self.lbry_download_btn.bind('<Button-1>', func=self.__lbry_download_video)
-        
-        self.settings.Base_logger.info("Creating LBRY select file button")
-        self.lbry_select_file_btn = tk.Button(self, text="Select Video File")
-        self.lbry_select_file_btn.grid(column=3, row=9)
-        self.lbry_select_file_btn.bind('<Button-1>', func=self.__lbry_select_video_file)
-        
-        self.settings.Base_logger.info("Creating LBRY remove from sync button")
-        self.lbry_remove_from_sync_btn = tk.Button(self, text="Remove from Sync List")
-        self.lbry_remove_from_sync_btn.grid(column=5, row=4)
-        self.lbry_remove_from_sync_btn.bind('<Button-1>', func=self.__lbry_remove_from_sync)
-        
-        self.settings.Base_logger.info("Creating LBRY Upload Button")
-        self.lbry_upload_btn = tk.Button(self, text="Upload")
-        self.lbry_upload_btn.grid(column=5, row=0)
-        self.lbry_upload_btn.bind('<Button-1>', func=self.__lbry_upload_vids)
-    
-    def __init__(self, folder_location: str=''):
-        super(CCMApp, self).__init__()
-        
-        self.settings = self.__setup_folder(folder_location=folder_location)
-        self.settings.Base_logger.info("Initializing CCM App")
-        self.secrets_dir = os.path.join(os.getcwd(), 'secrets')
-        self.yt_cred_file = os.path.join(self.secrets_dir, 'youtube_client_secret.json')
-        self.yt_plat = None
-        self.lbry_plat = None
-        self.lbry_channel_chooser = None
-        self.yt_vids_not_downloaded = []
-        self.lbry_vids_not_downloaded = []
-        self.yt_upload_list = []
-        self.lbry_upload_list = []
-        self.default_bid = 0.0001
-        
-        self.geometry(f"{CCMApp.WIDTH}x{CCMApp.HEIGHT}+{CCMApp.WIN_X}+{CCMApp.WIN_Y}")
-        
-        self.settings.Base_logger.info("Starting YT GUI Setup")
-        self.__yt_gui_setup()
-        self.settings.Base_logger.info("Starting LBRY GUI Setup")
-        self.__lbry_gui_setup()
-        self.settings.Base_logger.info("CCM App Initialized")
-        
-        
+        return config.Settings(folder_location=folder, logging_config_file=logging_config_file)       
         
 class SimpleChoiceBox:
     def __init__(self,title,text,choices):

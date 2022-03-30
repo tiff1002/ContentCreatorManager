@@ -22,7 +22,7 @@ class LBRYMedia(media.Media):
         """
         Constructor
         """
-        super(LBRYMedia, self).__init__(platform=lbry_channel, ID=ID)
+        super().__init__(platform=lbry_channel, ID=ID)
         self.logger = self.settings.LBRY_logger
         
         self.logger.info("Initializing Media Object as an LBRY Media Object")

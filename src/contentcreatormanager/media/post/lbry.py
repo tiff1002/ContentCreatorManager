@@ -17,7 +17,7 @@ class LBRYTextPost(lbry_media.LBRYMedia):
         """
         Constructor takes LBRY Platform object, title and body for the LBRY Post
         """
-        super(LBRYTextPost, self).__init__(lbry_channel=lbry_channel,
+        super().__init__(lbry_channel=lbry_channel,
                                            file_name='',
                                            thumbnail_url=thumbnail_url,
                                            description=body,

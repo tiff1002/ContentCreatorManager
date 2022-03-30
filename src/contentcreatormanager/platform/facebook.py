@@ -22,7 +22,7 @@ class Facebook(plat.Platform):
         self.settings = settings
         data = self.read_json(Facebook.CLIENT_SECRETS_FILE)
         
-        super(Facebook, self).__init__(settings=settings, ID=data['PAGE_ID'])
+        super().__init__(settings=settings, ID=data['PAGE_ID'])
         
         self.logger = self.settings.Facebook_logger
         m="Initializing Platform Object as Facebook Platform object"

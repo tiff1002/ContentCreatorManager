@@ -58,7 +58,7 @@ class YouTube(plat.Platform):
         grab all video data and use it to make video 
         objects and add them to media_objects list property.
         """
-        super(YouTube, self).__init__(settings=settings, ID='')
+        super().__init__(settings=settings, ID='')
         self.logger = settings.YouTube_logger
         self.logger.info("Initializing Platform Object as a YouTube Platform")
         

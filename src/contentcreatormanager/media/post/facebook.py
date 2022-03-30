@@ -15,7 +15,7 @@ class FacebookPost(media_post.Post):
         Constructor takes a Facebook Platform object as well
         as the body of the post as a string
         """
-        super(FacebookPost, self).__init__(platform=facebook,title='',
+        super().__init__(platform=facebook,title='',
                                            body=post)
         
         

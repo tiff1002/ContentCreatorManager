@@ -26,7 +26,7 @@ class Video(media.Media):
             platform.settings.Video_logger.error(m)
             raise Exception()
         
-        super(Video, self).__init__(platform=platform, ID=ID)
+        super().__init__(platform=platform, ID=ID)
         
         self.logger = self.settings.Video_logger
         self.logger.info("Initializing Media Object as a Video object")

@@ -16,7 +16,7 @@ class Post(media.Media):
         Constructor for generic post to set the settings, body of the 
         post and title.  It will also initialize posted to False
         """
-        super(Post, self).__init__(platform=platform, ID='')
+        super().__init__(platform=platform, ID='')
         
         self.logger = self.settings.Post_logger
         

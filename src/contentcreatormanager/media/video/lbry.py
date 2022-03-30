@@ -8,7 +8,6 @@ import requests
 import contentcreatormanager.media.lbry as lbry_media
 import time
 import shutil
-import ffmpeg
 
 class LBRYVideo(lbry_media.LBRYMedia):
     """
@@ -27,7 +26,7 @@ class LBRYVideo(lbry_media.LBRYMedia):
         details can be manually set on creation.  bid defaults very
         low, language defaults to en
         """
-        super(LBRYVideo, self).__init__(lbry_channel=lbry_channel,
+        super().__init__(lbry_channel=lbry_channel,
                                         file_name=file_name,
                                         thumbnail_url=thumbnail_url, 
                                         description=description,
@@ -134,7 +133,7 @@ class LBRYVideo(lbry_media.LBRYMedia):
         It will do the LBRY lookup with claim_id unless the
         use_name flag is set to True
         """
-        response = super(LBRYVideo, self).update_local(use_name=use_name)
+        response = super().update_local(use_name=use_name)
         self.set_file_based_on_title()
         
         return response

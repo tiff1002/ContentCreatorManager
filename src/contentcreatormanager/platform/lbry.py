@@ -60,7 +60,7 @@ class LBRY(plat.Platform):
         to True to grab all video data from LBRY on creation of
         LBRY Platform Object.
         """
-        super(LBRY, self).__init__(settings=settings, ID=ID)
+        super().__init__(settings=settings, ID=ID)
         
         self.logger = self.settings.LBRY_logger
         self.logger.info("Initializing Platform Object as LBRY Platform")

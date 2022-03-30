@@ -14,7 +14,7 @@ class Tweet(media_post.Post):
         Constructor takes a Twitter Platform object and a string to be
         the body of the Tweet
         """
-        super(Tweet, self).__init__(platform=twitter,body=post,title='')
+        super().__init__(platform=twitter,body=post,title='')
         
         self.logger = self.settings.Twitter_logger
         
