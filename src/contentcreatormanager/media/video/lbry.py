@@ -14,34 +14,6 @@ class LBRYVideo(lbry_media.LBRYMedia):
     """
     classdocs
     """  
-    def __upload_new_video(self):
-        """
-        Private Method for uploading a new video to LBRY.  This uses the 
-        stream_create api call.  This method will also set the id to the 
-        new claim_id from the upload. This method just makes the API call 
-        and does nothing to confirm it worked or is complete.
-        """
-        result = self.platform.api_stream_create(name=self.name, bid=self.bid,
-                                                 file_path=self.file,
-                                                 title=self.title,
-                                                 description=self.description,
-                                                 channel_id=self.platform.id,
-                                                 languages=self.languages,
-                                                 tags=self.tags,
-                                                 thumbnail_url=self.thumbnail_url,
-                                                 lic=self.license,
-                                                 license_url=self.license_url)
-        
-        if 'error' in result:
-            self.logger.error(f"The create call returned an error:\n{result['error']['data']['traceback'][3]}")
-            return result
-        
-        self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
-        self.id = result['result']['outputs'][0]['claim_id']
-        
-        self.logger.info("stream_create API call complete without error")
-        return result['result']
-
     def __init__(self, lbry_channel, ID : str = '', tags : list = [],
                  title : str = '',file_hash : str = '', file_name : str = '',
                  name : str = '', thumbnail_url : str = '', bid : float = .0001,
@@ -84,6 +56,34 @@ class LBRYVideo(lbry_media.LBRYMedia):
                     self.logger.error("Could not update with name not found on LBRY")
         
         self.logger.info("LBRY Video Media Object initialized")
+    
+    def __upload_new_video(self):
+        """
+        Private Method for uploading a new video to LBRY.  This uses the 
+        stream_create api call.  This method will also set the id to the 
+        new claim_id from the upload. This method just makes the API call 
+        and does nothing to confirm it worked or is complete.
+        """
+        result = self.platform.api_stream_create(name=self.name, bid=self.bid,
+                                                 file_path=self.file,
+                                                 title=self.title,
+                                                 description=self.description,
+                                                 channel_id=self.platform.id,
+                                                 languages=self.languages,
+                                                 tags=self.tags,
+                                                 thumbnail_url=self.thumbnail_url,
+                                                 lic=self.license,
+                                                 license_url=self.license_url)
+        
+        if 'error' in result:
+            self.logger.error(f"The create call returned an error:\n{result['error']['data']['traceback'][3]}")
+            return result
+        
+        self.logger.info(f"Setting claim_id to {result['result']['outputs'][0]['claim_id']}")
+        self.id = result['result']['outputs'][0]['claim_id']
+        
+        self.logger.info("stream_create API call complete without error")
+        return result['result']
     
     def set_file_based_on_title(self):
         valid = '`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'

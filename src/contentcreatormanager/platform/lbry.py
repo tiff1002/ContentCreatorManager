@@ -52,6 +52,55 @@ class LBRY(plat.Platform):
     
     LBRY_THUMB_API_URL = 'https://spee.ch/api/claim/publish'
 
+    def __init__(self, settings : ccm_config.Settings, ID : str,
+                 init_videos : bool = False):
+        """
+        Constructor takes a Settings object.  ID string required 
+        (claim_id of the channel to be used).  Set init_videos flag
+        to True to grab all video data from LBRY on creation of
+        LBRY Platform Object.
+        """
+        super(LBRY, self).__init__(settings=settings, ID=ID)
+        
+        self.logger = self.settings.LBRY_logger
+        self.logger.info("Initializing Platform Object as LBRY Platform")
+        
+        result = self.__get_channel()
+        
+        m="Setting local values based on API call results"
+        self.logger.info(m)
+        self.address = result['result']['items'][0]['address']
+        self.bid = result['result']['items'][0]['amount']
+        self.name = result['result']['items'][0]['name']
+        self.normalized_name = result['result']['items'][0]['normalized_name']
+        self.permanent_url = result['result']['items'][0]['permanent_url']
+        
+        if 'title' in result['result']['items'][0]['value']:
+            self.title = result['result']['items'][0]['value']['title']
+        if 'description' in result['result']['items'][0]['value']:
+            self.description = result['result']['items'][0]['value']['description']
+        if 'email' in result['result']['items'][0]['value']:
+            self.email = result['result']['items'][0]['value']['email']
+        if 'languages' in result['result']['items'][0]['value']:
+            self.languages = result['result']['items'][0]['value']['languages']
+        else:
+            self.languages = ['en']
+        if 'tags' in result['result']['items'][0]['value']:
+            self.tags = result['result']['items'][0]['value']['tags']
+        else:
+            self.tags = []
+        if 'thumbnail' in result['result']['items'][0]['value']:    
+            self.thumbnail = result['result']['items'][0]['value']['thumbnail']
+        else:
+            self.thumbnail = None
+            
+        if init_videos:
+            m="init_videos set to true grabbing video data"
+            self.logger.info(m)
+            self.__add_channel_videos()
+            
+        self.logger.info("LBRY Platform object initialized")
+    
     def __get_channel(self):
         """
         Private method to make api call to get channel info based on claim_id
@@ -119,55 +168,6 @@ class LBRY(plat.Platform):
         num_vids_added = len(self.media_objects) - num_claims_before
         m=f"{num_vids_added} LBRY Video Objects added to media_objects"
         self.logger.info(m)
-
-    def __init__(self, settings : ccm_config.Settings, ID : str,
-                 init_videos : bool = False):
-        """
-        Constructor takes a Settings object.  ID string required 
-        (claim_id of the channel to be used).  Set init_videos flag
-        to True to grab all video data from LBRY on creation of
-        LBRY Platform Object.
-        """
-        super(LBRY, self).__init__(settings=settings, ID=ID)
-        
-        self.logger = self.settings.LBRY_logger
-        self.logger.info("Initializing Platform Object as LBRY Platform")
-        
-        result = self.__get_channel()
-        
-        m="Setting local values based on API call results"
-        self.logger.info(m)
-        self.address = result['result']['items'][0]['address']
-        self.bid = result['result']['items'][0]['amount']
-        self.name = result['result']['items'][0]['name']
-        self.normalized_name = result['result']['items'][0]['normalized_name']
-        self.permanent_url = result['result']['items'][0]['permanent_url']
-        
-        if 'title' in result['result']['items'][0]['value']:
-            self.title = result['result']['items'][0]['value']['title']
-        if 'description' in result['result']['items'][0]['value']:
-            self.description = result['result']['items'][0]['value']['description']
-        if 'email' in result['result']['items'][0]['value']:
-            self.email = result['result']['items'][0]['value']['email']
-        if 'languages' in result['result']['items'][0]['value']:
-            self.languages = result['result']['items'][0]['value']['languages']
-        else:
-            self.languages = ['en']
-        if 'tags' in result['result']['items'][0]['value']:
-            self.tags = result['result']['items'][0]['value']['tags']
-        else:
-            self.tags = []
-        if 'thumbnail' in result['result']['items'][0]['value']:    
-            self.thumbnail = result['result']['items'][0]['value']['thumbnail']
-        else:
-            self.thumbnail = None
-            
-        if init_videos:
-            m="init_videos set to true grabbing video data"
-            self.logger.info(m)
-            self.__add_channel_videos()
-            
-        self.logger.info("LBRY Platform object initialized")
     
     def add_video(self, vid : lbry_vid.LBRYVideo):
         """

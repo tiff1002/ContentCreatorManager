@@ -7,7 +7,6 @@ import contentcreatormanager.media.media as media
 import os.path
 import time
 import hashlib
-import ffmpeg
 import urllib.request
 
 class LBRYMedia(media.Media):

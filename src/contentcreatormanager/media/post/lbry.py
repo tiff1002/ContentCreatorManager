@@ -11,19 +11,6 @@ class LBRYTextPost(lbry_media.LBRYMedia):
     """
     classdocs
     """
-    def __write_description_to_file(self):
-        """
-        Private Method to write the description property to a md file
-        """
-        if os.path.isfile(self.file):
-            m=f"{self.file} already exists.  Removing before recreating it"
-            self.logger.warning(m)
-            os.remove(self.file)
-        
-        with open(self.file, 'w') as f:
-            f.write(self.description)
-        f.close()
-
     def __init__(self, lbry_channel, title : str, body : str, name : str,
                  tags : list = [], bid : float = .001, thumbnail_url : str ='',
                  languages : list = ['en']):
@@ -46,6 +33,19 @@ class LBRYTextPost(lbry_media.LBRYMedia):
 
         self.logger.info("LBRY Post Object Initialized")
         
+    def __write_description_to_file(self):
+        """
+        Private Method to write the description property to a md file
+        """
+        if os.path.isfile(self.file):
+            m=f"{self.file} already exists.  Removing before recreating it"
+            self.logger.warning(m)
+            os.remove(self.file)
+        
+        with open(self.file, 'w') as f:
+            f.write(self.description)
+        f.close()
+    
     def upload(self):
         """
         Method to send this post to the LBRY Channel tied to the 
