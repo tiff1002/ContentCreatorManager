@@ -20,6 +20,7 @@ class Platform(object):
         self.settings = settings
         self.logger = settings.Base_logger
         self.media_objects = []
+        self.media_object_titles = []
         
         self.logger.info(f"Initializing Platform Object with id {ID}")
         self.id = ID
@@ -68,6 +69,7 @@ class Platform(object):
             return
         
         self.media_objects.append(media)
+        self.media_object_titles.append(media.title)
         
         m=f"Media Object with id {media.id} added to media_objects"
         self.logger.info(m)

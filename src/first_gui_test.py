@@ -50,7 +50,7 @@ class CCMApp(tk.Tk):
         self.settings.Base_logger.info("Creating YouTube Channel Label")
         self.yt_lbl_str = tk.StringVar()
         self.yt_lbl_str.set("YouTube Channel")
-        self.yt_lbl = tk.Label(self, textvariable=self.yt_lbl_str)
+        self.yt_lbl = tk.ttk.Label(self, textvariable=self.yt_lbl_str)
         self.yt_lbl.grid(column=0, row=0, columnspan=2)
         
         self.settings.Base_logger.info("Creating YouTube Channel ListBox")
