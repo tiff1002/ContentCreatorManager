@@ -15,6 +15,7 @@ import tkinter.filedialog as tk_fd
 import tkinter.simpledialog as tk_sd
 import json
 import contentcreatormanager.platform.youtube as yt_plat
+import contentcreatormanager.platform.lbry as lbry_plat
 
 def focus_next_widget(event):
     """Callback to focus on next widget when pressing <Tab>."""
@@ -62,12 +63,7 @@ class Variables:
 
         self.yt_vid_var = tk.StringVar()
 
-        self.lbry_vid = ["Lbry vid", "Second vid lbry", "LBRY third vid",
-                         "Fourth", "LBRY video 5", "exclusive LBRY 6",
-                         "New LBRY video 7", "LBRY video sample 8",
-                         "Exclusive video 9 (LBRY)", "LBRY based video",
-                         "video-11-lbry"]
-        self.lbry_vid_var = tk.StringVar(value=self.lbry_vid)
+        self.lbry_vid_var = tk.StringVar()
 
         self.lbry_up = ["Lbry up 1", "LBRY up 2"]
         self.lbry_up_var = tk.StringVar(value=self.lbry_up)
@@ -78,10 +74,8 @@ class Variables:
         
         self.yt_not_dl_lb = None
 
-        self.lbry_vid_not = ["LBRY vid missing",
-                             "Second vid not downloaded LBRY",
-                             "Third LBRY video not available",
-                             "Not existing LBRY"]
+        self.lbry_vid_not_dl = []
+        self.lbry_vid_not_dl_titles = []
         self.lbry_vid_not_var = tk.StringVar(value=self.lbry_vid_not)
 
         self.yt_up = ["YT up 1", "YT up 2", "YT 3", "YT 4", "youtube 5",
@@ -139,12 +133,17 @@ class Methods:
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
     def confirm_api(self):
-        print("Confirm API is running")
+        try:
+            lbry_plat.claim_list()
+        except Exception:
+            tk.messagebox.showwarning(message='LBRY Not Running please start the LBRY Desktop App')
+            return 'break'
+        tk.messagebox.showinfo(message='LBRY Running')
+        return 'break'
 
     def load_lbry_data(self):
-        print("Load in LBRY channel data")
-        self.lbry_vid.append("called LBRY data " + f"{random.random():.2f}")
-        self.lbry_vid_var.set(self.lbry_vid)
+        self.logger.info("Loading in LBRY channel data")
+        
 
     def get_vids_yt_not_lbry(self):
         print("Get vids on YT not on LBRY")
@@ -161,7 +160,6 @@ class Methods:
 
     def yt_download(self):
         for j in self.yt_not_dl_lb.curselection():
-            #index = [i for i,x in enumerate(self.yt_plat.media_object_titles) if x == self.yt_vid_not_dl_titles[j]]
             vid = self.yt_vid_not_dl[j]
         
         self.logger.info(f"Downloading YT Vid {vid.title}")
@@ -175,7 +173,16 @@ class Methods:
             self.logger.error("Can not find video file download failed")
 
     def yt_select_video(self):
-        print("Select video file (YT)")
+        file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])
+        for j in self.yt_not_dl_lb.curselection():
+            video = self.yt_vid_not_dl[j]
+        
+        self.logger.info(f"Copying {file} to {video.file}")
+        shutil.copy(file, video.file)
+        
+        self.yt_vid_not_dl.remove(video)
+        self.yt_vid_not_dl_titles.remove(video.title)
+        self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
     def lbry_download(self):
         print("Download (LBRY)")
