@@ -35,6 +35,8 @@ class LBRYMedia(media.Media):
         self.tags = tags
         self.bid = bid
         self.title = title
+        if name == '':
+            name = self.title        
         self.name = self.get_valid_name(name)
         self.license = lic
         self.license_url = license_url

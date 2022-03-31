@@ -514,6 +514,9 @@ class YouTubeVideo(media_vid.Video):
         self.privacy_status = privStatus
         self.update_web(force_update=True)
         
+        if os.path.isfile(self.thumbnail):
+            self.upload_thumb(make_thumb=False)
+        
         self.logger.info("Video Upload Complete")
     
     def download(self, overwrite=False):
