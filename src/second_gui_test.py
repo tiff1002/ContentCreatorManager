@@ -117,6 +117,9 @@ class Methods:
         secrets_json['installed']['project_id'] = project_id
         secrets_json['installed']['client_secret'] = client_secret
         self.logger.info(f"Saving Client Secrets file for YouTube as {self.yt_cred_file}")
+        secrets_dir = os.path.join(os.getcwd(), 'secrets')
+        if not os.path.isdir(secrets_dir):
+            os.mkdir(secrets_dir)
         with open(self.yt_cred_file, 'w') as jf:
             json.dump(secrets_json, jf)
     
