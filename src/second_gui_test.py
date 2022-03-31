@@ -281,6 +281,9 @@ class Methods:
         for j in self.yt_not_dl_lb.curselection():
             vid = self.yt_vid_not_dl[j]
         
+        vid_dir = os.path.join(os.getcwd(), 'videos')
+        if not os.path.isdir(vid_dir):
+            os.mkdir(vid_dir)
         self.logger.info(f"Downloading YT Vid {vid.title}")
         vid.download()
         if os.path.isfile(vid.file):
@@ -312,6 +315,10 @@ class Methods:
         window.grab_set()
         for j in self.lbry_not_dl_lb.curselection():
             vid = self.lbry_vid_not_dl[j]
+        
+        vid_dir = os.path.join(os.getcwd(), 'videos')
+        if not os.path.isdir(vid_dir):
+            os.mkdir(vid_dir)
         
         self.logger.info(f"Downloading LBRYS Vid {vid.title}")
         vid.download()
