@@ -9,18 +9,12 @@ class Tweet(media_post.Post):
     """
     classdocs
     """
-    def __post(self):
-        """
-        Private Method to send out the Tweet Object's body property
-        """
-        
-            
     def __init__(self, twitter, post : str, sensitive : bool = False):
         """
         Constructor takes a Twitter Platform object and a string to be
         the body of the Tweet
         """
-        super(Tweet, self).__init__(platform=twitter,body=post,title='')
+        super().__init__(platform=twitter,body=post,title='')
         
         self.logger = self.settings.Twitter_logger
         
@@ -29,6 +23,12 @@ class Tweet(media_post.Post):
         self.logger.info("Initializing Post object as a Tweet")
         
         self.logger.info("Tweet Object initialized")
+        
+    def __post(self):
+        """
+        Private Method to send out the Tweet Object's body property
+        """
+        return
         
     def is_uploaded(self): # this needs proper implementation
         """

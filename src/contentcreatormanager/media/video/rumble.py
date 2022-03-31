@@ -28,7 +28,7 @@ class RumbleVideo(media_vid.Video):
         and thumbnail_file_name can be provided with or without the mp4 or jpg
         file extension.
         """
-        super(RumbleVideo, self).__init__(platform=rumble_channel, ID='',
+        super().__init__(platform=rumble_channel, ID='',
                                           title=title, description=description,
                                           file_name=video_file_name, 
                                           thumbnail_file_name=thumbnail_file_name)

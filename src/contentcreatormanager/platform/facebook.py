@@ -12,16 +12,7 @@ class Facebook(plat.Platform):
     """
     classdocs
     """
-    CLIENT_SECRETS_FILE = 'facebook_client_secret.json'
-    
-    def __init_page_access_token(self):
-        self.graph = facebook.GraphAPI(self.access_token)
-        resp = self.graph.get_object('me/accounts')
-
-        for page in resp['data']:
-            if page['id'] == self.id:
-                self.page_access_token = page['access_token']
-                
+    CLIENT_SECRETS_FILE = 'facebook_client_secret.json'               
 
     def __init__(self, settings : ccm_config.Settings):
         """
@@ -31,7 +22,7 @@ class Facebook(plat.Platform):
         self.settings = settings
         data = self.read_json(Facebook.CLIENT_SECRETS_FILE)
         
-        super(Facebook, self).__init__(settings=settings, ID=data['PAGE_ID'])
+        super().__init__(settings=settings, ID=data['PAGE_ID'])
         
         self.logger = self.settings.Facebook_logger
         m="Initializing Platform Object as Facebook Platform object"
@@ -45,6 +36,14 @@ class Facebook(plat.Platform):
         
         self.logger.info("Facebook Platform Object initialized")
         
+    def __init_page_access_token(self):
+        self.graph = facebook.GraphAPI(self.access_token)
+        resp = self.graph.get_object('me/accounts')
+
+        for page in resp['data']:
+            if page['id'] == self.id:
+                self.page_access_token = page['access_token']
+                
     def re_init_token(self):
         """
         Method to re run the Method that inititalized the page_access_token

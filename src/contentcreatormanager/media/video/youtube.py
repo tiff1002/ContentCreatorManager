@@ -19,6 +19,87 @@ class YouTubeVideo(media_vid.Video):
     
     MAX_RETRIES = 25
     
+    def __init__(self, channel, ID : str = None, favorite_count : str ='0', 
+                 comment_count : str ='0', dislike_count : str ='0', 
+                 like_count : str ='0', view_count : str ='0', 
+                 self_declared_made_for_kids : bool =False,
+                 made_for_kids : bool =False,public_stats_viewable:bool =True,
+                 embeddable : bool =True, lic : str ='youtube',
+                 privacy_status : str ="public",
+                 upload_status : str ='notUploaded', 
+                 has_custom_thumbnail : bool =False, 
+                 content_rating : dict ={}, licensed_content : bool =False, 
+                 default_audio_language : str ='en-US', published_at=None,
+                 channel_id=None, title='', description=None,
+                 file_name : str = '', update_from_web : bool = False,
+                 thumbnails : dict ={}, channel_title=None, tags : list =[],
+                 category_id : int =22, live_broadcast_content=None,
+                 new_video : bool =False):
+        """
+        Constructor takes a YouTube Platform object as its only parameter 
+        without a default value.  All properties can be set on creation of
+        the Object.  If the object is a new video not yet on YouTube set 
+        the new_video flag to True, and if you want the object to be updated
+        based on a web lookup with the ID set the update_local flag to True.
+        """
+        super().__init__(platform=channel,
+                                           ID=ID,file_name=file_name)
+        self.logger = self.settings.YouTube_logger
+        
+        self.logger.info("Initializing Video Object as a YouTube Video Object")
+        
+        self.channel = channel
+        
+        self.published_at = published_at
+        self.channel_id = channel_id
+        self.title = title
+        self.description = description
+        self.thumbnails = thumbnails
+        self.channel_title = channel_title
+        self.tags = tags
+        self.category_id = category_id
+        self.live_broadcast_content = live_broadcast_content
+        self.default_audio_language = default_audio_language
+        self.default_language = default_audio_language
+        self.licensed_content = licensed_content
+        self.content_rating = content_rating
+        self.has_custom_thumbnail = has_custom_thumbnail
+        self.upload_status = upload_status
+        self.privacy_status = privacy_status
+        self.license = lic
+        self.embeddable = embeddable
+        self.public_stats_viewable = public_stats_viewable
+        self.made_for_kids = made_for_kids
+        self.self_declared_made_for_kids = self_declared_made_for_kids
+        self.view_count = view_count
+        self.like_count = like_count
+        self.dislike_count = dislike_count
+        self.comment_count = comment_count
+        self.favorite_count = favorite_count
+        
+        if file_name == '':
+            file_name = self.title
+            vid_dir = os.path.join(os.getcwd(), 'videos')
+            self.file = os.path.join(vid_dir,
+                                     self.get_valid_video_file_name(desired_file_name=file_name))
+        
+        if new_video:
+            m="new_video not attempting to initialize pytube_obj variable"
+            self.logger.info(m)
+            self.pytube_obj = None
+        else:
+            m="not new_video.  Attempting to initialize pytube_obj property"
+            self.logger.info(m)
+            self.pytube_obj = self.__get_pytube(use_oauth=True)
+            if update_from_web:
+                m="update_video flag set.  Grabbing Video details from YouTube"
+                self.logger.info(m)
+                self.update_local()
+                self.logger.info("update ran")
+                
+        
+        self.logger.info("YouTube Video Object initialized")
+        
     def __initialize_upload(self):
         return self.platform.api_videos_insert_req(file=self.file,
                                             snippet_title=self.title, snippet_description=self.description,
@@ -159,87 +240,6 @@ class YouTubeVideo(media_vid.Video):
         """
         url = self.__url()
         return pytube.YouTube(url, use_oauth=use_oauth)
-    
-    def __init__(self, channel, ID : str = None, favorite_count : str ='0', 
-                 comment_count : str ='0', dislike_count : str ='0', 
-                 like_count : str ='0', view_count : str ='0', 
-                 self_declared_made_for_kids : bool =False,
-                 made_for_kids : bool =False,public_stats_viewable:bool =True,
-                 embeddable : bool =True, lic : str ='youtube',
-                 privacy_status : str ="public",
-                 upload_status : str ='notUploaded', 
-                 has_custom_thumbnail : bool =False, 
-                 content_rating : dict ={}, licensed_content : bool =False, 
-                 default_audio_language : str ='en-US', published_at=None,
-                 channel_id=None, title='', description=None,
-                 file_name : str = '', update_from_web : bool = False,
-                 thumbnails : dict ={}, channel_title=None, tags : list =[],
-                 category_id : int =22, live_broadcast_content=None,
-                 new_video : bool =False):
-        """
-        Constructor takes a YouTube Platform object as its only parameter 
-        without a default value.  All properties can be set on creation of
-        the Object.  If the object is a new video not yet on YouTube set 
-        the new_video flag to True, and if you want the object to be updated
-        based on a web lookup with the ID set the update_local flag to True.
-        """
-        super(YouTubeVideo, self).__init__(platform=channel,
-                                           ID=ID,file_name=file_name)
-        self.logger = self.settings.YouTube_logger
-        
-        self.logger.info("Initializing Video Object as a YouTube Video Object")
-        
-        self.channel = channel
-        
-        self.published_at = published_at
-        self.channel_id = channel_id
-        self.title = title
-        self.description = description
-        self.thumbnails = thumbnails
-        self.channel_title = channel_title
-        self.tags = tags
-        self.category_id = category_id
-        self.live_broadcast_content = live_broadcast_content
-        self.default_audio_language = default_audio_language
-        self.default_language = default_audio_language
-        self.licensed_content = licensed_content
-        self.content_rating = content_rating
-        self.has_custom_thumbnail = has_custom_thumbnail
-        self.upload_status = upload_status
-        self.privacy_status = privacy_status
-        self.license = lic
-        self.embeddable = embeddable
-        self.public_stats_viewable = public_stats_viewable
-        self.made_for_kids = made_for_kids
-        self.self_declared_made_for_kids = self_declared_made_for_kids
-        self.view_count = view_count
-        self.like_count = like_count
-        self.dislike_count = dislike_count
-        self.comment_count = comment_count
-        self.favorite_count = favorite_count
-        
-        if file_name == '':
-            file_name = self.title
-            vid_dir = os.path.join(os.getcwd(), 'videos')
-            self.file = os.path.join(vid_dir,
-                                     self.get_valid_video_file_name(desired_file_name=file_name))
-        
-        if new_video:
-            m="new_video not attempting to initialize pytube_obj variable"
-            self.logger.info(m)
-            self.pytube_obj = None
-        else:
-            m="not new_video.  Attempting to initialize pytube_obj property"
-            self.logger.info(m)
-            self.pytube_obj = self.__get_pytube(use_oauth=True)
-            if update_from_web:
-                m="update_video flag set.  Grabbing Video details from YouTube"
-                self.logger.info(m)
-                self.update_local()
-                self.logger.info("update ran")
-                
-        
-        self.logger.info("YouTube Video Object initialized")
         
     def get_thumb_url(self):
         """

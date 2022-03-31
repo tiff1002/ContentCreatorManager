@@ -17,7 +17,7 @@ class RedditTextPost(media_post.Post):
         Constructor takes a Reddit Platform Object as well as title
         and body strings for the post
         """
-        super(RedditTextPost, self).__init__(platform=reddit, body=body,
+        super().__init__(platform=reddit, body=body,
                                              title=title)
         self.logger = self.settings.Reddit_logger
         

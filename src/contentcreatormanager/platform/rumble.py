@@ -25,7 +25,7 @@ class Rumble(plat.Platform):
         Set flag init_videos to True to initialize all videos already on
         the Rumble Channel (not implemented yet)
         """
-        super(Rumble, self).__init__(settings=settings, ID='')
+        super().__init__(settings=settings, ID='')
         self.logger = self.settings.Rumble_logger
         
         m="Initializing Platform Object as a Rumble Platform Object"

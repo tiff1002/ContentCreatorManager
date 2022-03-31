@@ -18,7 +18,7 @@ class Twitter(plat.Platform):
         """
         Constructor takes a Settings object.  No ID for Twitter Platform
         """
-        super(Twitter, self).__init__(settings=settings, ID='')
+        super().__init__(settings=settings, ID='')
         
         self.logger = self.settings.Twitter_logger
         m="Initializing Platform Object as Twitter Platform object"

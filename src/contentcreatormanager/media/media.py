@@ -12,8 +12,6 @@ class Media(object):
     """
     classdocs
     """
-
-
     def __init__(self, platform, ID : str):
         """
         Constructor takes a Settings Object and an ID in the form of a string

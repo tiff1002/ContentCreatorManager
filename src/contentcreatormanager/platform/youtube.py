@@ -49,6 +49,35 @@ class YouTube(plat.Platform):
     
     MAX_RETRIES = 25
     
+    def __init__(self, settings : ccm_config.Settings,
+                 init_videos : bool = False, current_quota_usage : int = 0):
+        """
+        Constructor takes a Settings object.  No ID needs
+        to be provided it is grabbed using an API call.  
+        init_videos flag (default False) set to True will
+        grab all video data and use it to make video 
+        objects and add them to media_objects list property.
+        """
+        super().__init__(settings=settings, ID='')
+        self.logger = settings.YouTube_logger
+        self.logger.info("Initializing Platform Object as a YouTube Platform")
+        
+        self.quota_usage = current_quota_usage
+        
+        httplib2.RETRIES = 1
+        m="Set httplib2.RETRIES to 1 as retry logic is handled in this tool"
+        self.logger.info(m)
+        
+        
+        self.service = self.__create_service()
+        self.logger.info("Created and set YouTube service")
+        
+        self.logger.info("Setting Id for the Channel")
+        self.id = self.__get_channel()
+        
+        if init_videos:
+            self.__set_videos()
+    
     def __get_parts(self, contentDetails : bool, snippet : bool,
                     statistics : bool, status : bool, fileDetails : bool,
                     ID : bool, liveStreamingDetails : bool, localizations:bool,
@@ -362,35 +391,6 @@ class YouTube(plat.Platform):
         m=f"There is no items in the result returning as is:\n{result}"
         self.logger.error(m)
         return result
-    
-    def __init__(self, settings : ccm_config.Settings,
-                 init_videos : bool = False, current_quota_usage : int = 0):
-        """
-        Constructor takes a Settings object.  No ID needs
-        to be provided it is grabbed using an API call.  
-        init_videos flag (default False) set to True will
-        grab all video data and use it to make video 
-        objects and add them to media_objects list property.
-        """
-        super(YouTube, self).__init__(settings=settings, ID='')
-        self.logger = settings.YouTube_logger
-        self.logger.info("Initializing Platform Object as a YouTube Platform")
-        
-        self.quota_usage = current_quota_usage
-        
-        httplib2.RETRIES = 1
-        m="Set httplib2.RETRIES to 1 as retry logic is handled in this tool"
-        self.logger.info(m)
-        
-        
-        self.service = self.__create_service()
-        self.logger.info("Created and set YouTube service")
-        
-        self.logger.info("Setting Id for the Channel")
-        self.id = self.__get_channel()
-        
-        if init_videos:
-            self.__set_videos()
             
     def add_video_with_id(self, ID):
         """
