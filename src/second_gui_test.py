@@ -620,8 +620,12 @@ def main(argv=None):
     if "linux" in platform.system().lower():
         theme.theme_use("clam")
 
-    if os.path.isdir(sys.argv[1]):
-        app = Application(root=root, folder_location=sys.argv[1])
+    if len(sys.argv) > 1:
+        if os.path.isdir(sys.argv[1]):
+            app = Application(root=root, folder_location=sys.argv[1])
+        else:
+            folder = tk_fd.askdirectory(title='Choose Application Directory')
+            app = Application(root=root, folder_location=folder)
     else:
         folder = tk_fd.askdirectory(title='Choose Application Directory')
         app = Application(root=root, folder_location=folder)
