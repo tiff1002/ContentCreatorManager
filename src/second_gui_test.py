@@ -16,6 +16,7 @@ import tkinter.simpledialog as tk_sd
 import json
 import contentcreatormanager.platform.youtube as yt_plat
 import contentcreatormanager.platform.lbry as lbry_plat
+import tkinter.messagebox as tk_mb
 
 def focus_next_widget(event):
     """Callback to focus on next widget when pressing <Tab>."""
@@ -76,7 +77,7 @@ class Variables:
 
         self.lbry_vid_not_dl = []
         self.lbry_vid_not_dl_titles = []
-        self.lbry_vid_not_var = tk.StringVar(value=self.lbry_vid_not)
+        self.lbry_vid_not_var = tk.StringVar()
 
         self.yt_up = ["YT up 1", "YT up 2", "YT 3", "YT 4", "youtube 5",
                       "YT up 06", "YT up 07", "YT 08", "YT 09", "youtube 10",
@@ -143,7 +144,29 @@ class Methods:
 
     def load_lbry_data(self):
         self.logger.info("Loading in LBRY channel data")
+        if self.lbry_plat is None:
+            channels = lbry_plat.claim_list(claim_type=['channel'])
+            if len(channels['result']['items']) > 1:
+                picked = False
+                for ch in channels['result']['items']:
+                    if not picked:
+                        option = tk_mb.askyesno(title='LBRY Channel Confirmation',message=f'Do you want to use this channel:{ch["name"]}')
+                        if option:
+                            self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=ch['claim_id'], init_videos=True)
+                            picked = True
+            elif len(channels['result']['items']) == 0:
+                self.logger.error("No LBRY Channels found")
+                return
+            else:
+                self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=channels['result']['items'][0]['claim_id'], init_videos=True)   
         
+        for vid in self.lbry_plat.media_objects:
+            if not os.path.isfile(vid.file):
+                self.lbry_vid_not_dl.append(vid)
+                self.lbry_vid_not_dl_titles.append(vid.title)
+        
+        self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
+        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)  
 
     def get_vids_yt_not_lbry(self):
         print("Get vids on YT not on LBRY")
