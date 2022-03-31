@@ -1,9 +1,5 @@
 # ContentCreatorManager
 
-# Warning:
-
-# Work on the GUI may have broken the scripts.  I have not tested them and I have not updated this readme apart from this warning.  Further updates to come
-
 ## What Is This?
 
 This aims to be a tool for small content creators to manage and promote their content on as many platforms as possible.  This tool should make it so that once set up a content creator has to do the same amount of or less work than managing one platform and still get their content everywhere and announced everywhere.
