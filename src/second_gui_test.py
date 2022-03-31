@@ -208,12 +208,30 @@ class Methods:
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
     def lbry_download(self):
-        print("Download (LBRY)")
-        self.lbry_vid_not.append("Download LBRY " + f"{random.random():.2f}")
-        self.lbry_vid_not_var.set(self.lbry_vid_not)
+        for j in self.lbry_not_dl_lb.curselection():
+            vid = self.lbry_vid_not_dl[j]
+        
+        self.logger.info(f"Downloading LBRYS Vid {vid.title}")
+        vid.download()
+        if os.path.isfile(vid.file):
+            self.logger.info("Video Downloaded")
+            self.lbry_vid_not_dl.remove(vid)
+            self.lbry_vid_not_dl_titles.remove(vid.title)
+            self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
+        else:
+            self.logger.error("Can not find video file download failed")
 
     def lbry_select_video(self):
-        print("Select video file (LBRY)")
+        file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])
+        for j in self.lbry_not_dl_lb.curselection():
+            video = self.lbry_vid_not_dl[j]
+        
+        self.logger.info(f"Copying {file} to {video.file}")
+        shutil.copy(file, video.file)
+        
+        self.lbry_vid_not_dl.remove(video)
+        self.lbry_vid_not_dl_titles.remove(video.title)
+        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
 
     def get_vids_lbry_not_yt(self):
         print("Get vids on LBRY not on YT")
@@ -342,7 +360,7 @@ class MainPage:
 
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
-        setup_listbox(f1, height=self.list_h, width=self.list_w,
+        self.lbry_not_dl_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
                       var=self.lbry_vid_not_var)
 
         f2 = ttk.Frame(parent)
