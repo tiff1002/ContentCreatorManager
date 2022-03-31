@@ -63,6 +63,7 @@ class LBRYVideo(lbry_media.LBRYMedia):
         new claim_id from the upload. This method just makes the API call 
         and does nothing to confirm it worked or is complete.
         """
+        
         result = self.platform.api_stream_create(name=self.name, bid=self.bid,
                                                  file_path=self.file,
                                                  title=self.title,
@@ -109,12 +110,15 @@ class LBRYVideo(lbry_media.LBRYMedia):
             
         return lbry_media.LBRYMedia.make_thumb(self)
     
-    def upload_thumbnail(self, update_video : bool = True):
+    def upload_thumbnail(self, update_video : bool = True, use_existing_thumb_if_present : bool = True):
         """
         Method to upload thumbnail to LBRY and set object thumbnail_url
         """
-        thumb_file = os.path.join(os.getcwd(),
-                                  self.get_valid_thumbnail_file_name())
+        if os.path.isfile(self.thumbnail) and use_existing_thumb_if_present:
+            thumb_file = self.thumbnail
+        else:
+            thumb_file = os.path.join(os.getcwd(),
+                                      self.get_valid_thumbnail_file_name())
         
         if not os.path.isfile(thumb_file):
             self.logger.warning("No Thumbnail file found generating one")
@@ -180,8 +184,11 @@ class LBRYVideo(lbry_media.LBRYMedia):
         if actual_file_path == desired_file_path:         
             return get_result
         
-        shutil.move(actual_file_path, desired_file_path,
-                    copy_function = shutil.copy2)
+        self.logger.info(f"we want {desired_file_path} we got {actual_file_path} copying to desired location and deleting original")
+        
+        shutil.copy(actual_file_path, desired_file_path)
+        os.remove(actual_file_path)
+        os.remove(os.path.join(os.getcwd(), os.path.basename(desired_file_path)))
     
     def upload(self):
         """
@@ -196,6 +203,9 @@ class LBRYVideo(lbry_media.LBRYMedia):
         
         if not os.path.isfile(self.file):
             self.logger.error(f"Can not find file: {file_name}")
+        
+        self.logger.info("attempting to upload thumbnail")
+        self.upload_thumbnail(update_video=False, use_existing_thumb_if_present=True)
         
         self.logger.info(f"Attempting to upload {file_name}")
         result = self.__upload_new_video()

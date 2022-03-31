@@ -62,11 +62,12 @@ class Variables:
         self.list_h = 10
         self.list_w = 45
 
-        self.default_bid = 0.001
+        self.default_bid = 0.0001
 
         self.yt_vid_var = tk.StringVar()
 
         self.lbry_vid_var = tk.StringVar()
+        self.lbry_title_var = tk.StringVar()
 
         self.lbry_upload_vids = []
         self.lbry_upload_titles = []
@@ -121,7 +122,11 @@ class Methods:
     
     def load_yt_data(self):
         self.logger.info("Loading in YouTube data")
-        
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Loading YouTube Data")
+        window.update_idletasks()
+        window.grab_set()
         if self.yt_plat is None:
             self.logger.info("YouTube Platform is not initialized.  Initializing now")
             self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True)
@@ -133,6 +138,7 @@ class Methods:
         
         self.yt_vid_var.set(self.yt_plat.media_object_titles)
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
+        window.destroy()
 
     def confirm_api(self):
         try:
@@ -153,12 +159,22 @@ class Methods:
                     if not picked:
                         option = tk_mb.askyesno(title='LBRY Channel Confirmation',message=f'Do you want to use this channel:{ch["name"]}')
                         if option:
+                            window = tk.Toplevel()
+                            window.geometry("400x90")
+                            window.wm_title("Loading LBRY Data")
+                            window.update_idletasks()
+                            window.grab_set()
                             self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=ch['claim_id'], init_videos=True)
                             picked = True
             elif len(channels['result']['items']) == 0:
                 self.logger.error("No LBRY Channels found")
                 return
             else:
+                window = tk.Toplevel()
+                window.geometry("400x90")
+                window.wm_title("Loading LBRY Data")
+                window.update_idletasks()
+                window.grab_set()
                 self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=channels['result']['items'][0]['claim_id'], init_videos=True)   
         
         for vid in self.lbry_plat.media_objects:
@@ -167,7 +183,8 @@ class Methods:
                 self.lbry_vid_not_dl_titles.append(vid.title)
         
         self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
-        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)  
+        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
+        window.destroy()  
 
     def get_vids_yt_not_lbry(self):
         self.logger.info("Getting videos on YouTube not on LBRY")
@@ -213,8 +230,51 @@ class Methods:
         self.lbry_upload_vids.remove(removal_vid)
         self.lbry_upload_titles.remove(removal_vid.title)
         self.lbry_up_var.set(self.lbry_upload_titles)
+        
+    def lbry_set_title(self):
+        self.lbry_title_var.set("LBRY upload list.\n"
+                                "Default value: "
+                                f"{self.default_bid} LBC each")
+        
+    def lbry_change_default_bid(self):
+        new_bid = tk_sd.askfloat(title='Default Bid',
+                       prompt="Please enter the default LBC bid you would like to make for video uploads")
+        
+        if new_bid >= 0.0001:
+            self.default_bid = new_bid
+            self.lbry_set_title()
+            self.logger.info(f"Set LBRY Default bid to {new_bid}")
+            return
+        
+        self.logger.error("Bad value given")
+        tk_mb.showwarning(title="Bad Bid", message="Please enter a valid float that is 0.0001 or greater")
+        
+    def lbry_upload_videos(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Uploading LBRY Videos")
+        window.update_idletasks()
+        window.grab_set()
+        for vid in self.lbry_upload_vids:
+            self.logger.info(f"Attempting to upload {vid.file} to LBRY")
+            vid.upload()
+            if vid.is_uploaded():
+                self.logger.info("Video Uploaded")
+                self.lbry_upload_vids.remove(vid)
+                self.lbry_upload_titles.remove(vid.title)
+                self.lbry_up_var.set(self.yt_upload_titles)
+                self.lbry_plat.add_video(vid)
+                self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
+            else:
+                self.logger.error("LBRY Upload Failed")
+        window.destroy()
 
     def yt_download(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Downloading YouTube Video")
+        window.update_idletasks()
+        window.grab_set()
         for j in self.yt_not_dl_lb.curselection():
             vid = self.yt_vid_not_dl[j]
         
@@ -227,6 +287,7 @@ class Methods:
             self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
         else:
             self.logger.error("Can not find video file download failed")
+        window.destroy()
 
     def yt_select_video(self):
         file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])
@@ -241,6 +302,11 @@ class Methods:
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
     def lbry_download(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Downloading LBRY Video")
+        window.update_idletasks()
+        window.grab_set()
         for j in self.lbry_not_dl_lb.curselection():
             vid = self.lbry_vid_not_dl[j]
         
@@ -253,6 +319,8 @@ class Methods:
             self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
         else:
             self.logger.error("Can not find video file download failed")
+            
+        window.destroy()
 
     def lbry_select_video(self):
         file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])
@@ -321,7 +389,27 @@ class Methods:
         self.yt_upload_vids.remove(removal_vid)
         self.yt_upload_titles.remove(removal_vid.title)
         self.yt_up_var.set(self.yt_upload_titles)
-
+        
+    def yt_upload_videos(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Uploading YouTube Videos")
+        window.update_idletasks()
+        window.grab_set()
+        for vid in self.yt_upload_vids:
+            self.logger.info(f"Attempting to upload {vid.file} to YouTube")
+            vid.upload()
+            if vid.is_uploaded():
+                self.logger.info("Video Uploaded")
+                self.yt_upload_vids.remove(vid)
+                self.yt_upload_titles.remove(vid.title)
+                self.yt_up_var.set(self.yt_upload_titles)
+                self.yt_plat.add_video(vid)
+                self.yt_vid_var.set(self.yt_plat.media_object_titles)
+            else:
+                self.logger.error("YouTube Upload Failed")
+        window.destroy()       
+                
 
 class MainPage:
     """Main interface."""
@@ -369,6 +457,11 @@ class MainPage:
         b2 = ttk.Button(f2, text="Load in YouTube data",
                         command=self.load_yt_data)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Future Button")
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_ch(self, parent):
         title = ttk.Label(parent,
@@ -388,12 +481,16 @@ class MainPage:
         b2 = ttk.Button(f2, text="Load in LBRY channel data",
                         command=self.load_lbry_data)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Future Button")
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_up_list(self, parent):
         title = ttk.Label(parent,
-                          text=("LBRY upload list.\n"
-                                "Default value: "
-                                f"{self.default_bid} LBC each"))
+                          textvariable=self.lbry_title_var)
+        self.lbry_set_title()
         title.grid(row=0, column=0, sticky=tk.W + tk.E)
 
         f1 = ttk.Frame(parent)
@@ -409,6 +506,16 @@ class MainPage:
         b2 = ttk.Button(f2, text="Remove from LBRY Upload List",
                         command=self.lbry_remove_upload_list)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Upload to LBRY",
+                        command=self.lbry_upload_videos)
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        b4 = ttk.Button(f3, text="Change Default Bid",
+                        command=self.lbry_change_default_bid)
+        b4.grid(row=0, column=1, sticky=tk.W + tk.E)
 
     def setup_yt_not_dl_vids(self, parent):
         title = ttk.Label(parent,
@@ -428,6 +535,11 @@ class MainPage:
         b2 = ttk.Button(f2, text="Select video file",
                         command=self.yt_select_video)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Future Button")
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_not_downloaded(self, parent):
         title = ttk.Label(parent,
@@ -447,6 +559,11 @@ class MainPage:
         b2 = ttk.Button(f2, text="Select video file",
                         command=self.lbry_select_video)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Future Button")
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_yt_up_list(self, parent):
         title = ttk.Label(parent,
@@ -466,6 +583,12 @@ class MainPage:
         b2 = ttk.Button(f2, text="Remove From YT Upload List",
                         command=self.yt_remove_upload_list)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Upload to YouTube",
+                        command=self.yt_upload_videos)
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
 
 class Application(ttk.Frame,
