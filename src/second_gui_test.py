@@ -76,7 +76,6 @@ class Variables:
         self.yt_vid_not_dl_titles = []
         self.yt_vid_not_var = tk.StringVar()
         
-        self.yt_not_dl_lb = None
 
         self.lbry_vid_not_dl = []
         self.lbry_vid_not_dl_titles = []
