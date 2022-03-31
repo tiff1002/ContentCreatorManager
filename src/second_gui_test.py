@@ -15,7 +15,9 @@ import tkinter.filedialog as tk_fd
 import tkinter.simpledialog as tk_sd
 import json
 import contentcreatormanager.platform.youtube as yt_plat
+import contentcreatormanager.media.video.youtube as yt_vid
 import contentcreatormanager.platform.lbry as lbry_plat
+import contentcreatormanager.media.video.lbry as lbry_vid
 import tkinter.messagebox as tk_mb
 
 def focus_next_widget(event):
@@ -66,8 +68,9 @@ class Variables:
 
         self.lbry_vid_var = tk.StringVar()
 
-        self.lbry_up = ["Lbry up 1", "LBRY up 2"]
-        self.lbry_up_var = tk.StringVar(value=self.lbry_up)
+        self.lbry_upload_vids = []
+        self.lbry_upload_titles = []
+        self.lbry_up_var = tk.StringVar()
 
         self.yt_vid_not_dl = []
         self.yt_vid_not_dl_titles = []
@@ -79,10 +82,9 @@ class Variables:
         self.lbry_vid_not_dl_titles = []
         self.lbry_vid_not_var = tk.StringVar()
 
-        self.yt_up = ["YT up 1", "YT up 2", "YT 3", "YT 4", "youtube 5",
-                      "YT up 06", "YT up 07", "YT 08", "YT 09", "youtube 10",
-                      "youtube missing value"]
-        self.yt_up_var = tk.StringVar(value=self.yt_up)
+        self.yt_upload_vids = []
+        self.yt_upload_titles = []
+        self.yt_up_var = tk.StringVar()
         
         
 
@@ -169,17 +171,49 @@ class Methods:
         self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)  
 
     def get_vids_yt_not_lbry(self):
-        print("Get vids on YT not on LBRY")
-        self.lbry_up.append("added YT vid " + f"{random.random():.2f}")
-        self.lbry_up_var.set(self.lbry_up)
+        self.logger.info("Getting videos on YouTube not on LBRY")
+        
+        list1 = self.yt_plat.media_objects
+        list2 = self.lbry_plat.media_objects
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        self.logger.info("Looping through YouTube Media Objects")
+        for obj in list1:
+            not_this_one = False
+            self.logger.info("Looping through LBRY Media Objects")
+            for o in list2:
+                if obj.title == o.title:
+                    self.logger.info(f"{o.title} is on both Platforms")
+                    not_this_one = True
+            if not not_this_one:
+                self.logger.info(f"{obj.title} is not on LBRY creating LBRY Video Object")
+                lvid = lbry_vid.LBRYVideo(lbry_channel=self.lbry_plat, tags=obj.tags, title=obj.title, file_name=os.path.basename(obj.file), description=obj.description, new_video=True)
+                if not os.path.isdir(os.path.join(os.getcwd(), 'thumbs')):
+                    self.logger.warning("Currently no thumbs dir creating it")
+                    os.makedirs('thumbs')
+                if not os.path.isfile(obj.thumbnail):
+                    self.logger.warning(f"Thumbnail {obj.thumbnail} not downloaded downloading now")
+                    os.chdir(thumb_dir)
+                    lvid.thumbnail = obj.download_thumb()
+                    os.chdir(self.settings.folder_location)
+                else:
+                    self.logger.info(f"Thumbnail already present no need to download")
+                    lvid.thumbnail = obj.thumbnail
+                    self.logger.info(f"Setting bid for new LBRY Vid to {self.default_bid}")
+                    lvid.bid = self.default_bid
+                self.logger.info(f"Adding {lvid.title} to list of vids not on LBRY that are on YouTube")
+                self.lbry_upload_vids.append(lvid)
+                self.lbry_upload_titles.append(lvid.title)
+        
+        self.lbry_up_var.set(self.lbry_upload_titles)
 
-    def lbry_remove_sync_list(self):
-        print("Remove from LBRY sync list")
-        if not self.lbry_up:
-            return
-
-        self.lbry_up.pop()
-        self.lbry_up_var.set(self.lbry_up)
+    def lbry_remove_upload_list(self):
+        for i in self.lbry_upload_lb.curselection():
+            removal_vid= self.lbry_upload_vids[i]
+        
+        self.logger.info(f"Removing {removal_vid.title} from LBRY Upload List")
+        self.lbry_upload_vids.remove(removal_vid)
+        self.lbry_upload_titles.remove(removal_vid.title)
+        self.lbry_up_var.set(self.lbry_upload_titles)
 
     def yt_download(self):
         for j in self.yt_not_dl_lb.curselection():
@@ -234,17 +268,60 @@ class Methods:
         self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
 
     def get_vids_lbry_not_yt(self):
-        print("Get vids on LBRY not on YT")
-        self.yt_up.append("added LBRY vid " + f"{random.random():.2f}")
-        self.yt_up_var.set(self.yt_up)
+        self.logger.info("Getting videos on LBRY that are not on YouTube")
+        
+        list1 = self.lbry_plat.media_objects
+        list2 = self.yt_plat.media_objects
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        self.logger.info("Looping through LBRY Media Objects")
+        for obj in list1:
+            not_this_one = False
+            self.logger.info("Looping through YouTube Media Objects")
+            for o in list2:
+                if obj.title == o.title:
+                    self.logger.info(f"{o.title} is on both Platforms")
+                    not_this_one = True
+            if not not_this_one:
+                self.logger.info(f"{obj.title} is not on YouTube creating YouTube Video Object")
+                yvid = yt_vid.YouTubeVideo(channel=self.yt_plat,
+                                           self_declared_made_for_kids=False,
+                                           made_for_kids=False,
+                                           public_stats_viewable=True,
+                                           embeddable=True,
+                                           privacy_status='public',
+                                           has_custom_thumbnail=False,
+                                           title=obj.title,
+                                           description=obj.description,
+                                           file_name=os.path.basename(obj.file),
+                                           update_from_web=False,
+                                           tags=obj.tags,
+                                           new_video=True)
+                yvid.thumbnail = obj.thumbnail
+                if not os.path.isdir(thumb_dir):
+                    self.logger.warning("Currently no thumbs dir creating it")
+                    os.makedirs('thumbs')
+                if not os.path.isfile(obj.thumbnail):
+                    self.logger.warning(f"Thumbnail {obj.thumbnail} not downloaded downloading now")
+                    os.chdir(thumb_dir)
+                    yvid.thumbnail = obj.download_thumb()
+                    os.chdir(self.settings.folder_location)
+                else:
+                    self.logger.info(f"Thumbnail already present no need to download")
+                    yvid.thumbnail = obj.thumbnail
+                self.logger.info(f"Adding {yvid.title} to list of vids not on YouTube that are on LBRY")
+                self.yt_upload_vids.append(yvid)
+                self.yt_upload_titles.append(yvid.title)
+        
+        self.yt_up_var.set(self.yt_upload_titles)
 
-    def yt_remove_sync_list(self):
-        print("Remove from LBRY sync list")
-        if not self.yt_up:
-            return
-
-        self.yt_up.pop()
-        self.yt_up_var.set(self.yt_up)
+    def yt_remove_upload_list(self):
+        for i in self.yt_upload_lb.curselection():
+            removal_vid= self.yt_upload_vids[i]
+        
+        self.logger.info(f"Removing {removal_vid.title} from YouTube Upload List")
+        self.yt_upload_vids.remove(removal_vid)
+        self.yt_upload_titles.remove(removal_vid.title)
+        self.yt_up_var.set(self.yt_upload_titles)
 
 
 class MainPage:
@@ -322,7 +399,7 @@ class MainPage:
 
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
-        setup_listbox(f1, height=self.list_h, width=self.list_w,
+        self.lbry_upload_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
                       var=self.lbry_up_var)
 
         f2 = ttk.Frame(parent)
@@ -330,8 +407,8 @@ class MainPage:
         b1 = ttk.Button(f2, text="Get vids on YT not on LBRY",
                         command=self.get_vids_yt_not_lbry)
         b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Remove from LBRY sync list",
-                        command=self.lbry_remove_sync_list)
+        b2 = ttk.Button(f2, text="Remove from LBRY Upload List",
+                        command=self.lbry_remove_upload_list)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
 
     def setup_yt_not_dl_vids(self, parent):
@@ -379,7 +456,7 @@ class MainPage:
 
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
-        setup_listbox(f1, height=self.list_h, width=self.list_w,
+        self.yt_upload_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
                       var=self.yt_up_var)
 
         f2 = ttk.Frame(parent)
@@ -387,8 +464,8 @@ class MainPage:
         b1 = ttk.Button(f2, text="Get vids on LBRY not on YT",
                         command=self.get_vids_lbry_not_yt)
         b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Remove from sync list",
-                        command=self.yt_remove_sync_list)
+        b2 = ttk.Button(f2, text="Remove From YT Upload List",
+                        command=self.yt_remove_upload_list)
         b2.grid(row=0, column=1, sticky=tk.W + tk.E)
 
 
