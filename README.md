@@ -36,6 +36,7 @@ In addition to this there are several Python libraries you will need to install 
 - pip install google_auth_oauthlib
 - pip install google-api-python-client
 
+You will also need the LBRY Desktop App installed and running
 
 Finally you will need FFMPEG Binaries installed and in your system's Path
 
