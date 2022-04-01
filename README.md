@@ -18,6 +18,8 @@ In addition to this is can determine which videos are on one platform and not th
 
 ## How Do I Use this?
 
+You will need to set up a Project in [Google Dev Console](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwipmYuq7vH2AhVJSzABHXZkAI4QFnoECAcQAQ&url=https%3A%2F%2Fconsole.developers.google.com%2F&usg=AOvVaw39ieEDI7pzBj4NtuzqS57M) and give it access to the Youtube Data API v3.  You will need the client id project id and client secrets.
+
 Well first thing you will need is the latest version of Python installed for your system.  [Python Downloads Page](https://www.python.org/downloads/)
 
 In addition to this there are several Python libraries you will need to install with pip:
@@ -32,9 +34,19 @@ In addition to this there are several Python libraries you will need to install 
 - pip install google_auth_oauthlib
 - pip install google-api-python-client
 
-You will also need the LBRY Desktop App installed and running
+You will also need the [LBRY Desktop App](https://lbry.com/get) installed and running
 
-Finally you will need FFMPEG Binaries installed and in your system's Path
+Finally you will need [FFMPEG](https://www.ffmpeg.org/download.html) Binaries for your system and they will need to be in the system's path.  How to do this will depend on your OS.  You will know you got it working if on command line (CMD or Powershell on windows, Terminal on Mac, any number of terminal emulators on Linux) you can run ffmpeg from any directory.
+
+Once you have all these requirements met you can download this project via the git clone command or just downloading the .zip archive of the project from GitHub and run the program.
+
+To run the program you will go into the src directory and run python second_gui_test.py
+
+Once you do this you will get prompted to select a directory and this will be the directory that the application will use to run.
+
+Alternatively you can run python second_gui_test.py "PATH TO APP DIR" to skip the dialog asking for a directory for the application.
+
+Using the application should be fairly straight forward, but I will make some videos on how to install and use and link to them here.
 
 ## I NEED HELP:
 
