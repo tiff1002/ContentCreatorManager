@@ -111,10 +111,10 @@ class Methods:
         os.chdir(self.settings.folder_location)
         
         for vid in self.yt_no_custom_thumb_vids:
-            vid.upload_thumb()
-            vid.update_web(force_update=True)
-            self.yt_no_custom_thumb_vids.remove(vid)
-            self.yt_no_custom_thumb_vid_titles.remove(vid.title)
+            if vid.upload_thumb() is not None:
+                vid.update_web(force_update=True)
+                self.yt_no_custom_thumb_vids.remove(vid)
+                self.yt_no_custom_thumb_vid_titles.remove(vid.title)
         
         self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
                 

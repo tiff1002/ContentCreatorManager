@@ -783,10 +783,14 @@ class YouTube(plat.Platform):
         """
         quota_cost = 50
         self.logger.info("Making YouTube API Call to thumbnails.set which costs 50 quota units")
-        result = self.service.thumbnails().set(
-            videoId=videoId,
-            media_body=googleapiclient.http.MediaFileUpload(thumb_file)
-        ).execute()
+        try:
+            result = self.service.thumbnails(
+                ).set(videoId=videoId,
+                      media_body=googleapiclient.http.MediaFileUpload(
+                          thumb_file)).execute()
+        except HttpError:
+            self.logger.error("Thumbnail Upload quoata reached upload failed")
+            return None
         self.quota_usage += quota_cost
         m=f"API call made.  Current Quota Usage: {self.quota_usage}"
         self.logger.info(m)
