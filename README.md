@@ -6,7 +6,7 @@ This aims to be a tool for small content creators to manage and promote their co
 
 While the goals for this thing are big, it is still heavily under development.  The most alpha version of the first GUI for this has just come out
 
-Previously there were some scripts in this project to make use of the code and while still present on the GitHub they likely do not work without some tweaking at this point so use at your own risk.  Hell all of this is use at your own risk :P
+Previously there were some scripts in this project to make use of the code and while still present on the [GitHub](https://github.com/tiff1002/ContentCreatorManager) they likely do not work without some tweaking at this point so use at your own risk.  Hell all of this is use at your own risk :P
 
 ## What Can This App Currently Do?
 
