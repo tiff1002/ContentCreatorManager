@@ -6,12 +6,15 @@ Created on Feb 24, 2022
 import shortuuid
 import os.path
 import ffmpeg
-from PIL import ImageChops
+from PIL import ImageChops, Image
 
 class Media(object):
     """
     classdocs
     """
+    
+    THUMB_SIZE = (1280,720)
+    
     def __init__(self, platform, ID : str):
         """
         Constructor takes a Settings Object and an ID in the form of a string
@@ -53,7 +56,13 @@ class Media(object):
                                      vframes=1)
         step_four = step_three.overwrite_output()
         result = step_four.run(capture_stdout=False,capture_stderr=False)
+        
         return result
+    
+    def transform_thumb(self):
+        image = Image.open(fr"{self.thumbnail}")
+        image.thumbnail(Media.THUMB_SIZE)
+        image.save(self.get_valid_thumbnail_file_name())
     
     def get_valid_thumbnail_file_name(self, desired_file_name : str = ''):
         """

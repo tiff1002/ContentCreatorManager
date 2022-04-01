@@ -112,6 +112,7 @@ class Methods:
         
         for vid in self.yt_no_custom_thumb_vids:
             vid.upload_thumb()
+            vid.update_web(force_update=True)
             self.yt_no_custom_thumb_vids.remove(vid)
             self.yt_no_custom_thumb_vid_titles.remove(vid.title)
         
@@ -228,11 +229,16 @@ class Methods:
             self.logger.info("YouTube Platform is not initialized.  Initializing now")
             self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True)
         
+        self.logger.info("Sorting through YouTube Videos")
         for vid in self.yt_plat.media_objects:
             if not vid.has_custom_thumbnail:
+                self.logger.info(f"{vid.title} {vid.id} has no custom thumbnail")
                 self.yt_no_custom_thumb_vids.append(vid)
                 self.yt_no_custom_thumb_vid_titles.append(vid.title)
+            else:
+                self.logger.info(f"{vid.title} {vid.id} Already has a custom Thumbnail")
             if not os.path.isfile(vid.file):
+                self.logger.info(f"{vid.title} not found locally")
                 self.yt_vid_not_dl.append(vid)
                 self.yt_vid_not_dl_titles.append(vid.title)
         
@@ -565,7 +571,7 @@ class MainPage:
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
         self.yt_thumb_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
-                      var=self.yt_vid_var)
+                      var=self.yt_custom_thumb_var)
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)

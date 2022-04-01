@@ -275,7 +275,11 @@ class YouTubeVideo(media_vid.Video):
         self.thumbnail = os.path.join(thumb_dir, filename)
         return self.thumbnail
     
-    def make_thumb(self):
+    def make_thumb(self, overwrite : bool = False):
+        if os.path.isfile(self.thumbnail) and not overwrite:
+            self.logger.warning("Overwrite not set and thumbnail already exists")
+            return
+        
         if not os.path.isfile(self.file):
             self.logger.warning("No Video file found downloading to make thumbnail")
             self.download()
