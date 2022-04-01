@@ -247,9 +247,14 @@ class YouTube(plat.Platform):
         channel to the media_objects list property
         """
         vid_data = self.__get_all_video_data()
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
         for vid in vid_data:
             self.add_video_with_request(vid)
-    
+        
+        for vid in self.media_objects:
+            thumb_name = os.path.basename(vid.thumbnail)
+            vid.thumbnail = os.path.join(thumb_dir, thumb_name)
+        
     def __get_playlist_video_ids(self):
         """
         Private Method to get all the video_ids from the channel 

@@ -104,11 +104,11 @@ class LBRYVideo(lbry_media.LBRYMedia):
         """
         Method to make a thumbnail file
         """
-        if not os.path.join(self.file):
+        if not os.path.isfile(self.file):
             self.logger.warning("No Video file found downloading to make thumbnail")
             self.download()
             
-        return lbry_media.LBRYMedia.make_thumb(self)
+        return super().make_thumb(self)
     
     def upload_thumbnail(self, update_video : bool = True, use_existing_thumb_if_present : bool = True):
         """

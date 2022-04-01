@@ -130,7 +130,7 @@ class YouTubeVideo(media_vid.Video):
         m=f"Attempting to download video portion of {self.title}"
         self.logger.info(m)
         video_file = None
-        vid_dir = os.path.join(os.getcwd(), 'videos')
+        vid_dir = os.path.join(self.settings.folder_location, 'videos')
         finished = False
         tries = 0
        
@@ -254,7 +254,13 @@ class YouTubeVideo(media_vid.Video):
         url = self.get_thumb_url()
         filename = self.get_valid_thumbnail_file_name()
         r = requests.get(url, stream = True)
-
+        
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        if not os.path.isdir(thumb_dir):
+            os.mkdir(thumb_dir)
+        
+        os.chdir(thumb_dir)
+        
         if r.status_code == 200:
             self.logger.info("Thumbnail image retrieved from YouTube")
             r.raw.decode_content = True
@@ -262,11 +268,19 @@ class YouTubeVideo(media_vid.Video):
                 shutil.copyfileobj(r.raw, f)
         else:
             self.logger.error("Did not get status 200 trying to grab thumbnail")
+            os.chdir(self.settings.folder_location)
             return r
-        
+        os.chdir(self.settings.folder_location)
         self.logger.info("Setting thumb file")
-        self.thumbnail = os.path.join(os.getcwd(), filename)
+        self.thumbnail = os.path.join(thumb_dir, filename)
         return self.thumbnail
+    
+    def make_thumb(self):
+        if not os.path.isfile(self.file):
+            self.logger.warning("No Video file found downloading to make thumbnail")
+            self.download()
+        
+        return super().make_thumb()
     
     def upload_thumb(self, make_thumb : bool = False):
         """

@@ -58,7 +58,7 @@ class Video(media.Media):
         """
         Method to create a Thumbnail File from video file
         """
-        return media.Media.make_thumb(self)
+        return super().make_thumb()
     
     def get_valid_video_file_name(self, desired_file_name : str = ''):
         """

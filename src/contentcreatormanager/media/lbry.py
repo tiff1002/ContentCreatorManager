@@ -76,6 +76,9 @@ class LBRYMedia(media.Media):
         self.uploaded = True
         return True
     
+    def make_thumb(self):
+        return super().make_thumb()
+    
     def set_file_based_on_title(self):
         v='`~!@#$%^&+=,-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         valid_chars = v

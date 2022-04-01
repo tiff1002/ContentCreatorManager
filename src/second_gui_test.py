@@ -4,7 +4,6 @@ Created on Mar 30, 2022
 @author: tiff
 '''
 import platform
-import random
 import sys
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -86,10 +85,105 @@ class Variables:
         self.yt_upload_titles = []
         self.yt_up_var = tk.StringVar()
         
-        
-
+        self.yt_no_custom_thumb_vids = []
+        self.yt_no_custom_thumb_vid_titles = []
+        self.yt_custom_thumb_var = tk.StringVar()
 
 class Methods:
+    def yt_generate_and_upload_thumbs(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Generating and Uploading Custom Thumbnails for YouTube Videos")
+        window.update_idletasks()
+        window.grab_set()
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        if not os.path.isdir(thumb_dir):
+            os.mkdir(thumb_dir)
+        if len(self.yt_no_custom_thumb_vids) == 0:
+            tk_mb.showwarning(title="No videos listed for this", message="No Videos are loaded into the no custom thumbnail list box")
+            return
+        os.chdir(thumb_dir)
+        for vid in self.yt_no_custom_thumb_vids:
+            if not vid.has_custom_thumbnail:
+                vid.make_thumb()
+                vid.has_custom_thumbnail = True
+        
+        os.chdir(self.settings.folder_location)
+        
+        for vid in self.yt_no_custom_thumb_vids:
+            vid.upload_thumb()
+            self.yt_no_custom_thumb_vids.remove(vid)
+            self.yt_no_custom_thumb_vid_titles.remove(vid.title)
+        
+        self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+                
+        window.destroy()
+
+    def yt_generate_thumb(self):
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Generating Custom Thumbnail from Video")
+        window.update_idletasks()
+        window.grab_set()
+        
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        
+        if not os.path.isdir(thumb_dir):
+            os.mkdir(thumb_dir)
+            
+        os.chdir(thumb_dir)
+        
+        video = None
+        for i in self.yt_thumb_lb.curselection():
+            video = self.yt_plat.media_objects[i]
+            
+        if video is None:
+            tk_mb.showwarning(title="No Video Selected", message="You Must have a video selected when you press this button")
+            os.chdir(self.settings.folder_location)
+            return
+        
+        self.logger.info(f"Generating Thumbnail for YouTube Video {video.title}")
+        
+        video.make_thumb()
+        os.chdir(self.settings.folder_location)
+        video.has_custom_thumbnail = True
+        window.destroy()
+    
+    def yt_pick_thumb(self):
+        video = None
+        for i in self.yt_thumb_lb.curselection():
+            video = self.yt_plat.media_objects[i]
+            
+        if video is None:
+            tk_mb.showwarning(title="No Video Selected", message="You Must have a video selected when you press this button")
+            return
+        
+        file = tk_fd.askopenfilename(filetypes=[("Image files", ".jpg .jpeg")])
+        
+        if file == '':
+            tk_mb.showwarning(title="No File Selected", message="You Must select an image file after you press this button")
+            return
+        
+        self.logger.info(f"Copying {file} to {video.thumbnail}")
+        shutil.copy(file, video.thumbnail)
+        
+        video.has_custom_thumbnail = True
+    
+    def download_custom_thumbs(self):
+        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        if not os.path.isdir(thumb_dir):
+            os.mkdir(thumb_dir)
+        window = tk.Toplevel()
+        window.geometry("400x90")
+        window.wm_title("Downloading YouTube Video custom thumbnails")
+        window.update_idletasks()
+        window.grab_set()
+        for vid in self.yt_plat.media_objects:
+            if vid.has_custom_thumbnail:
+                if not os.path.isfile(vid.thumbnail):
+                    vid.download_thumb()
+        window.destroy()
+    
     def conf_api_details(self):
         self.logger.info("Configuring API Details for YouTube")
         if os.path.isfile(self.yt_cred_file):
@@ -135,12 +229,16 @@ class Methods:
             self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True)
         
         for vid in self.yt_plat.media_objects:
+            if not vid.has_custom_thumbnail:
+                self.yt_no_custom_thumb_vids.append(vid)
+                self.yt_no_custom_thumb_vid_titles.append(vid.title)
             if not os.path.isfile(vid.file):
                 self.yt_vid_not_dl.append(vid)
                 self.yt_vid_not_dl_titles.append(vid.title)
         
         self.yt_vid_var.set(self.yt_plat.media_object_titles)
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
+        self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
         window.destroy()
 
     def confirm_api(self):
@@ -441,6 +539,15 @@ class MainPage:
 
         frame6 = ttk.Frame(parent)
         frame6.grid(row=1, column=2, padx=4, pady=4)
+        
+        frame7 = ttk.Frame(parent)
+        frame7.grid(row=2, column=0, padx=4, pady=4)
+
+        frame8 = ttk.Frame(parent)
+        frame8.grid(row=2, column=1, padx=4, pady=4)
+
+        frame9 = ttk.Frame(parent)
+        frame9.grid(row=2, column=2, padx=4, pady=4)
 
         self.setup_yt_ch(frame1)
         self.setup_lbry_ch(frame2)
@@ -448,7 +555,33 @@ class MainPage:
         self.setup_yt_not_dl_vids(frame4)
         self.setup_lbry_not_downloaded(frame5)
         self.setup_yt_up_list(frame6)
+        self.setup_yt_thumbnail_list(frame7)
 
+    def setup_yt_thumbnail_list(self, parent):
+        title = ttk.Label(parent,
+                          text="YouTube Videos Without Custom Thumbnail")
+        title.grid(row=0, column=0, sticky=tk.W + tk.E)
+
+        f1 = ttk.Frame(parent)
+        f1.grid(row=1, column=0, sticky=tk.W + tk.E)
+        self.yt_thumb_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
+                      var=self.yt_vid_var)
+
+        f2 = ttk.Frame(parent)
+        f2.grid(row=2, column=0, sticky=tk.W + tk.E)
+        b1 = ttk.Button(f2, text="Pick Thumbnail File",
+                        command=self.yt_pick_thumb)
+        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
+        b2 = ttk.Button(f2, text="Generate Thumbnail",
+                        command=self.yt_generate_thumb)
+        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        
+        f3 = ttk.Frame(parent)
+        f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        b3 = ttk.Button(f3, text="Generate and Upload all Thumbnails",
+                        command=self.yt_generate_and_upload_thumbs)
+        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
+    
     def setup_yt_ch(self, parent):
         title = ttk.Label(parent,
                           text="YouTube channel")
@@ -456,7 +589,7 @@ class MainPage:
 
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
-        setup_listbox(f1, height=self.list_h, width=self.list_w,
+        self.yt_ch_lb = setup_listbox(f1, height=self.list_h, width=self.list_w,
                       var=self.yt_vid_var)
 
         f2 = ttk.Frame(parent)
@@ -470,7 +603,8 @@ class MainPage:
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
-        b3 = ttk.Button(f3, text="Future Button")
+        b3 = ttk.Button(f3, text="Download Custom Thumbnails",
+                        command=self.download_custom_thumbs)
         b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_ch(self, parent):
@@ -621,7 +755,7 @@ def main(argv=None):
     root = tk.Tk()
     root.columnconfigure(0, weight=1)
     root.rowconfigure(0, weight=1)
-    root.title("CreatorManager")
+    root.title("Content Creator Manager")
     # The quit method is explicit because we create a second toplevel,
     # and it causes problems when we try to close the window
     root.protocol("WM_DELETE_WINDOW", root.quit)
