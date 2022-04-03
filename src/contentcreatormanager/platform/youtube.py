@@ -50,7 +50,8 @@ class YouTube(plat.Platform):
     MAX_RETRIES = 25
     
     def __init__(self, settings : ccm_config.Settings,
-                 init_videos : bool = False, current_quota_usage : int = 0):
+                 init_videos : bool = False, current_quota_usage : int = 0,
+                 progress_var = None, popup_var = None):
         """
         Constructor takes a Settings object.  No ID needs
         to be provided it is grabbed using an API call.  
@@ -76,7 +77,7 @@ class YouTube(plat.Platform):
         self.id = self.__get_channel()
         
         if init_videos:
-            self.__set_videos()
+            self.__set_videos(progress_var=progress_var, popup_var=popup_var)
     
     def __get_parts(self, contentDetails : bool, snippet : bool,
                     statistics : bool, status : bool, fileDetails : bool,
@@ -241,12 +242,12 @@ class YouTube(plat.Platform):
         res=result['items'][0]['contentDetails']['relatedPlaylists']['uploads']
         return res
     
-    def __set_videos(self):
+    def __set_videos(self, progress_var = None, popup_var = None):
         """
         Private Method to add all videos on the
         channel to the media_objects list property
         """
-        vid_data = self.__get_all_video_data()
+        vid_data = self.__get_all_video_data(progress_var=progress_var, popup_var=popup_var)
         thumb_dir = os.path.join(os.getcwd(), 'thumbs')
         for vid in vid_data:
             self.add_video_with_request(vid)
@@ -339,7 +340,7 @@ class YouTube(plat.Platform):
                     return_data.append(r)
         return return_data
           
-    def __get_all_video_data(self):
+    def __get_all_video_data(self, progress_var = None, popup_var = None):
         """
         Private Method to return a list of requests for all vids on the channel
         """
@@ -350,15 +351,19 @@ class YouTube(plat.Platform):
         csv_length = response['csv_length']
         
         id_csvs = []
-        
+        progress = 0
+        progress_step = float(100.0/(num_pages*csv_length))
         for x in range(num_pages):
             ids = []
             for y in range(csv_length):
+                popup_var.update()
                 try:
                     ids.append(video_ids[(x*csv_length)+y])
                 except IndexError:
                     self.logger.info("Reached the end of the list of ids")
-                    
+                
+                progress += progress_step
+                progress_var.set(progress)    
             id_csvs.append(",".join(ids))
                     
         pages = self.__get_video_data_from_csvs(id_csvs)

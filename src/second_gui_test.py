@@ -222,17 +222,24 @@ class Methods:
     
     def load_yt_data(self):
         self.logger.info("Loading in YouTube data")
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Loading YouTube Data")
-        window.update_idletasks()
-        window.grab_set()
+        popup = tk.Toplevel()
+        tk.Label(popup, text="YouTube Channel data being loaded in").grid(row=0,column=0)
+
+        progress_var = tk.DoubleVar()
+        progress_bar = ttk.Progressbar(popup, variable=progress_var, maximum=130)
+        progress_bar.grid(row=1, column=0)#.pack(fill=tk.X, expand=1, side=tk.BOTTOM)
+        popup.pack_slaves()
+        
         if self.yt_plat is None:
             self.logger.info("YouTube Platform is not initialized.  Initializing now")
-            self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True)
+            self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True, progress_var=progress_var, popup_var=popup)
+        
+        progress = 100
+        progress_step = float(30.0/len(self.yt_plat.media_objects))
         
         self.logger.info("Sorting through YouTube Videos")
         for vid in self.yt_plat.media_objects:
+            popup.update()
             if not vid.has_custom_thumbnail:
                 self.logger.info(f"{vid.title} {vid.id} has no custom thumbnail")
                 self.yt_no_custom_thumb_vids.append(vid)
@@ -243,11 +250,14 @@ class Methods:
                 self.logger.info(f"{vid.title} not found locally")
                 self.yt_vid_not_dl.append(vid)
                 self.yt_vid_not_dl_titles.append(vid.title)
+                
+            progress += progress_step
+            progress_var.set(progress)
         
         self.yt_vid_var.set(self.yt_plat.media_object_titles)
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
         self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
-        window.destroy()
+        popup.destroy()
 
     def confirm_api(self):
         try:
