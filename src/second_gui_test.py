@@ -111,8 +111,10 @@ class Methods:
         os.chdir(self.settings.folder_location)
         
         for vid in self.yt_no_custom_thumb_vids:
-            if vid.upload_thumb() is not None:
-                vid.update_web(force_update=True)
+            self.logger.info(f"Attempting to upload thumb for {vid.title}")
+            res = vid.upload_thumb()
+            if res is not None:
+                self.logger.info("Thumb uploaded removing from LB list")
                 self.yt_no_custom_thumb_vids.remove(vid)
                 self.yt_no_custom_thumb_vid_titles.remove(vid.title)
         
