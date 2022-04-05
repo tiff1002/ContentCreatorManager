@@ -13,11 +13,12 @@ import os.path
 import tkinter.filedialog as tk_fd
 import tkinter.simpledialog as tk_sd
 import json
-import contentcreatormanager.platform.youtube as yt_plat
 import contentcreatormanager.media.video.youtube as yt_vid
 import contentcreatormanager.platform.lbry as lbry_plat
 import contentcreatormanager.media.video.lbry as lbry_vid
 import tkinter.messagebox as tk_mb
+import contentcreatormanager.config as config
+import contentcreatormanager
 
 def focus_next_widget(event):
     """Callback to focus on next widget when pressing <Tab>."""
@@ -90,52 +91,61 @@ class Variables:
         self.yt_custom_thumb_var = tk.StringVar()
 
 class Methods:
+    def __yt_thread_monitor(self, thread):
+        if thread.is_alive():
+            # check the thread every 100ms
+            self.after(100, lambda: self.__yt_thread_monitor(thread))
+        else:
+            self.yt_data_load_btn['state'] = tk.NORMAL
+            self.yt_config_api_btn['state'] = tk.NORMAL
+            self.yt_download_custom_thumbs_btn['state'] = tk.NORMAL
+            self.yt_download_btn['state'] = tk.NORMAL
+            self.yt_select_vid_file_btn['state'] = tk.NORMAL
+            self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
+            self.yt_generate_thumb_btn['state'] = tk.NORMAL
+            self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
+            self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+            self.yt_upload_btn['state'] = tk.NORMAL
+            
+            self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+            
+    def monitor_yt_thumb_gen_thread(self, thread):
+        self.__yt_thread_monitor(thread)
+    
+    def monitor_yt_thumb_gen_and_upload_thread(self, thread):
+        self.__yt_thread_monitor(thread)
+            
+    def monitor_yt_data_load_thread(self, thread):
+        self.__yt_thread_monitor(thread)
+            
     def yt_generate_and_upload_thumbs(self):
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Generating and Uploading Custom Thumbnails for YouTube Videos")
-        window.update_idletasks()
-        window.grab_set()
-        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
-        if not os.path.isdir(thumb_dir):
-            os.mkdir(thumb_dir)
         if len(self.yt_no_custom_thumb_vids) == 0:
             tk_mb.showwarning(title="No videos listed for this", message="No Videos are loaded into the no custom thumbnail list box")
             return
-        os.chdir(thumb_dir)
-        for vid in self.yt_no_custom_thumb_vids:
-            if not vid.has_custom_thumbnail:
-                vid.make_thumb()
-                vid.has_custom_thumbnail = True
         
-        os.chdir(self.settings.folder_location)
+        self.yt_data_load_btn['state'] = tk.DISABLED
+        self.yt_config_api_btn['state'] = tk.DISABLED
+        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
+        self.yt_download_btn['state'] = tk.DISABLED
+        self.yt_select_vid_file_btn['state'] = tk.DISABLED
+        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
+        self.yt_generate_thumb_btn['state'] = tk.DISABLED
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+        self.yt_upload_btn['state'] = tk.DISABLED
         
-        for vid in self.yt_no_custom_thumb_vids:
-            self.logger.info(f"Attempting to upload thumb for {vid.title}")
-            res = vid.upload_thumb()
-            if res is not None:
-                self.logger.info("Thumb uploaded removing from LB list")
-                self.yt_no_custom_thumb_vids.remove(vid)
-                self.yt_no_custom_thumb_vid_titles.remove(vid.title)
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
         
-        self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
-                
-        window.destroy()
+        gen_and_upload_thread = config.YTGUIThumbUploader(settings=self.settings,
+                                                          yt_no_custom_thumb_vids=self.yt_no_custom_thumb_vids,
+                                                          yt_no_custom_thumb_vid_titles=self.yt_no_custom_thumb_vid_titles,
+                                                          yt_custom_thumb_var=self.yt_custom_thumb_var)
+        
+        gen_and_upload_thread.start()
+        
+        self.monitor_yt_thumb_gen_and_upload_thread(gen_and_upload_thread)
 
     def yt_generate_thumb(self):
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Generating Custom Thumbnail from Video")
-        window.update_idletasks()
-        window.grab_set()
-        
-        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
-        
-        if not os.path.isdir(thumb_dir):
-            os.mkdir(thumb_dir)
-            
-        os.chdir(thumb_dir)
-        
         video = None
         for i in self.yt_thumb_lb.curselection():
             video = self.yt_plat.media_objects[i]
@@ -145,12 +155,25 @@ class Methods:
             os.chdir(self.settings.folder_location)
             return
         
-        self.logger.info(f"Generating Thumbnail for YouTube Video {video.title}")
+        self.yt_data_load_btn['state'] = tk.DISABLED
+        self.yt_config_api_btn['state'] = tk.DISABLED
+        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
+        self.yt_download_btn['state'] = tk.DISABLED
+        self.yt_select_vid_file_btn['state'] = tk.DISABLED
+        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
+        self.yt_generate_thumb_btn['state'] = tk.DISABLED
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+        self.yt_upload_btn['state'] = tk.DISABLED
         
-        video.make_thumb()
-        os.chdir(self.settings.folder_location)
-        video.has_custom_thumbnail = True
-        window.destroy()
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        
+        thumb_gen_thread = config.YTGUIThumbGenerator(settings=self.settings,
+                                                      video=video)
+        
+        thumb_gen_thread.start()
+        
+        self.monitor_yt_thumb_gen_thread(thumb_gen_thread)
     
     def yt_pick_thumb(self):
         video = None
@@ -221,30 +244,29 @@ class Methods:
             json.dump(secrets_json, jf)
     
     def load_yt_data(self):
-        self.logger.info("Loading in YouTube data")
+        self.yt_data_load_btn['state'] = tk.DISABLED
+        self.yt_config_api_btn['state'] = tk.DISABLED
+        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
+        self.yt_download_btn['state'] = tk.DISABLED
+        self.yt_select_vid_file_btn['state'] = tk.DISABLED
+        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
+        self.yt_generate_thumb_btn['state'] = tk.DISABLED
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+        self.yt_upload_btn['state'] = tk.DISABLED
         
-        if self.yt_plat is None:
-            self.logger.info("YouTube Platform is not initialized.  Initializing now")
-            self.yt_plat = yt_plat.YouTube(settings=self.settings, init_videos=True)
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
         
-        
-        self.logger.info("Sorting through YouTube Videos")
-        for vid in self.yt_plat.media_objects:
-            if not vid.has_custom_thumbnail:
-                self.logger.info(f"{vid.title} {vid.id} has no custom thumbnail")
-                self.yt_no_custom_thumb_vids.append(vid)
-                self.yt_no_custom_thumb_vid_titles.append(vid.title)
-            else:
-                self.logger.info(f"{vid.title} {vid.id} Already has a custom Thumbnail")
-            if not os.path.isfile(vid.file):
-                self.logger.info(f"{vid.title} not found locally")
-                self.yt_vid_not_dl.append(vid)
-                self.yt_vid_not_dl_titles.append(vid.title)
-                
-        
-        self.yt_vid_var.set(self.yt_plat.media_object_titles)
-        self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
-        self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+        loading_thread = config.YTGUIDataLoad(self.settings, self.yt_plat,
+                                              self.yt_no_custom_thumb_vids,
+                                              self.yt_no_custom_thumb_vid_titles,
+                                              self.yt_vid_not_dl,
+                                              self.yt_vid_not_dl_titles,
+                                              self.yt_vid_var,
+                                              self.yt_vid_not_var,
+                                              self.yt_custom_thumb_var)
+        loading_thread.start()
+        self.monitor_yt_data_load_thread(loading_thread)
 
     def confirm_api(self):
         try:
@@ -567,18 +589,20 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Pick Thumbnail File",
+        self.yt_pick_thumb_file_btn = ttk.Button(f2, text="Pick Thumbnail File",
                         command=self.yt_pick_thumb)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Generate Thumbnail",
+        self.yt_pick_thumb_file_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.yt_generate_thumb_btn = ttk.Button(f2, text="Generate Thumbnail",
                         command=self.yt_generate_thumb)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.yt_generate_thumb_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
-        b3 = ttk.Button(f3, text="Generate and Upload all Thumbnails",
+        
+        self.yt_gen_and_upload_all_thumbs_btn = ttk.Button(f3, text="Generate and Upload all Thumbnails",
                         command=self.yt_generate_and_upload_thumbs)
-        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.yt_gen_and_upload_all_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
     
     def setup_yt_ch(self, parent):
         title = ttk.Label(parent,
@@ -592,18 +616,20 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Configure API details",
+        self.yt_config_api_btn = ttk.Button(f2, text="Configure API details",
                         command=self.conf_api_details)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Load in YouTube data",
+        self.yt_config_api_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.yt_data_load_btn = ttk.Button(f2, text="Load in YouTube data",
                         command=self.load_yt_data)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.yt_data_load_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
-        b3 = ttk.Button(f3, text="Download Custom Thumbnails",
+        
+        self.yt_download_custom_thumbs_btn = ttk.Button(f3, text="Download Custom Thumbnails",
                         command=self.download_custom_thumbs)
-        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.yt_download_custom_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_ch(self, parent):
         title = ttk.Label(parent,
@@ -617,15 +643,17 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Confirm API is running",
+        self.lbry_api_btn = ttk.Button(f2, text="Confirm API is running",
                         command=self.confirm_api)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Load in LBRY channel data",
+        self.lbry_api_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.lbry_channel_load_btn = ttk.Button(f2, text="Load in LBRY channel data",
                         command=self.load_lbry_data)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.lbry_channel_load_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
+        
         b3 = ttk.Button(f3, text="Future Button")
         b3.grid(row=0, column=0, sticky=tk.W + tk.E)
 
@@ -642,22 +670,25 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Get vids on YT not on LBRY",
+        
+        self.lbry_get_yt_vids_btn = ttk.Button(f2, text="Get vids on YT not on LBRY",
                         command=self.get_vids_yt_not_lbry)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Remove from LBRY Upload List",
+        self.lbry_get_yt_vids_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.lbry_remove_from_upload_btn = ttk.Button(f2, text="Remove from LBRY Upload List",
                         command=self.lbry_remove_upload_list)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.lbry_remove_from_upload_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
-        b3 = ttk.Button(f3, text="Upload to LBRY",
-                        command=self.lbry_upload_videos)
-        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
         
-        b4 = ttk.Button(f3, text="Change Default Bid",
+        self.lbry_upload_btn = ttk.Button(f3, text="Upload to LBRY",
+                        command=self.lbry_upload_videos)
+        self.lbry_upload_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.lbry_bid_btn = ttk.Button(f3, text="Change Default Bid",
                         command=self.lbry_change_default_bid)
-        b4.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.lbry_bid_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
 
     def setup_yt_not_dl_vids(self, parent):
         title = ttk.Label(parent,
@@ -671,12 +702,13 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Download",
+        self.yt_download_btn = ttk.Button(f2, text="Download",
                         command=self.yt_download)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Select video file",
+        self.yt_download_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.yt_select_vid_file_btn = ttk.Button(f2, text="Select video file",
                         command=self.yt_select_video)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.yt_select_vid_file_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
@@ -695,12 +727,12 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Download",
+        self.lbry_download_btn = ttk.Button(f2, text="Download",
                         command=self.lbry_download)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Select video file",
+        self.lbry_download_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.lbry_select_vid_file_btn = ttk.Button(f2, text="Select video file",
                         command=self.lbry_select_video)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.lbry_select_vid_file_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
@@ -719,18 +751,20 @@ class MainPage:
 
         f2 = ttk.Frame(parent)
         f2.grid(row=2, column=0, sticky=tk.W + tk.E)
-        b1 = ttk.Button(f2, text="Get vids on LBRY not on YT",
+        self.yt_get_lbry_vids_btn = ttk.Button(f2, text="Get vids on LBRY not on YT",
                         command=self.get_vids_lbry_not_yt)
-        b1.grid(row=0, column=0, sticky=tk.W + tk.E)
-        b2 = ttk.Button(f2, text="Remove From YT Upload List",
+        self.yt_get_lbry_vids_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.yt_remove_from_upload_btn = ttk.Button(f2, text="Remove From YT Upload List",
                         command=self.yt_remove_upload_list)
-        b2.grid(row=0, column=1, sticky=tk.W + tk.E)
+        self.yt_remove_from_upload_btn.grid(row=0, column=1, sticky=tk.W + tk.E)
         
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
-        b3 = ttk.Button(f3, text="Upload to YouTube",
+        
+        self.yt_upload_btn = ttk.Button(f3, text="Upload to YouTube",
                         command=self.yt_upload_videos)
-        b3.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.yt_upload_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
 
 
 class Application(ttk.Frame,

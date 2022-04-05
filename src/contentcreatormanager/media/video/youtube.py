@@ -111,18 +111,22 @@ class YouTubeVideo(media_vid.Video):
     def __execute_upload(self, inited_upload):
         return self.platform.api_videos_insert_exec(inited_upload)
     
-    def __aud_dl(self):
+    def __aud_dl(self, progress_var = None,popup_var = None):
+        popup_var.update()
         py = self.pytube_obj.streams.filter(only_audio=True)
+        progress_var.set(60)
         return py.order_by('abr').desc().first().download(filename_prefix="audio_")
     
-    def __vid_dl(self):
+    def __vid_dl(self,progress_var = None,popup_var = None):
         """
         private method to run pytube vid download
         """
+        popup_var.update()
         py = self.pytube_obj.streams.order_by('resolution')
+        progress_var.set(30)
         return py.desc().first().download(filename_prefix="video_")
     
-    def __pytube_download_video(self):
+    def __pytube_download_video(self, progress_var = None,popup_var = None):
         """
         Private Method to download the video portion of 
         this YouTube Video Object
@@ -139,7 +143,7 @@ class YouTubeVideo(media_vid.Video):
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
             try:
                 os.chdir(vid_dir)
-                video_file = self.__vid_dl()
+                video_file = self.__vid_dl(progress_var = progress_var,popup_var = popup_var)
                 finished = True
             except KeyError as e:
                 if e.args[0] == 'content-length':
@@ -163,7 +167,7 @@ class YouTubeVideo(media_vid.Video):
         return video_file
         
         
-    def __pytube_download_audio(self):
+    def __pytube_download_audio(self, progress_var = None,popup_var = None):
         """
         Private Method to download the audio portion
         of the YouTube Video Object
@@ -179,7 +183,7 @@ class YouTubeVideo(media_vid.Video):
         while not finished and tries < YouTubeVideo.MAX_RETRIES + 2:
             try:
                 os.chdir(vid_dir)
-                audio_file = self.__aud_dl()
+                audio_file = self.__aud_dl(progress_var = progress_var,popup_var = popup_var)
                 finished = True
             except Exception as e:
                 if tries > YouTubeVideo.MAX_RETRIES:
@@ -197,7 +201,7 @@ class YouTubeVideo(media_vid.Video):
         self.logger.info(f"Downloaded audio for {self.title}")
         return audio_file
     
-    def __pytube_download(self, overwrite : bool = False):
+    def __pytube_download(self, overwrite : bool = False, progress_var = None,popup_var = None):
         """
         Private Method to download a video from YouTube using pytube. 
         Optional parameter overwrite is a bool that defaults to False.
@@ -216,15 +220,15 @@ class YouTubeVideo(media_vid.Video):
                 self.logger.info("Overwrite not set not downloading")
                 return
         
-        video_file = self.__pytube_download_video()
+        video_file = self.__pytube_download_video(progress_var = progress_var,popup_var = popup_var)
         
         if video_file == 'content-length-error':
             self.logger.error("Can not download this video")
             return 'content-length-error'
         
-        audio_file = self.__pytube_download_audio()
+        audio_file = self.__pytube_download_audio(progress_var = progress_var,popup_var = popup_var)
         
-        self.combine_audio_and_video_files(video_file, audio_file)
+        self.combine_audio_and_video_files(video_file, audio_file, progress_var = progress_var,popup_var = popup_var)
     
     def __url(self):
         """
@@ -537,7 +541,7 @@ class YouTubeVideo(media_vid.Video):
         
         self.logger.info("Video Upload Complete")
     
-    def download(self, overwrite=False):
+    def download(self, overwrite=False, progress_var = None,popup_var = None):
         """
         Method to download the video from YouTube.
         Set overwrite to True if you want an existing file overwritten
@@ -546,7 +550,7 @@ class YouTubeVideo(media_vid.Video):
             if not self.is_uploaded():
                 self.logger.error("Video not uploaded. Can not download it")
                 return
-        result = self.__pytube_download(overwrite=overwrite)
+        result = self.__pytube_download(overwrite=overwrite, progress_var = progress_var,popup_var = popup_var)
         
         return result
         

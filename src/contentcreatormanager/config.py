@@ -4,7 +4,101 @@ Created on Feb 24, 2022
 @author: tiff
 """
 import logging.config
-import os
+import os.path
+from threading import Thread
+import contentcreatormanager.platform.youtube as yt
+
+class YTGUIThumbGenerator(Thread):
+    def __init__(self, settings, video):
+        super().__init__()
+        self.thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        self.settings = settings
+        self.logger = settings.Base_logger
+        if not os.path.isdir(self.thumb_dir):
+            os.mkdir(self.thumb_dir)
+        self.video = video    
+
+    def run(self):
+        os.chdir(self.thumb_dir)
+        
+        self.logger.info(f"Generating Thumbnail for YouTube Video {self.video.title}")
+        
+        self.video.make_thumb()
+        os.chdir(self.settings.folder_location)
+        self.video.has_custom_thumbnail = True
+
+class YTGUIThumbUploader(Thread):
+    def __init__(self, settings, yt_no_custom_thumb_vids,
+                 yt_no_custom_thumb_vid_titles,
+                 yt_custom_thumb_var):
+        super().__init__()
+        self.settings = settings
+        self.logger = settings.Base_logger
+        self.thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        
+        self.yt_no_custom_thumb_vids = yt_no_custom_thumb_vids
+        self.yt_no_custom_thumb_vid_titles = yt_no_custom_thumb_vid_titles
+        self.yt_custom_thumb_var = yt_custom_thumb_var
+        
+        if not os.path.isdir(self.thumb_dir):
+            os.mkdir(self.thumb_dir)
+        
+    def run(self):
+        os.chdir(self.thumb_dir)
+        for vid in self.yt_no_custom_thumb_vids:
+            if not vid.has_custom_thumbnail:
+                vid.make_thumb()
+                vid.has_custom_thumbnail = True
+        
+        os.chdir(self.settings.folder_location)
+        
+        for vid in self.yt_no_custom_thumb_vids:
+            self.logger.info(f"Attempting to upload thumb for {vid.title}")
+            res = vid.upload_thumb()
+            if res is not None:
+                self.logger.info("Thumb uploaded removing from LB list")
+                self.yt_no_custom_thumb_vids.remove(vid)
+                self.yt_no_custom_thumb_vid_titles.remove(vid.title)
+                self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+
+class YTGUIDataLoad(Thread):
+    def __init__(self, settings, yt_plat, yt_no_custom_thumb_vids,
+                 yt_no_custom_thumb_vid_titles, yt_vid_not_dl,
+                 yt_vid_not_dl_titles, yt_vid_var, yt_vid_not_var,
+                 yt_custom_thumb_var):
+        super().__init__()
+        self.logger = settings.Base_logger
+        self.logger.info("Loading in YouTube data")
+        self.settings = settings
+        self.yt_plat = yt_plat
+        self.yt_no_custom_thumb_vids = yt_no_custom_thumb_vids
+        self.yt_no_custom_thumb_vid_titles = yt_no_custom_thumb_vid_titles
+        self.yt_vid_not_dl = yt_vid_not_dl
+        self.yt_vid_not_dl_titles = yt_vid_not_dl_titles
+        self.yt_vid_var = yt_vid_var
+        self.yt_vid_not_var = yt_vid_not_var
+        self.yt_custom_thumb_var = yt_custom_thumb_var     
+        
+    def run(self):
+        if self.yt_plat is None:
+            self.logger.info("YouTube Platform is not initialized.  Initializing now")
+            self.yt_plat = yt.YouTube(settings=self.settings, init_videos=True, gui_var=self.yt_vid_var)
+        
+        
+        self.logger.info("Sorting through YouTube Videos")
+        for vid in self.yt_plat.media_objects:
+            if not vid.has_custom_thumbnail:
+                self.logger.info(f"{vid.title} {vid.id} has no custom thumbnail")
+                self.yt_no_custom_thumb_vids.append(vid)
+                self.yt_no_custom_thumb_vid_titles.append(vid.title)
+                self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+            else:
+                self.logger.info(f"{vid.title} {vid.id} Already has a custom Thumbnail")
+            if not os.path.isfile(vid.file):
+                self.logger.info(f"{vid.title} not found locally")
+                self.yt_vid_not_dl.append(vid)
+                self.yt_vid_not_dl_titles.append(vid.title)
+                self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
 class Settings(object):
     """
@@ -20,7 +114,7 @@ class Settings(object):
         
         logging.config.fileConfig(logging_config_file)
         self.logger = logging.getLogger('SettingsLogger')
-
+        self.root_logger = logging.getLogger()
         
         self.YouTube_logger = logging.getLogger('YouTubeLogger')
         self.LBRY_logger = logging.getLogger('LBRYLogger')
@@ -36,3 +130,4 @@ class Settings(object):
         self.Video_logger = logging.getLogger('VideoLogger')
         self.Post_logger = logging.getLogger('PostLogger')
         self.logger.info("Loggers initialized")
+

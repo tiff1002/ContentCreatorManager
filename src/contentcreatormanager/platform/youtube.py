@@ -3,7 +3,6 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.config as ccm_config
 import contentcreatormanager.platform.platform as plat
 import contentcreatormanager.media.video.youtube as yt_vid
 import httplib2
@@ -20,6 +19,7 @@ import google.auth.exceptions
 import googleapiclient.http
 from googleapiclient.errors import HttpError
 from google.auth.transport.requests import Request as GoogleAuthRequest
+import contentcreatormanager
 
 class YouTube(plat.Platform):
     """
@@ -49,9 +49,9 @@ class YouTube(plat.Platform):
     
     MAX_RETRIES = 25
     
-    def __init__(self, settings : ccm_config.Settings,
+    def __init__(self, settings,
                  init_videos : bool = False, current_quota_usage : int = 0,
-                 progress_var = None, popup_var = None):
+                 gui_var=None):
         """
         Constructor takes a Settings object.  No ID needs
         to be provided it is grabbed using an API call.  
@@ -69,6 +69,7 @@ class YouTube(plat.Platform):
         m="Set httplib2.RETRIES to 1 as retry logic is handled in this tool"
         self.logger.info(m)
         
+        self.gui_var = gui_var
         
         self.service = self.__create_service()
         self.logger.info("Created and set YouTube service")
@@ -77,7 +78,7 @@ class YouTube(plat.Platform):
         self.id = self.__get_channel()
         
         if init_videos:
-            self.__set_videos(progress_var=progress_var, popup_var=popup_var)
+            self.__set_videos()
     
     def __get_parts(self, contentDetails : bool, snippet : bool,
                     statistics : bool, status : bool, fileDetails : bool,
@@ -242,12 +243,12 @@ class YouTube(plat.Platform):
         res=result['items'][0]['contentDetails']['relatedPlaylists']['uploads']
         return res
     
-    def __set_videos(self, progress_var = None, popup_var = None):
+    def __set_videos(self):
         """
         Private Method to add all videos on the
         channel to the media_objects list property
         """
-        vid_data = self.__get_all_video_data(progress_var=progress_var, popup_var=popup_var)
+        vid_data = self.__get_all_video_data()
         thumb_dir = os.path.join(os.getcwd(), 'thumbs')
         for vid in vid_data:
             self.add_video_with_request(vid)
@@ -340,7 +341,7 @@ class YouTube(plat.Platform):
                     return_data.append(r)
         return return_data
           
-    def __get_all_video_data(self, progress_var = None, popup_var = None):
+    def __get_all_video_data(self):
         """
         Private Method to return a list of requests for all vids on the channel
         """
@@ -351,19 +352,14 @@ class YouTube(plat.Platform):
         csv_length = response['csv_length']
         
         id_csvs = []
-        progress = 0
-        progress_step = float(100.0/(num_pages*csv_length))
         for x in range(num_pages):
             ids = []
             for y in range(csv_length):
-                popup_var.update()
                 try:
                     ids.append(video_ids[(x*csv_length)+y])
                 except IndexError:
                     self.logger.info("Reached the end of the list of ids")
-                
-                progress += progress_step
-                progress_var.set(progress)    
+                  
             id_csvs.append(",".join(ids))
                     
         pages = self.__get_video_data_from_csvs(id_csvs)
@@ -410,7 +406,12 @@ class YouTube(plat.Platform):
         v = yt_vid.YouTubeVideo(channel=self, ID=ID, update_from_web=True)
         self.add_video(v)
         return v
-        
+    
+    def add_media(self, media):
+        super().add_media(media)
+        if self.gui_var is not None:
+            self.gui_var.set(self.media_object_titles)    
+    
     def add_video(self, vid : yt_vid.YouTubeVideo):
         """
         Method to add a YouTube video to media_objects

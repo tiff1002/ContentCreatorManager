@@ -82,7 +82,7 @@ class Video(media.Media):
             
         return result
     
-    def combine_audio_and_video_files(self, video_file, audio_file):
+    def combine_audio_and_video_files(self, video_file, audio_file, progress_var = None,popup_var = None):
         """
         Method to combine given audio and video file using FFMPEG
         """
@@ -146,6 +146,9 @@ class Video(media.Media):
         os.remove(audFile)
         self.logger.info(f"Removing {vidFile}")
         os.remove(vidFile)
+        
+        popup_var.update()
+        progress_var.set(100)
     
     def is_thumb_downloaded(self):
         """

@@ -3,7 +3,6 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.config as ccm_config
 import contentcreatormanager.media.media as media
 import contentcreatormanager.media.video.video as media_vid
 import os
@@ -13,7 +12,7 @@ class Platform(object):
     """
     classdocs
     """
-    def __init__(self, settings : ccm_config.Settings, ID : str):
+    def __init__(self, settings, ID : str):
         """
         Constructor takes a Settings object and an ID as string
         """
