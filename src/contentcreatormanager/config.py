@@ -7,6 +7,20 @@ import logging.config
 import os.path
 from threading import Thread
 import contentcreatormanager.platform.youtube as yt
+import pickle
+
+class YTGUICustomThumbsDownloader(Thread):
+    def __init__(self, yt_plat):
+        super().__init__()
+        self.thumb_dir = os.path.join(os.getcwd(), 'thumbs')
+        if not os.path.isdir(self.thumb_dir):
+            os.mkdir(self.thumb_dir)
+        self.yt_plat = yt_plat            
+    def run(self):
+        for vid in self.yt_plat.media_objects:
+            if vid.has_custom_thumbnail:
+                if not os.path.isfile(vid.thumbnail):
+                    vid.download_thumb()
 
 class YTGUIThumbGenerator(Thread):
     def __init__(self, settings, video):
@@ -28,9 +42,7 @@ class YTGUIThumbGenerator(Thread):
         self.video.has_custom_thumbnail = True
 
 class YTGUIThumbUploader(Thread):
-    def __init__(self, settings, yt_no_custom_thumb_vids,
-                 yt_no_custom_thumb_vid_titles,
-                 yt_custom_thumb_var):
+    def __init__(self, settings, yt_no_custom_thumb_vids, yt_no_custom_thumb_vid_titles):
         super().__init__()
         self.settings = settings
         self.logger = settings.Base_logger
@@ -38,7 +50,6 @@ class YTGUIThumbUploader(Thread):
         
         self.yt_no_custom_thumb_vids = yt_no_custom_thumb_vids
         self.yt_no_custom_thumb_vid_titles = yt_no_custom_thumb_vid_titles
-        self.yt_custom_thumb_var = yt_custom_thumb_var
         
         if not os.path.isdir(self.thumb_dir):
             os.mkdir(self.thumb_dir)
@@ -62,29 +73,39 @@ class YTGUIThumbUploader(Thread):
                 self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
 
 class YTGUIDataLoad(Thread):
-    def __init__(self, settings, yt_plat, yt_no_custom_thumb_vids,
-                 yt_no_custom_thumb_vid_titles, yt_vid_not_dl,
-                 yt_vid_not_dl_titles, yt_vid_var, yt_vid_not_var,
-                 yt_custom_thumb_var):
+    def __init__(self, settings, yt_plat):
         super().__init__()
-        self.logger = settings.Base_logger
-        self.logger.info("Loading in YouTube data")
         self.settings = settings
+        self.logger = settings.Base_logger
         self.yt_plat = yt_plat
-        self.yt_no_custom_thumb_vids = yt_no_custom_thumb_vids
-        self.yt_no_custom_thumb_vid_titles = yt_no_custom_thumb_vid_titles
-        self.yt_vid_not_dl = yt_vid_not_dl
-        self.yt_vid_not_dl_titles = yt_vid_not_dl_titles
-        self.yt_vid_var = yt_vid_var
-        self.yt_vid_not_var = yt_vid_not_var
-        self.yt_custom_thumb_var = yt_custom_thumb_var     
+        self.yt_no_custom_thumb_vids = []
+        self.yt_no_custom_thumb_vid_titles = []
+        self.yt_vid_not_dl = []
+        self.yt_vid_not_dl_titles = []
         
+    def __save_vars(self):
+        yt_vars = []
+        yt_vars.append(self.yt_plat)
+        yt_vars.append(self.yt_no_custom_thumb_vids)
+        yt_vars.append(self.yt_no_custom_thumb_vid_titles)
+        yt_vars.append(self.yt_vid_not_dl)
+        yt_vars.append(self.yt_vid_not_dl_titles)
+        temp_dir = os.path.join(os.getcwd(), 'temp')
+        if not os.path.isdir(temp_dir):
+            os.mkdir(temp_dir)
+        var_file = os.path.join(temp_dir, "ytvars.pickle")
+        
+        with open(var_file, 'wb') as file:
+            pickle.dump(yt_vars, file)
+            
+        file.close()
+    
     def run(self):
         if self.yt_plat is None:
             self.logger.info("YouTube Platform is not initialized.  Initializing now")
-            self.yt_plat = yt.YouTube(settings=self.settings, init_videos=True, gui_var=self.yt_vid_var)
-        
-        
+            self.yt_plat = yt.YouTube(settings=self.settings, init_videos=True)
+    
+    
         self.logger.info("Sorting through YouTube Videos")
         for vid in self.yt_plat.media_objects:
             if not vid.has_custom_thumbnail:
@@ -99,6 +120,7 @@ class YTGUIDataLoad(Thread):
                 self.yt_vid_not_dl.append(vid)
                 self.yt_vid_not_dl_titles.append(vid.title)
                 self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
+            #self.__save_vars()
 
 class Settings(object):
     """

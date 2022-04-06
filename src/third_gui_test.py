@@ -17,8 +17,7 @@ import contentcreatormanager.media.video.youtube as yt_vid
 import contentcreatormanager.platform.lbry as lbry_plat
 import contentcreatormanager.media.video.lbry as lbry_vid
 import tkinter.messagebox as tk_mb
-import contentcreatormanager.config as config
-import contentcreatormanager
+import pickle
 
 def focus_next_widget(event):
     """Callback to focus on next widget when pressing <Tab>."""
@@ -42,6 +41,10 @@ def setup_listbox(parent, height=10, width=40,
 
     return listb
 
+
+class Thread_Vars:
+    def __init__(self):
+        super().__init__()
 
 class Variables:
     def setup_vars(self, folder_location, parent):
@@ -91,26 +94,79 @@ class Variables:
         self.yt_custom_thumb_var = tk.StringVar()
 
 class Methods:
+    def __yt_thread_disable_buttons(self):
+        self.yt_data_load_btn['state'] = tk.DISABLED
+        self.yt_config_api_btn['state'] = tk.DISABLED
+        self.yt_download_yt_custom_thumbs_btn['state'] = tk.DISABLED
+        self.yt_download_btn['state'] = tk.DISABLED
+        self.yt_select_vid_file_btn['state'] = tk.DISABLED
+        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
+        self.yt_generate_thumb_btn['state'] = tk.DISABLED
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+        self.yt_upload_btn['state'] = tk.DISABLED
+        
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        
+    def __yt_thread_enable_buttons(self):
+        self.yt_data_load_btn['state'] = tk.NORMAL
+        self.yt_config_api_btn['state'] = tk.NORMAL
+        self.yt_download_yt_custom_thumbs_btn['state'] = tk.NORMAL
+        self.yt_download_btn['state'] = tk.NORMAL
+        self.yt_select_vid_file_btn['state'] = tk.NORMAL
+        self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
+        self.yt_generate_thumb_btn['state'] = tk.NORMAL
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
+        self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+        self.yt_upload_btn['state'] = tk.NORMAL
+        
+        self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+    
+    def __load_yt_thread_vars(self, thread):
+        self.yt_plat = thread.yt_plat
+        self.yt_no_custom_thumb_vids = thread.yt_no_custom_thumb_vids
+        self.yt_no_custom_thumb_vid_titles = thread.yt_no_custom_thumb_vid_titles
+        self.yt_vid_not_dl = thread.yt_vid_not_dl
+        self.yt_vid_not_dl_titles = thread.yt_vid_not_dl_titles
+        
+    def __set_yt_lbs(self):
+        if self.yt_plat is not None:
+            self.yt_vid_var.set(self.yt_plat.media_object_titles)
+        self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
+        self.yt_up_var.set(self.yt_upload_titles)
+        self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+    
     def __yt_thread_monitor(self, thread):
         if thread.is_alive():
             # check the thread every 100ms
             self.after(100, lambda: self.__yt_thread_monitor(thread))
         else:
-            self.yt_data_load_btn['state'] = tk.NORMAL
-            self.yt_config_api_btn['state'] = tk.NORMAL
-            self.yt_download_custom_thumbs_btn['state'] = tk.NORMAL
-            self.yt_download_btn['state'] = tk.NORMAL
-            self.yt_select_vid_file_btn['state'] = tk.NORMAL
-            self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
-            self.yt_generate_thumb_btn['state'] = tk.NORMAL
-            self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
-            self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
-            self.yt_upload_btn['state'] = tk.NORMAL
+            self.__yt_thread_enable_buttons()
+        self.__load_yt_thread_vars(thread)
+        self.__set_yt_lbs()  
+    
+    def __yt_thumb_thread_monitor(self, thread, i):
+        if thread.is_alive():
+            # check the thread every 100ms
+            self.after(100, lambda: self.__yt_thread_monitor(thread))
+        else:
+            self.yt_plat.media_objects[i] = thread.video
+            self.__yt_thread_enable_buttons()
+        self.__load_yt_thread_vars(thread)
+        self.__set_yt_lbs()
+        
+    def __yt_thread_monitor_no_var_update(self, thread, i):
+        if thread.is_alive():
+            # check the thread every 100ms
+            self.after(100, lambda: self.__yt_thread_monitor(thread))
+        else:
+            self.__yt_thread_enable_buttons()
             
-            self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
-            
-    def monitor_yt_thumb_gen_thread(self, thread):
-        self.__yt_thread_monitor(thread)
+    def monitor_yt_custom_thumb_downloader_thread(self, thread):
+        self.__yt_thread_monitor_no_var_update(thread)
+    
+    def monitor_yt_thumb_gen_thread(self, thread, i):
+        self.__yt_thumb_thread_monitor(thread, i)
     
     def monitor_yt_thumb_gen_and_upload_thread(self, thread):
         self.__yt_thread_monitor(thread)
@@ -123,23 +179,11 @@ class Methods:
             tk_mb.showwarning(title="No videos listed for this", message="No Videos are loaded into the no custom thumbnail list box")
             return
         
-        self.yt_data_load_btn['state'] = tk.DISABLED
-        self.yt_config_api_btn['state'] = tk.DISABLED
-        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
-        self.yt_download_btn['state'] = tk.DISABLED
-        self.yt_select_vid_file_btn['state'] = tk.DISABLED
-        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
-        self.yt_generate_thumb_btn['state'] = tk.DISABLED
-        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
-        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
-        self.yt_upload_btn['state'] = tk.DISABLED
-        
-        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        self.__yt_thread_disable_buttons()
         
         gen_and_upload_thread = config.YTGUIThumbUploader(settings=self.settings,
                                                           yt_no_custom_thumb_vids=self.yt_no_custom_thumb_vids,
-                                                          yt_no_custom_thumb_vid_titles=self.yt_no_custom_thumb_vid_titles,
-                                                          yt_custom_thumb_var=self.yt_custom_thumb_var)
+                                                          yt_no_custom_thumb_vid_titles=self.yt_no_custom_thumb_vid_titles)
         
         gen_and_upload_thread.start()
         
@@ -155,25 +199,14 @@ class Methods:
             os.chdir(self.settings.folder_location)
             return
         
-        self.yt_data_load_btn['state'] = tk.DISABLED
-        self.yt_config_api_btn['state'] = tk.DISABLED
-        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
-        self.yt_download_btn['state'] = tk.DISABLED
-        self.yt_select_vid_file_btn['state'] = tk.DISABLED
-        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
-        self.yt_generate_thumb_btn['state'] = tk.DISABLED
-        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
-        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
-        self.yt_upload_btn['state'] = tk.DISABLED
-        
-        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        self.__yt_thread_disable_buttons()
         
         thumb_gen_thread = config.YTGUIThumbGenerator(settings=self.settings,
                                                       video=video)
         
         thumb_gen_thread.start()
         
-        self.monitor_yt_thumb_gen_thread(thumb_gen_thread)
+        self.monitor_yt_thumb_gen_thread(thumb_gen_thread, i)
     
     def yt_pick_thumb(self):
         video = None
@@ -195,20 +228,11 @@ class Methods:
         
         video.has_custom_thumbnail = True
     
-    def download_custom_thumbs(self):
-        thumb_dir = os.path.join(os.getcwd(), 'thumbs')
-        if not os.path.isdir(thumb_dir):
-            os.mkdir(thumb_dir)
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Downloading YouTube Video custom thumbnails")
-        window.update_idletasks()
-        window.grab_set()
-        for vid in self.yt_plat.media_objects:
-            if vid.has_custom_thumbnail:
-                if not os.path.isfile(vid.thumbnail):
-                    vid.download_thumb()
-        window.destroy()
+    def download_yt_custom_thumbs(self):
+        self.__yt_thread_disable_buttons()
+        custom_thumb_downloader_thread = config.YTGUICustomThumbsDownloader(self.yt_plat)
+        custom_thumb_downloader_thread.start()
+        self.monitor_yt_custom_thumb_downloader_thread(custom_thumb_downloader_thread)
     
     def conf_api_details(self):
         self.logger.info("Configuring API Details for YouTube")
@@ -244,27 +268,8 @@ class Methods:
             json.dump(secrets_json, jf)
     
     def load_yt_data(self):
-        self.yt_data_load_btn['state'] = tk.DISABLED
-        self.yt_config_api_btn['state'] = tk.DISABLED
-        self.yt_download_custom_thumbs_btn['state'] = tk.DISABLED
-        self.yt_download_btn['state'] = tk.DISABLED
-        self.yt_select_vid_file_btn['state'] = tk.DISABLED
-        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
-        self.yt_generate_thumb_btn['state'] = tk.DISABLED
-        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
-        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
-        self.yt_upload_btn['state'] = tk.DISABLED
-        
-        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
-        
-        loading_thread = config.YTGUIDataLoad(self.settings, self.yt_plat,
-                                              self.yt_no_custom_thumb_vids,
-                                              self.yt_no_custom_thumb_vid_titles,
-                                              self.yt_vid_not_dl,
-                                              self.yt_vid_not_dl_titles,
-                                              self.yt_vid_var,
-                                              self.yt_vid_not_var,
-                                              self.yt_custom_thumb_var)
+        self.__yt_thread_disable_buttons()
+        loading_thread = config.YTGUIDataLoad(self.settings,self.yt_plat)
         loading_thread.start()
         self.monitor_yt_data_load_thread(loading_thread)
 
@@ -627,9 +632,9 @@ class MainPage:
         f3 = ttk.Frame(parent)
         f3.grid(row=3, column=0, sticky=tk.W + tk.E)
         
-        self.yt_download_custom_thumbs_btn = ttk.Button(f3, text="Download Custom Thumbnails",
-                        command=self.download_custom_thumbs)
-        self.yt_download_custom_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.yt_download_yt_custom_thumbs_btn = ttk.Button(f3, text="Download Custom Thumbnails",
+                        command=self.download_yt_custom_thumbs)
+        self.yt_download_yt_custom_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
 
     def setup_lbry_ch(self, parent):
         title = ttk.Label(parent,
