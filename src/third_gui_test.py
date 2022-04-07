@@ -108,6 +108,15 @@ class Methods:
         
         self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
         
+    def __lbry_thread_disable_buttons(self):
+        self.lbry_api_btn['state'] = tk.DISABLED
+        self.lbry_download_btn['state'] = tk.DISABLED
+        self.lbry_select_vid_file_btn['state'] = tk.DISABLED
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        self.lbry_upload_btn['state'] = tk.DISABLED
+        
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+
     def __yt_thread_enable_buttons(self):
         self.yt_data_load_btn['state'] = tk.NORMAL
         self.yt_config_api_btn['state'] = tk.NORMAL
@@ -122,12 +131,34 @@ class Methods:
         
         self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
     
+    def __lbry_thread_enable_buttons(self):
+        self.lbry_api_btn['state'] = tk.NORMAL
+        self.lbry_download_btn['state'] = tk.NORMAL
+        self.lbry_select_vid_file_btn['state'] = tk.NORMAL
+        self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+        self.lbry_upload_btn['state'] = tk.NORMAL
+        
+        self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+    
     def __load_yt_thread_vars(self, thread):
-        self.yt_plat = thread.yt_plat
-        self.yt_no_custom_thumb_vids = thread.yt_no_custom_thumb_vids
-        self.yt_no_custom_thumb_vid_titles = thread.yt_no_custom_thumb_vid_titles
-        self.yt_vid_not_dl = thread.yt_vid_not_dl
-        self.yt_vid_not_dl_titles = thread.yt_vid_not_dl_titles
+        if hasattr(thread, 'yt_plat'):
+            self.yt_plat = thread.yt_plat
+        if hasattr(thread, 'yt_no_custom_thumb_vids'):
+            self.yt_no_custom_thumb_vids = thread.yt_no_custom_thumb_vids
+        if hasattr(thread, "yt_no_custom_thumb_vid_titles"):
+            self.yt_no_custom_thumb_vid_titles = thread.yt_no_custom_thumb_vid_titles
+        if hasattr(thread, "yt_vid_not_dl"):
+            self.yt_vid_not_dl = thread.yt_vid_not_dl
+        if hasattr(thread, "yt_vid_not_dl_titles"):
+            self.yt_vid_not_dl_titles = thread.yt_vid_not_dl_titles
+            
+    def __load_lbry_thread_vars(self, thread):
+        if hasattr(thread, 'lbry_plat'):
+            self.lbry_plat = thread.lbry_plat
+        if hasattr(thread, "lbry_vid_not_dl"):
+            self.lbry_vid_not_dl = thread.lbry_vid_not_dl
+        if hasattr(thread, "lbry_vid_not_dl_titles"):
+            self.lbry_vid_not_dl_titles = thread.lbry_vid_not_dl_titles
         
     def __set_yt_lbs(self):
         if self.yt_plat is not None:
@@ -135,15 +166,32 @@ class Methods:
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
         self.yt_up_var.set(self.yt_upload_titles)
         self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
+        
+    def __set_lbry_lbs(self):
+        if self.lbry_plat is not None:
+            self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
+        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
+        self.lbry_up_var.set(self.lbry_upload_titles)
     
     def __yt_thread_monitor(self, thread):
         if thread.is_alive():
             # check the thread every 100ms
+            self.__yt_thread_disable_buttons()
             self.after(100, lambda: self.__yt_thread_monitor(thread))
         else:
             self.__yt_thread_enable_buttons()
         self.__load_yt_thread_vars(thread)
-        self.__set_yt_lbs()  
+        self.__set_yt_lbs() 
+        
+    def __lbry_thread_monitor(self, thread):
+        if thread.is_alive():
+            # check the thread every 100ms
+            self.__lbry_thread_disable_buttons()
+            self.after(100, lambda: self.__lbry_thread_monitor(thread))
+        else:
+            self.__lbry_thread_enable_buttons()
+        self.__load_lbry_thread_vars(thread)
+        self.__set_lbry_lbs() 
     
     def __yt_thumb_thread_monitor(self, thread, i):
         if thread.is_alive():
@@ -155,7 +203,7 @@ class Methods:
         self.__load_yt_thread_vars(thread)
         self.__set_yt_lbs()
         
-    def __yt_thread_monitor_no_var_update(self, thread, i):
+    def __yt_thread_monitor_no_var_update(self, thread):
         if thread.is_alive():
             # check the thread every 100ms
             self.after(100, lambda: self.__yt_thread_monitor(thread))
@@ -173,6 +221,9 @@ class Methods:
             
     def monitor_yt_data_load_thread(self, thread):
         self.__yt_thread_monitor(thread)
+        
+    def monitor_lbry_data_load_thread(self, thread):
+        self.__lbry_thread_monitor(thread)
             
     def yt_generate_and_upload_thumbs(self):
         if len(self.yt_no_custom_thumb_vids) == 0:
@@ -283,6 +334,7 @@ class Methods:
         return 'break'
 
     def load_lbry_data(self):
+        self.__lbry_thread_disable_buttons()
         self.logger.info("Loading in LBRY channel data")
         if self.lbry_plat is None:
             channels = lbry_plat.claim_list(claim_type=['channel'])
@@ -292,32 +344,24 @@ class Methods:
                     if not picked:
                         option = tk_mb.askyesno(title='LBRY Channel Confirmation',message=f'Do you want to use this channel:{ch["name"]}')
                         if option:
-                            window = tk.Toplevel()
-                            window.geometry("400x90")
-                            window.wm_title("Loading LBRY Data")
-                            window.update_idletasks()
-                            window.grab_set()
-                            self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=ch['claim_id'], init_videos=True)
+                            lbry_loader_thread = config.LBRYGUIDataLoad(settings=self.settings, lbry_plat=self.lbry_plat, ID=ch['claim_id'])
+                            lbry_loader_thread.start()
+                            
+                            self.monitor_lbry_data_load_thread(lbry_loader_thread)
                             picked = True
             elif len(channels['result']['items']) == 0:
                 self.logger.error("No LBRY Channels found")
                 return
             else:
-                window = tk.Toplevel()
-                window.geometry("400x90")
-                window.wm_title("Loading LBRY Data")
-                window.update_idletasks()
-                window.grab_set()
-                self.lbry_plat = lbry_plat.LBRY(settings=self.settings, ID=channels['result']['items'][0]['claim_id'], init_videos=True)   
-        
-        for vid in self.lbry_plat.media_objects:
-            if not os.path.isfile(vid.file):
-                self.lbry_vid_not_dl.append(vid)
-                self.lbry_vid_not_dl_titles.append(vid.title)
-        
-        self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
-        self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
-        window.destroy()  
+                lbry_loader_thread = config.LBRYGUIDataLoad(settings=self.settings, lbry_plat=self.lbry_plat, ID=channels['result']['items'][0]['claim_id'])
+                lbry_loader_thread.start()
+                
+                self.monitor_lbry_data_load_thread(lbry_loader_thread)
+        else:
+            lbry_loader_thread = config.LBRYGUIDataLoad(settings=self.settings, lbry_plat=self.lbry_plat, ID=channels['result']['items'][0]['claim_id'])
+            lbry_loader_thread.start()
+            
+            self.monitor_lbry_data_load_thread(lbry_loader_thread)
 
     def get_vids_yt_not_lbry(self):
         self.logger.info("Getting videos on YouTube not on LBRY")

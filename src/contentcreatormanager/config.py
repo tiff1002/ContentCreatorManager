@@ -7,7 +7,32 @@ import logging.config
 import os.path
 from threading import Thread
 import contentcreatormanager.platform.youtube as yt
-import pickle
+import contentcreatormanager.platform.lbry as lbry
+import tkinter.messagebox as tk_mb
+
+class LBRYGUIDataLoad(Thread):
+    def __init__(self, settings, lbry_plat, ID = None):
+        super().__init__()
+        self.settings = settings
+        self.logger = settings.Base_logger
+        self.lbry_plat = lbry_plat
+        self.ID = ID
+        self.lbry_vid_not_dl = []
+        self.lbry_vid_not_dl_titles = []
+    
+    def run(self):
+        if self.lbry_plat is None:
+            if self.ID is None:
+                tk_mb.showerror("No ID", "No ID to initialize LBRY Platform")
+                return
+            self.logger.info("LBRY Platform is not initialized.  Initializing now")
+            self.lbry_plat = lbry.LBRY(settings=self.settings, ID=self.ID, init_videos=True)
+    
+        for vid in self.lbry_plat.media_objects:
+            if not os.path.isfile(vid.file):
+                self.lbry_vid_not_dl.append(vid)
+                self.lbry_vid_not_dl_titles.append(vid.title)
+            
 
 class YTGUICustomThumbsDownloader(Thread):
     def __init__(self, yt_plat):
@@ -82,23 +107,6 @@ class YTGUIDataLoad(Thread):
         self.yt_no_custom_thumb_vid_titles = []
         self.yt_vid_not_dl = []
         self.yt_vid_not_dl_titles = []
-        
-    def __save_vars(self):
-        yt_vars = []
-        yt_vars.append(self.yt_plat)
-        yt_vars.append(self.yt_no_custom_thumb_vids)
-        yt_vars.append(self.yt_no_custom_thumb_vid_titles)
-        yt_vars.append(self.yt_vid_not_dl)
-        yt_vars.append(self.yt_vid_not_dl_titles)
-        temp_dir = os.path.join(os.getcwd(), 'temp')
-        if not os.path.isdir(temp_dir):
-            os.mkdir(temp_dir)
-        var_file = os.path.join(temp_dir, "ytvars.pickle")
-        
-        with open(var_file, 'wb') as file:
-            pickle.dump(yt_vars, file)
-            
-        file.close()
     
     def run(self):
         if self.yt_plat is None:
@@ -120,7 +128,6 @@ class YTGUIDataLoad(Thread):
                 self.yt_vid_not_dl.append(vid)
                 self.yt_vid_not_dl_titles.append(vid.title)
                 self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
-            #self.__save_vars()
 
 class Settings(object):
     """

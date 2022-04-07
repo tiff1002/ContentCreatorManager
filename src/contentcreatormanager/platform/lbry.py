@@ -3,7 +3,6 @@ Created on Feb 24, 2022
 
 @author: tiff
 """
-import contentcreatormanager.config as ccm_config
 import contentcreatormanager.platform.platform as plat
 import contentcreatormanager.media.video.lbry as lbry_vid
 import contentcreatormanager.media.post.lbry as lbry_post
@@ -52,7 +51,7 @@ class LBRY(plat.Platform):
     
     LBRY_THUMB_API_URL = 'https://spee.ch/api/claim/publish'
 
-    def __init__(self, settings : ccm_config.Settings, ID : str,
+    def __init__(self, settings, ID : str,
                  init_videos : bool = False):
         """
         Constructor takes a Settings object.  ID string required 
