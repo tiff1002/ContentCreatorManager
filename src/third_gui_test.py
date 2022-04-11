@@ -739,7 +739,7 @@ class MainPage:
     def setup_yt_ch(self, parent):
         title = ttk.Label(parent,
                           text="YouTube channel")
-        title.grid(row=0, column=0, sticky=tk.W + tk.E)
+        title.grid(row=0, column=0, sticky=tk.W)
 
         f1 = ttk.Frame(parent)
         f1.grid(row=1, column=0, sticky=tk.W + tk.E)
@@ -762,6 +762,11 @@ class MainPage:
         self.yt_download_yt_custom_thumbs_btn = ttk.Button(f3, text="Download Custom Thumbnails",
                         command=self.download_yt_custom_thumbs)
         self.yt_download_yt_custom_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
+        
+        self.yt_private_cb = ttk.Checkbutton(parent, text="Private Vids")
+        self.yt_private_cb.grid(row=0, column=0, sticky=tk.E)
+        self.yt_unlisted_cb = ttk.Checkbutton(parent, text="Unlisted Vids")
+        self.yt_unlisted_cb.grid(row=0, column=0)
 
     def setup_lbry_ch(self, parent):
         title = ttk.Label(parent,
