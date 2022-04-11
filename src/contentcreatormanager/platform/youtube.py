@@ -51,7 +51,7 @@ class YouTube(plat.Platform):
     
     def __init__(self, settings,
                  init_videos : bool = False, current_quota_usage : int = 0,
-                 gui_var=None):
+                 gui_var=None,private_vids=True,unlisted_vids=True):
         """
         Constructor takes a Settings object.  No ID needs
         to be provided it is grabbed using an API call.  
@@ -78,7 +78,7 @@ class YouTube(plat.Platform):
         self.id = self.__get_channel()
         
         if init_videos:
-            self.__set_videos()
+            self.__set_videos(private_vids,unlisted_vids)
     
     def __get_parts(self, contentDetails : bool, snippet : bool,
                     statistics : bool, status : bool, fileDetails : bool,
@@ -243,7 +243,7 @@ class YouTube(plat.Platform):
         res=result['items'][0]['contentDetails']['relatedPlaylists']['uploads']
         return res
     
-    def __set_videos(self):
+    def __set_videos(self,private_vids=True,unlisted_vids=True):
         """
         Private Method to add all videos on the
         channel to the media_objects list property
@@ -251,7 +251,7 @@ class YouTube(plat.Platform):
         vid_data = self.__get_all_video_data()
         thumb_dir = os.path.join(os.getcwd(), 'thumbs')
         for vid in vid_data:
-            self.add_video_with_request(vid)
+            self.add_video_with_request(vid, private_vids,unlisted_vids)
         
         for vid in self.media_objects:
             thumb_name = os.path.basename(vid.thumbnail)
@@ -418,12 +418,19 @@ class YouTube(plat.Platform):
         """
         self.add_media(vid)
             
-    def add_video_with_request(self,request):
+    def add_video_with_request(self,request, private_vids=True,unlisted_vids=True):
         """
         Method that will add a video to the media_objects list.
         First object data will be set using provided request
         (results from an API call)
         """
+        
+        if request['status']['privacyStatus'] == 'private' and not private_vids:
+            return
+        if request['status']['privacyStatus'] == 'unlisted' and not unlisted_vids:
+            return
+        
+        
         tags = []
         if not ('tags' not in request['snippet']):
             tags = request['snippet']['tags']

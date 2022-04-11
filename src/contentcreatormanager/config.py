@@ -98,7 +98,7 @@ class YTGUIThumbUploader(Thread):
                 self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
 
 class YTGUIDataLoad(Thread):
-    def __init__(self, settings, yt_plat):
+    def __init__(self, settings, yt_plat, yt_private_cb, yt_unlisted_cb):
         super().__init__()
         self.settings = settings
         self.logger = settings.Base_logger
@@ -107,14 +107,17 @@ class YTGUIDataLoad(Thread):
         self.yt_no_custom_thumb_vid_titles = []
         self.yt_vid_not_dl = []
         self.yt_vid_not_dl_titles = []
+        self.yt_private_cb = yt_private_cb
+        self.yt_unlisted_cb = yt_unlisted_cb
     
     def run(self):
         if self.yt_plat is None:
             self.logger.info("YouTube Platform is not initialized.  Initializing now")
-            self.yt_plat = yt.YouTube(settings=self.settings, init_videos=True)
+            self.yt_plat = yt.YouTube(settings=self.settings, init_videos=True,private_vids=self.yt_private_cb, unlisted_vids=self.yt_unlisted_cb)
     
     
         self.logger.info("Sorting through YouTube Videos")
+        
         for vid in self.yt_plat.media_objects:
             if not vid.has_custom_thumbnail:
                 self.logger.info(f"{vid.title} {vid.id} has no custom thumbnail")

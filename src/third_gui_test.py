@@ -403,7 +403,7 @@ class Methods:
     
     def load_yt_data(self):
         self.__yt_thread_disable_buttons()
-        loading_thread = config.YTGUIDataLoad(self.settings,self.yt_plat)
+        loading_thread = config.YTGUIDataLoad(self.settings,self.yt_plat,self.yt_private_cb_bool.get(),self.yt_unlisted_cb_bool.get())
         loading_thread.start()
         self.monitor_yt_data_load_thread(loading_thread)
 
@@ -763,9 +763,11 @@ class MainPage:
                         command=self.download_yt_custom_thumbs)
         self.yt_download_yt_custom_thumbs_btn.grid(row=0, column=0, sticky=tk.W + tk.E)
         
-        self.yt_private_cb = ttk.Checkbutton(parent, text="Private Vids")
+        self.yt_private_cb_bool = tk.BooleanVar()
+        self.yt_private_cb = ttk.Checkbutton(parent, text="Private Vids", variable=self.yt_private_cb_bool)
         self.yt_private_cb.grid(row=0, column=0, sticky=tk.E)
-        self.yt_unlisted_cb = ttk.Checkbutton(parent, text="Unlisted Vids")
+        self.yt_unlisted_cb_bool = tk.BooleanVar()
+        self.yt_unlisted_cb = ttk.Checkbutton(parent, text="Unlisted Vids", variable=self.yt_unlisted_cb_bool)
         self.yt_unlisted_cb.grid(row=0, column=0)
 
     def setup_lbry_ch(self, parent):
