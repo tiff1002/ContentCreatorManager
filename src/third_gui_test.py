@@ -446,6 +446,9 @@ class Methods:
             
             self.monitor_lbry_data_load_thread(lbry_loader_thread)
 
+    def monitor_yt_downloader_thread(self, thread):
+        self.__yt_thread_monitor(thread)
+    
     def get_vids_yt_not_lbry(self):
         self.logger.info("Getting videos on YouTube not on LBRY")
         
@@ -530,21 +533,14 @@ class Methods:
         window.destroy()
 
     def yt_download(self):
+        self.__yt_thread_disable_buttons()
         for j in self.yt_not_dl_lb.curselection():
             vid = self.yt_vid_not_dl[j]
         
-        vid_dir = os.path.join(os.getcwd(), 'videos')
-        if not os.path.isdir(vid_dir):
-            os.mkdir(vid_dir)
-        self.logger.info(f"Downloading YT Vid {vid.title}")
-        vid.download()
-        if os.path.isfile(vid.file):
-            self.logger.info("Video Downloaded")
-            self.yt_vid_not_dl.remove(vid)
-            self.yt_vid_not_dl_titles.remove(vid.title)
-            self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
-        else:
-            self.logger.error("Can not find video file download failed")
+        yt_downloader_thread = config.YTGUIDownload(settings=self.settings, vid=vid, yt_vid_not_dl=self.yt_vid_not_dl, yt_vid_not_dl_titles=self.yt_vid_not_dl_titles)
+        yt_downloader_thread.start()
+        
+        self.monitor_yt_downloader_thread(yt_downloader_thread)
 
     def yt_select_video(self):
         file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])

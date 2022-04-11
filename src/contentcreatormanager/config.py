@@ -97,6 +97,28 @@ class YTGUIThumbUploader(Thread):
                 self.yt_no_custom_thumb_vid_titles.remove(vid.title)
                 self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
 
+class YTGUIDownload(Thread):
+    def __init__(self, settings, vid, yt_vid_not_dl, yt_vid_not_dl_titles):
+        super().__init__()
+        self.settings = settings
+        self.logger = settings.Base_logger
+        self.vid = vid
+        self.yt_vid_not_dl = yt_vid_not_dl
+        self.yt_vid_not_dl_titles = yt_vid_not_dl_titles
+        
+    def run(self):
+        vid_dir = os.path.join(self.settings.folder_location, 'videos')
+        if not os.path.isdir(vid_dir):
+            os.mkdir(vid_dir)
+        self.logger.info(f"Downloading YT Vid {self.vid.title}")
+        self.vid.download()
+        if os.path.isfile(self.vid.file):
+            self.logger.info("Video Downloaded")
+            self.yt_vid_not_dl.remove(self.vid)
+            self.yt_vid_not_dl_titles.remove(self.vid.title)
+        else:
+            self.logger.error("Can not find video file download failed")
+        
 class YTGUIDataLoad(Thread):
     def __init__(self, settings, yt_plat, yt_private_cb, yt_unlisted_cb):
         super().__init__()
