@@ -448,6 +448,9 @@ class Methods:
 
     def monitor_yt_downloader_thread(self, thread):
         self.__yt_thread_monitor(thread)
+        
+    def monitor_lbry_downloader_thread(self, thread):
+        self.__lbry_thread_monitor(thread)
     
     def get_vids_yt_not_lbry(self):
         self.logger.info("Getting videos on YouTube not on LBRY")
@@ -555,29 +558,14 @@ class Methods:
         self.yt_vid_not_var.set(self.yt_vid_not_dl_titles)
 
     def lbry_download(self):
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Downloading LBRY Video")
-        window.update_idletasks()
-        window.grab_set()
+        self.__lbry_thread_disable_buttons()
         for j in self.lbry_not_dl_lb.curselection():
             vid = self.lbry_vid_not_dl[j]
         
-        vid_dir = os.path.join(os.getcwd(), 'videos')
-        if not os.path.isdir(vid_dir):
-            os.mkdir(vid_dir)
+        lbry_downloader_thread = config.LBRYGUIDownload(settings=self.settings, vid=vid, lbry_vid_not_dl=self.lbry_vid_not_dl, lbry_vid_not_dl_titles=self.lbry_vid_not_dl_titles)
+        lbry_downloader_thread.start()
         
-        self.logger.info(f"Downloading LBRYS Vid {vid.title}")
-        vid.download()
-        if os.path.isfile(vid.file):
-            self.logger.info("Video Downloaded")
-            self.lbry_vid_not_dl.remove(vid)
-            self.lbry_vid_not_dl_titles.remove(vid.title)
-            self.lbry_vid_not_var.set(self.lbry_vid_not_dl_titles)
-        else:
-            self.logger.error("Can not find video file download failed")
-            
-        window.destroy()
+        self.monitor_lbry_downloader_thread(lbry_downloader_thread)
 
     def lbry_select_video(self):
         file = tk_fd.askopenfilename(filetypes=[("Video files", ".mp4")])
