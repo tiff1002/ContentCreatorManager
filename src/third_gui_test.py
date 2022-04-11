@@ -17,7 +17,6 @@ import contentcreatormanager.media.video.youtube as yt_vid
 import contentcreatormanager.platform.lbry as lbry_plat
 import contentcreatormanager.media.video.lbry as lbry_vid
 import tkinter.messagebox as tk_mb
-import pickle
 
 def focus_next_widget(event):
     """Callback to focus on next widget when pressing <Tab>."""
@@ -40,11 +39,6 @@ def setup_listbox(parent, height=10, width=40,
     vsrl.config(command=listb.yview)
 
     return listb
-
-
-class Thread_Vars:
-    def __init__(self):
-        super().__init__()
 
 class Variables:
     def setup_vars(self, folder_location, parent):
@@ -118,27 +112,46 @@ class Methods:
         self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
 
     def __yt_thread_enable_buttons(self):
-        self.yt_data_load_btn['state'] = tk.NORMAL
+        secrets_dir = os.path.join(self.settings.folder_location, 'secrets')
+        secrets_file = os.path.join(secrets_dir, 'youtube_client_secret.json')
+        if os.path.isfile(secrets_file):
+            self.yt_data_load_btn['state'] = tk.NORMAL
         self.yt_config_api_btn['state'] = tk.NORMAL
-        self.yt_download_yt_custom_thumbs_btn['state'] = tk.NORMAL
-        self.yt_download_btn['state'] = tk.NORMAL
-        self.yt_select_vid_file_btn['state'] = tk.NORMAL
-        self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
-        self.yt_generate_thumb_btn['state'] = tk.NORMAL
-        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
-        self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
-        self.yt_upload_btn['state'] = tk.NORMAL
+        if self.yt_plat is not None:
+            if len(self.yt_plat.media_objects) > 0:
+                self.yt_download_yt_custom_thumbs_btn['state'] = tk.NORMAL
+        if len(self.yt_vid_not_dl) > 0:
+            self.yt_download_btn['state'] = tk.NORMAL
+            self.yt_select_vid_file_btn['state'] = tk.NORMAL
+        if len(self.yt_no_custom_thumb_vids) > 0:
+            self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
+            self.yt_generate_thumb_btn['state'] = tk.NORMAL
+            self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
         
-        self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+        if self.lbry_plat is not None and self.yt_plat is not None:
+            if len(self.lbry_plat.media_objects) > 0 and len(self.yt_plat.media_objects) > 0:
+                self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+                self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+        
+        if len(self.yt_upload_vids) > 0:
+            self.yt_upload_btn['state'] = tk.NORMAL
+            self.yt_remove_from_upload_btn['state'] = tk.NORMAL
     
     def __lbry_thread_enable_buttons(self):
         self.lbry_api_btn['state'] = tk.NORMAL
-        self.lbry_download_btn['state'] = tk.NORMAL
-        self.lbry_select_vid_file_btn['state'] = tk.NORMAL
-        self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
-        self.lbry_upload_btn['state'] = tk.NORMAL
         
-        self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+        if len(self.lbry_vid_not_dl) > 0:
+            self.lbry_download_btn['state'] = tk.NORMAL
+            self.lbry_select_vid_file_btn['state'] = tk.NORMAL
+        
+        if len(self.lbry_upload_vids) > 0:
+            self.lbry_upload_btn['state'] = tk.NORMAL
+            self.lbry_remove_from_upload_btn['state'] = tk.NORMAL
+        
+        if self.lbry_plat is not None and self.yt_plat is not None:
+            if len(self.lbry_plat.media_objects) > 0 and len(self.yt_plat.media_objects) > 0:
+                self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+                self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
     
     def __load_yt_thread_vars(self, thread):
         if hasattr(thread, 'yt_plat'):
@@ -151,6 +164,10 @@ class Methods:
             self.yt_vid_not_dl = thread.yt_vid_not_dl
         if hasattr(thread, "yt_vid_not_dl_titles"):
             self.yt_vid_not_dl_titles = thread.yt_vid_not_dl_titles
+        if hasattr(thread, "yt_upload_vids"):    
+            self.yt_upload_vids = thread.yt_upload_vids
+        if hasattr(thread, "yt_upload_titles"):      
+            self.yt_upload_titles = thread.yt_upload_titles
             
     def __load_lbry_thread_vars(self, thread):
         if hasattr(thread, 'lbry_plat'):
@@ -159,6 +176,10 @@ class Methods:
             self.lbry_vid_not_dl = thread.lbry_vid_not_dl
         if hasattr(thread, "lbry_vid_not_dl_titles"):
             self.lbry_vid_not_dl_titles = thread.lbry_vid_not_dl_titles
+        if hasattr(thread, "lbry_upload_vids"):    
+            self.lbry_upload_vids = thread.lbry_upload_vids
+        if hasattr(thread, "lbry_upload_titles"):      
+            self.lbry_upload_titles = thread.lbry_upload_titles
         
     def __set_yt_lbs(self):
         if self.yt_plat is not None:
@@ -225,6 +246,68 @@ class Methods:
     def monitor_lbry_data_load_thread(self, thread):
         self.__lbry_thread_monitor(thread)
             
+    def disable_all_btns(self):
+        self.yt_data_load_btn['state'] = tk.DISABLED
+        self.yt_config_api_btn['state'] = tk.DISABLED
+        self.yt_download_yt_custom_thumbs_btn['state'] = tk.DISABLED
+        self.yt_download_btn['state'] = tk.DISABLED
+        self.yt_select_vid_file_btn['state'] = tk.DISABLED
+        self.yt_pick_thumb_file_btn['state'] = tk.DISABLED
+        self.yt_generate_thumb_btn['state'] = tk.DISABLED
+        self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
+        self.yt_upload_btn['state'] = tk.DISABLED
+        self.yt_remove_from_upload_btn['state'] = tk.DISABLED
+        self.lbry_remove_from_upload_btn['state'] = tk.DISABLED
+        self.lbry_api_btn['state'] = tk.DISABLED
+        self.lbry_download_btn['state'] = tk.DISABLED
+        self.lbry_select_vid_file_btn['state'] = tk.DISABLED
+        self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        self.lbry_upload_btn['state'] = tk.DISABLED
+        self.lbry_bid_btn['state'] = tk.DISABLED
+        self.lbry_channel_load_btn['state'] = tk.DISABLED
+        
+    def enable_all_btns(self):
+        secrets_dir = os.path.join(self.settings.folder_location, 'secrets')
+        secrets_file = os.path.join(secrets_dir, 'youtube_client_secret.json')
+        
+        self.yt_config_api_btn['state'] = tk.NORMAL
+        self.lbry_api_btn['state'] = tk.NORMAL
+        self.lbry_bid_btn['state'] = tk.NORMAL
+        self.lbry_channel_load_btn['state'] = tk.NORMAL
+        
+        if len(self.lbry_vid_not_dl) > 0:
+            self.lbry_download_btn['state'] = tk.NORMAL
+            self.lbry_select_vid_file_btn['state'] = tk.NORMAL
+        
+        if len(self.lbry_upload_vids) > 0:
+            self.lbry_upload_btn['state'] = tk.NORMAL
+            self.lbry_remove_from_upload_btn['state'] = tk.NORMAL
+        
+        if self.lbry_plat is not None and self.yt_plat is not None:
+            if len(self.lbry_plat.media_objects) > 0 and len(self.yt_plat.media_objects) > 0:
+                self.lbry_get_yt_vids_btn['state'] = tk.NORMAL
+                self.yt_get_lbry_vids_btn['state'] = tk.NORMAL
+                
+        
+        if os.path.isfile(secrets_file):
+            self.yt_data_load_btn['state'] = tk.NORMAL
+        
+        if self.yt_plat is not None:
+            if len(self.yt_plat.media_objects) > 0:
+                self.yt_download_yt_custom_thumbs_btn['state'] = tk.NORMAL
+        if len(self.yt_vid_not_dl) > 0:
+            self.yt_download_btn['state'] = tk.NORMAL
+            self.yt_select_vid_file_btn['state'] = tk.NORMAL
+        if len(self.yt_no_custom_thumb_vids) > 0:
+            self.yt_pick_thumb_file_btn['state'] = tk.NORMAL
+            self.yt_generate_thumb_btn['state'] = tk.NORMAL
+            self.yt_gen_and_upload_all_thumbs_btn['state'] = tk.NORMAL
+        
+        if len(self.yt_upload_vids) > 0:
+            self.yt_upload_btn['state'] = tk.NORMAL
+            self.yt_remove_from_upload_btn['state'] = tk.NORMAL
+    
     def yt_generate_and_upload_thumbs(self):
         if len(self.yt_no_custom_thumb_vids) == 0:
             tk_mb.showwarning(title="No videos listed for this", message="No Videos are loaded into the no custom thumbnail list box")
@@ -826,6 +909,8 @@ class Application(ttk.Frame,
 
         self.setup_vars(folder_location=folder_location, parent=self)  # Initialized from `Variables` class
         self.setup_widgets(parent=self)  # the new Frame is the main container
+        self.disable_all_btns()
+        self.enable_all_btns()
 
     def setup_widgets(self, parent):
         """Setup the widgets of the application."""
