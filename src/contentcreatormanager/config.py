@@ -97,6 +97,27 @@ class YTGUIThumbUploader(Thread):
                 self.yt_no_custom_thumb_vid_titles.remove(vid.title)
                 self.yt_custom_thumb_var.set(self.yt_no_custom_thumb_vid_titles)
 
+class LBRYGUIUploader(Thread):
+    def __init__(self, settings, lbry_upload_vids, lbry_upload_titles):
+        super().__init__()
+        self.logger = settings.Base_logger
+        self.settings = settings
+        self.lbry_upload_vids = lbry_upload_vids
+        self.lbry_upload_titles = lbry_upload_titles
+        
+        
+    def run(self):
+        for vid in self.lbry_upload_vids:
+            self.logger.info(f"Attempting to upload {vid.file} to LBRY")
+            vid.upload()
+            if vid.is_uploaded():
+                self.logger.info("Video Uploaded")
+                self.lbry_upload_vids.remove(vid)
+                self.lbry_upload_titles.remove(vid.title)
+                self.lbry_plat.add_video(vid)
+            else:
+                self.logger.error("LBRY Upload Failed")
+
 class LBRYGUIDownload(Thread):
     def __init__(self, settings, vid, lbry_vid_not_dl, lbry_vid_not_dl_titles):
         super().__init__()

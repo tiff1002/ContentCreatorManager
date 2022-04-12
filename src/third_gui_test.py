@@ -107,8 +107,8 @@ class Methods:
         self.lbry_download_btn['state'] = tk.DISABLED
         self.lbry_select_vid_file_btn['state'] = tk.DISABLED
         self.lbry_get_yt_vids_btn['state'] = tk.DISABLED
+        self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
         self.lbry_upload_btn['state'] = tk.DISABLED
-        
         self.yt_get_lbry_vids_btn['state'] = tk.DISABLED
 
     def __yt_thread_enable_buttons(self):
@@ -200,6 +200,7 @@ class Methods:
             self.__yt_thread_disable_buttons()
             self.after(100, lambda: self.__yt_thread_monitor(thread))
         else:
+            self.__load_yt_thread_vars(thread)
             self.__yt_thread_enable_buttons()
         self.__load_yt_thread_vars(thread)
         self.__set_yt_lbs() 
@@ -210,6 +211,7 @@ class Methods:
             self.__lbry_thread_disable_buttons()
             self.after(100, lambda: self.__lbry_thread_monitor(thread))
         else:
+            self.__load_lbry_thread_vars(thread)
             self.__lbry_thread_enable_buttons()
         self.__load_lbry_thread_vars(thread)
         self.__set_lbry_lbs() 
@@ -244,6 +246,9 @@ class Methods:
         self.__yt_thread_monitor(thread)
         
     def monitor_lbry_data_load_thread(self, thread):
+        self.__lbry_thread_monitor(thread)
+        
+    def monitor_lbry_upload_thread(self, thread):
         self.__lbry_thread_monitor(thread)
             
     def disable_all_btns(self):
@@ -516,24 +521,10 @@ class Methods:
         tk_mb.showwarning(title="Bad Bid", message="Please enter a valid float that is 0.0001 or greater")
         
     def lbry_upload_videos(self):
-        window = tk.Toplevel()
-        window.geometry("400x90")
-        window.wm_title("Uploading LBRY Videos")
-        window.update_idletasks()
-        window.grab_set()
-        for vid in self.lbry_upload_vids:
-            self.logger.info(f"Attempting to upload {vid.file} to LBRY")
-            vid.upload()
-            if vid.is_uploaded():
-                self.logger.info("Video Uploaded")
-                self.lbry_upload_vids.remove(vid)
-                self.lbry_upload_titles.remove(vid.title)
-                self.lbry_up_var.set(self.yt_upload_titles)
-                self.lbry_plat.add_video(vid)
-                self.lbry_vid_var.set(self.lbry_plat.media_object_titles)
-            else:
-                self.logger.error("LBRY Upload Failed")
-        window.destroy()
+        self.__lbry_thread_disable_buttons()
+        lbry_uploader_thread = config.LBRYGUIUploader(self.settings, self.lbry_upload_vids, self.lbry_upload_titles)
+        lbry_uploader_thread.start()
+        self.monitor_lbry_upload_thread(lbry_uploader_thread)
 
     def yt_download(self):
         self.__yt_thread_disable_buttons()
