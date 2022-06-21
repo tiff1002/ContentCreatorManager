@@ -24,15 +24,11 @@ Well first thing you will need is the latest version of Python installed for you
 
 In addition to this there are several Python libraries you will need to install with pip:
 
-- pip install shortuuid
-- pip install ffmpeg-python
-- pip install Pillow
-- pip install pytube
-- pip install requests
-- pip install httplib2
-- pip install google_auth
-- pip install google_auth_oauthlib
-- pip install google-api-python-client
+`pip install shortuuid ffmpeg-python Pillow pytube requests httplib2 google_auth google_auth_oauthlib google-api-python-client`
+
+And in linux, the tkinter package for the GUI:
+
+`apt install python3-tk`
 
 You will also need the [LBRY Desktop App](https://lbry.com/get) installed and running
 
