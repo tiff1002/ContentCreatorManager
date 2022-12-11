@@ -148,7 +148,7 @@ class LBRY(plat.Platform):
             page += 1
             for i in p:
                 x += 1
-                if i['value']['stream_type'] == 'video':
+                  if i['value'].get('stream_type') == 'video':
                     self.logger.info(f"Adding claim with name {i['name']}")
                     claims.append(i)
                 else:
